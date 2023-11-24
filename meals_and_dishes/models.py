@@ -13,3 +13,4 @@ class MealsAndDishes(models.Model):
     media_url = models.CharField(
         max_length=255, default="https://thumbs2.imgbox.com/3f/24/TGdwPRoe_t.jpeg")
     price = models.IntegerField(default=0)
+    is_ready = models.BooleanField(default=True, null=True)
