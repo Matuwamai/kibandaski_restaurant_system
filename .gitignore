@@ -1,0 +1,5 @@
+/venv
+
+# .pyc files
+/restaurant_server/__pycache__/*.pyc
+/meals_and_dishes/__pycache__/*.pyc
