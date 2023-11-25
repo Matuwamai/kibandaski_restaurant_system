@@ -1,8 +1,8 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-from orders.serializers import OrderSerializer
-from meals_and_dishes.models import MealsAndDishes
+from orders.serializers import OrderSerializer, ListOrdersSerializer
+from orders.models import Order
 
 
 @api_view(['POST'])
@@ -14,3 +14,10 @@ def create_order(request):
         return Response({"message": "Order created successfully", "order_id": order.id})
 
     return Response(serializer.errors, status=400)
+
+
+@api_view(['GET'])
+def list_orders(request):
+    orders = Order.objects.all()
+    serializer = ListOrdersSerializer(orders, many=True)
+    return Response(serializer.data)
