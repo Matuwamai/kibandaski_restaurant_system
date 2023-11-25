@@ -27,7 +27,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'corsheaders',
-    'meals_and_dishes'
+    'meals_and_dishes',
+    'orders'
 ]
 
 MIDDLEWARE = [
