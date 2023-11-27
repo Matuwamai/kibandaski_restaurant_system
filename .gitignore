@@ -4,3 +4,4 @@
 /restaurant_server/__pycache__/*.pyc
 /meals_and_dishes/__pycache__/*.pyc
 /orders/__pycache__/*.pyc
+/tables/__pycache__/*.pyc
