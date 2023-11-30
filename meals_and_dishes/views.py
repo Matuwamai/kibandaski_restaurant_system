@@ -32,3 +32,24 @@ def list_meals_and_dishes(request):
         serializer = MealsAndDishesSerializer(meals_and_dishes, many=True)
 
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+# Update meal status
+
+
+@api_view(['PUT'])
+def update_meal_status(request, meal_id):
+    try:
+        meal = MealsAndDishes.objects.get(id=meal_id)
+    except MealsAndDishes.DoesNotExist:
+        return Response({"message": "Meal or Dishes not found!"}, status=status.HTTP_404_NOT_FOUND)
+
+    # Update the is_ready field depending on the previous state
+    if meal.is_ready == True:
+        meal.is_ready = False
+    else:
+        meal.is_ready = False
+    meal.save()
+
+    # Serialize the updated meal
+    serializer = MealsAndDishesSerializer(meal)
+    return Response(serializer.data)

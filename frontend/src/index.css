@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.scrollbar-hide::-webkit-scrollbar {
+    width: 0 !important;
+}
+
+.badge{
+    top: -7px;
+}
+
+@media (max-width: 768.5px){
+        .topbar-search {
+                display: none;
+            }
+}
+
+@media (max-width: 525.5px) {
+    .profile-info{
+        display: none;
+    }
+
+    .settings-icon{
+        display: none;
+    }
+}
