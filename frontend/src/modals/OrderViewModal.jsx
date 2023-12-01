@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
-// import QRCode from "react-qr-code";
-// import html2canvas from "html2canvas";
+import QRCode from "react-qr-code";
+import html2canvas from "html2canvas";
 import "./Modal.css";
 import { useGlobalContext } from "../context/context";
 import { useDispatch, useSelector } from "react-redux";
@@ -31,12 +31,12 @@ function OrderViewModal() {
   };
 
   const downloadReceipt = () => {
-    // html2canvas(receiptRef.current).then((canvas) => {
-    //   const link = document.createElement("a");
-    //   link.href = canvas.toDataURL("image/png");
-    //   link.download = "receipt.png";
-    //   link.click();
-    // });
+    html2canvas(receiptRef.current).then((canvas) => {
+      const link = document.createElement("a");
+      link.href = canvas.toDataURL("image/png");
+      link.download = "receipt.png";
+      link.click();
+    });
   };
 
   useEffect(() => {
@@ -106,9 +106,9 @@ function OrderViewModal() {
                 </table>
               </div>
 
-              {/* <div className='mt-8'>
+              <div className='mt-8'>
                 <QRCode value={`Receipt for Wamae, Total: KES ${total}`} />
-              </div> */}
+              </div>
             </div>
             <div className='flex justify-between'>
               <button onClick={handleCloseModal} className='mt-3'>

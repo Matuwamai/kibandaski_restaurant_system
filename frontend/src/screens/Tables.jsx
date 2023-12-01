@@ -59,6 +59,10 @@ const Tables = () => {
   }, [dispatch, success_create, success_delete]);
 
   useEffect(() => {
+    dispatch(listTables());
+  }, []);
+
+  useEffect(() => {
     setLastTableNo(tablesList.length);
   }, [tablesList]);
 
