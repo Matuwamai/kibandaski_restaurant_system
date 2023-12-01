@@ -7,7 +7,7 @@ export default function CreateOrderModal() {
 
   const handleCloseModal = () => {
     closeOrderCreateModal();
-    document.body.style.overflow = "auto"; // Allow scrolling on the body
+    document.body.style.overflow = "auto";
   };
 
   const handleCreateOrder = (e) => {
