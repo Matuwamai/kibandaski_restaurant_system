@@ -7,18 +7,22 @@ import { useDispatch, useSelector } from "react-redux";
 import { listOrders } from "../redux/actions/orderActions";
 import Loading from "../utils/Loading";
 import Message from "../utils/Message";
+import { listMeals } from "../redux/actions/mealsActions";
 
 const Orders = () => {
   const dispatch = useDispatch();
   const { openOrderCreateModal } = useGlobalContext();
 
-  const { loading, ordersList, error, success_delete } = useSelector(
-    (state) => state.orders
-  );
+  const { loading, ordersList, error, success_delete, success_create } =
+    useSelector((state) => state.orders);
 
   useEffect(() => {
     dispatch(listOrders());
-  }, [dispatch, success_delete]);
+  }, [dispatch, success_delete, success_create]);
+
+  useEffect(() => {
+    dispatch(listMeals());
+  }, []);
   return (
     <div>
       <div className='grid grid-cols-1 lg:grid-cols-3 my-3'>
