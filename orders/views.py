@@ -41,3 +41,15 @@ def update_order_status(request, order_id):
     # Serialize the updated order
     serializer = ListOrdersSerializer(order)
     return Response(serializer.data)
+
+# Delete Order
+
+
+@api_view(['DELETE'])
+def delete_order(request, order_id):
+    try:
+        order = Order.objects.get(id=order_id)
+    except Order.DoesNotExist:
+        return Response({"message": "Order not found!"}, status=status.HTTP_404_NOT_FOUND)
+    order.delete()
+    return Response({"message": "Order deleted successfully!"})

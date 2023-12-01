@@ -4,6 +4,7 @@ const initialState = {
   loading: false,
   ordersList: [],
   success_create: false,
+  success_delete: false,
   error: null,
 };
 
@@ -36,6 +37,19 @@ export const ordersSlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     },
+    deleteOrderStart: (state) => {
+      state.loading = true;
+      state.error = false;
+      state.success_delete = false;
+    },
+    deleteOrderSuccess: (state) => {
+      state.loading = false;
+      state.success_delete = true;
+    },
+    deleteOrderFail: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
   },
 });
 
@@ -46,6 +60,9 @@ export const {
   listOrdersStart,
   listOrdersSuccess,
   listOrdersFail,
+  deleteOrderStart,
+  deleteOrderSuccess,
+  deleteOrderFail,
 } = ordersSlice.actions;
 
 export default ordersSlice.reducer;

@@ -6,6 +6,9 @@ import {
   listOrdersFail,
   listOrdersStart,
   listOrdersSuccess,
+  deleteOrderStart,
+  deleteOrderSuccess,
+  deleteOrderFail,
 } from "../slices/orderSlices";
 import axios from "axios";
 
@@ -32,5 +35,18 @@ export const listOrders = () => async (dispatch) => {
     dispatch(listOrdersSuccess(data));
   } catch (err) {
     dispatch(listOrdersFail("Error listing orders!"));
+  }
+};
+
+// DELETE ORDER
+
+export const deleteOrder = (order_id) => async (dispatch) => {
+  try {
+    dispatch(deleteOrderStart());
+
+    await axios.delete(`${BASE_URL}/orders/delete/${order_id}`);
+    dispatch(deleteOrderSuccess());
+  } catch (err) {
+    dispatch(deleteOrderFail("Item not deleted!"));
   }
 };

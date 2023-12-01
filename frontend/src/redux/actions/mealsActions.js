@@ -47,7 +47,7 @@ export const deleteMeal = (meal_id) => async (dispatch) => {
   try {
     dispatch(deleteMealStart());
 
-    await axios.delete(`${BASE_URL}//meals-and-dishes/delete/${meal_id}`);
+    await axios.delete(`${BASE_URL}/meals-and-dishes/delete/${meal_id}`);
     dispatch(deleteMealSuccess());
   } catch (err) {
     dispatch(deleteMealFail("Item not deleted!"));

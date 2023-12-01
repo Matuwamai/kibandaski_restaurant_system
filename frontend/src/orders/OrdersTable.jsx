@@ -1,19 +1,26 @@
 import { DataGrid } from "@mui/x-data-grid";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
 import { MdVerified } from "react-icons/md";
 import { CgDanger } from "react-icons/cg";
 import { useGlobalContext } from "../context/context";
 import moment from "moment";
+import { useDispatch } from "react-redux";
+import { deleteOrder } from "../redux/actions/orderActions";
 
 export default function OrdersTable({ list }) {
   const { openOrderViewModal } = useGlobalContext();
+  const dispatch = useDispatch();
 
   const handleViewOrder = (id) => {
     openOrderViewModal();
   };
 
-  console.log(list);
+  const handleDeleteOrder = (id) => {
+    dispatch(deleteOrder(id));
+  };
+
   const columns = [
     {
       field: "id",
@@ -120,7 +127,7 @@ export default function OrdersTable({ list }) {
     {
       field: "action",
       headerName: "Actions",
-      width: 130,
+      width: 180,
       renderCell: (params) => {
         return (
           <div className='w-full flex gap-3'>
@@ -131,6 +138,12 @@ export default function OrdersTable({ list }) {
             </div>
             <div className='border text-green-400 cursor-pointer p-2 rounded'>
               <EditIcon />
+            </div>
+            <div
+              className='border text-red-400 cursor-pointer p-2 rounded'
+              onClick={() => handleDeleteOrder(params.row.id)}
+            >
+              <DeleteIcon />
             </div>
           </div>
         );

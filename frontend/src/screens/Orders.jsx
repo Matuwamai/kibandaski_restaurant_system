@@ -12,11 +12,13 @@ const Orders = () => {
   const dispatch = useDispatch();
   const { openOrderCreateModal } = useGlobalContext();
 
-  const { loading, ordersList, error } = useSelector((state) => state.orders);
+  const { loading, ordersList, error, success_delete } = useSelector(
+    (state) => state.orders
+  );
 
   useEffect(() => {
     dispatch(listOrders());
-  }, [dispatch]);
+  }, [dispatch, success_delete]);
   return (
     <div>
       <div className='grid grid-cols-1 lg:grid-cols-3 my-3'>
