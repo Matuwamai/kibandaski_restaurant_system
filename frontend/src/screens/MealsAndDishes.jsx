@@ -12,11 +12,13 @@ const MealsAndDishes = () => {
   const dispatch = useDispatch();
   const { openMealCreateModal } = useGlobalContext();
 
-  const { loading, mealsList, error } = useSelector((state) => state.meals);
+  const { loading, mealsList, error, success_delete } = useSelector(
+    (state) => state.meals
+  );
 
   useEffect(() => {
     dispatch(listMeals());
-  }, [dispatch]);
+  }, [dispatch, success_delete]);
 
   // useEffect(() => {
   //   if (mealsList) {

@@ -5,7 +5,14 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { MdVerified } from "react-icons/md";
 import { CgDanger } from "react-icons/cg";
 import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { deleteMeal } from "../redux/actions/mealsActions";
 export default function DishesList({ list }) {
+  const dispatch = useDispatch();
+
+  const handleDelete = (id) => {
+    dispatch(deleteMeal(id));
+  };
   const columns = [
     {
       field: "id",
@@ -101,7 +108,10 @@ export default function DishesList({ list }) {
             <div className='border text-green-400 cursor-pointer p-2 rounded'>
               <EditIcon />
             </div>
-            <div className='border text-red-400 cursor-pointer p-2 rounded'>
+            <div
+              className='border text-red-400 cursor-pointer p-2 rounded'
+              onClick={() => handleDelete(params.row.id)}
+            >
               <DeleteIcon />
             </div>
           </div>

@@ -53,3 +53,14 @@ def update_meal_status(request, meal_id):
     # Serialize the updated meal
     serializer = MealsAndDishesSerializer(meal)
     return Response(serializer.data)
+
+
+# Delete meal & Dishes
+@api_view(['DELETE'])
+def delete_meal(request, meal_id):
+    try:
+        meal = MealsAndDishes.objects.get(id=meal_id)
+    except MealsAndDishes.DoesNotExist:
+        return Response({"message": "Meal or Dishes not found!"}, status=status.HTTP_404_NOT_FOUND)
+    meal.delete()
+    return Response({"message": "Item deleted successfully!"})

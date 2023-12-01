@@ -6,6 +6,9 @@ import {
   listMealsFail,
   listMealsStart,
   listMealsSuccess,
+  deleteMealFail,
+  deleteMealStart,
+  deleteMealSuccess,
 } from "../slices/mealsSlices";
 import axios from "axios";
 
@@ -35,5 +38,18 @@ export const listMeals = () => async (dispatch) => {
     dispatch(listMealsSuccess(data));
   } catch (err) {
     dispatch(listMealsFail("Error listing meals!"));
+  }
+};
+
+// DELETE MEAL
+
+export const deleteMeal = (meal_id) => async (dispatch) => {
+  try {
+    dispatch(deleteMealStart());
+
+    await axios.delete(`${BASE_URL}//meals-and-dishes/delete/${meal_id}`);
+    dispatch(deleteMealSuccess());
+  } catch (err) {
+    dispatch(deleteMealFail("Item not deleted!"));
   }
 };

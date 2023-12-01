@@ -4,6 +4,7 @@ const initialState = {
   loading: false,
   mealsList: [],
   success_create: false,
+  success_delete: false,
   error: null,
 };
 
@@ -36,6 +37,19 @@ export const mealsSlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     },
+    deleteMealStart: (state) => {
+      state.loading = true;
+      state.error = false;
+      state.success_delete = false;
+    },
+    deleteMealSuccess: (state) => {
+      state.loading = false;
+      state.success_delete = true;
+    },
+    deleteMealFail: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
   },
 });
 
@@ -46,6 +60,9 @@ export const {
   listMealsStart,
   listMealsSuccess,
   listMealsFail,
+  deleteMealStart,
+  deleteMealSuccess,
+  deleteMealFail,
 } = mealsSlice.actions;
 
 export default mealsSlice.reducer;
