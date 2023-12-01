@@ -7,7 +7,7 @@ import { CgDanger } from "react-icons/cg";
 import { useGlobalContext } from "../context/context";
 import moment from "moment";
 import { useDispatch } from "react-redux";
-import { deleteOrder } from "../redux/actions/orderActions";
+import { deleteOrder, updateOrderStatus } from "../redux/actions/orderActions";
 
 export default function OrdersTable({ list }) {
   const { openOrderViewModal } = useGlobalContext();
@@ -21,7 +21,35 @@ export default function OrdersTable({ list }) {
     dispatch(deleteOrder(id));
   };
 
+  const handleUpdateStatus = (id) => {
+    dispatch(updateOrderStatus(id));
+  };
+
   const columns = [
+    {
+      field: "is_completed",
+      headerName: "Status",
+      width: 150,
+      renderCell: (params) => {
+        return (
+          <>
+            {params.row.is_completed ? (
+              <div className='flex gap-2 items-center justify-center bg-slate-50 text-green-300 px-4 py-1 rounded font-semibold'>
+                <MdVerified style={{ fontSize: "18px" }} />
+                <h6 className='my-auto'>Completed</h6>
+              </div>
+            ) : (
+              <button
+                className='w-32 flex gap-2 items-center justify-center bg-slate-200 text-gray-600'
+                onClick={() => handleUpdateStatus(params.row.id)}
+              >
+                Close
+              </button>
+            )}
+          </>
+        );
+      },
+    },
     {
       field: "id",
       headerName: "Order NO",
@@ -41,7 +69,9 @@ export default function OrdersTable({ list }) {
       renderCell: (params) => {
         return (
           <h6 className='text-gray-600 uppercase my-auto'>
-            TABLE#{params.row.table_no}
+            {params.row.table_no === 0
+              ? "Over C"
+              : `TABLE#${params.row.table_no}`}
           </h6>
         );
       },
@@ -49,7 +79,7 @@ export default function OrdersTable({ list }) {
     {
       field: "customer_name",
       headerName: "Customer",
-      width: 150,
+      width: 100,
       renderCell: (params) => {
         return (
           <h6 className='text-gray-600 my-auto'>{params.row.customer_name}</h6>
@@ -59,7 +89,7 @@ export default function OrdersTable({ list }) {
     {
       field: "order_details",
       headerName: "Order Details",
-      width: 300,
+      width: 220,
       renderCell: (params) => {
         const order_desc = (params.row.order_items || [])
           .map((item) => item.title)
@@ -99,28 +129,6 @@ export default function OrdersTable({ list }) {
           <h6 className='bg-slate-100 px-2 py-1 rounded-md text-blue-300 my-auto'>
             {moment(params.row.created_at).fromNow()}
           </h6>
-        );
-      },
-    },
-    {
-      field: "is_completed",
-      headerName: "Status",
-      width: 150,
-      renderCell: (params) => {
-        return (
-          <>
-            {params.row.is_completed ? (
-              <div className='w-32 flex gap-2 items-center justify-center bg-green-400 text-white px-4 py-1 rounded font-semibold'>
-                <MdVerified style={{ fontSize: "18px" }} />
-                <h6 className='my-auto'>Completed</h6>
-              </div>
-            ) : (
-              <div className='w-32 flex gap-2 items-center justify-center bg-orange-300 text-red-500 px-4 py-1 rounded font-semibold'>
-                <CgDanger style={{ fontSize: "18px" }} />
-                <h6 className='my-auto'>Pending</h6>
-              </div>
-            )}
-          </>
         );
       },
     },

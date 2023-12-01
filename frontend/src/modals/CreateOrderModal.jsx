@@ -65,6 +65,7 @@ export default function CreateOrderModal() {
   }, [mealsList, selectedMeals]);
 
   useEffect(() => {
+    setSelectedMeals([]);
     handleCloseModal();
   }, [success_create]);
 

@@ -10,18 +10,8 @@ const TopBar = () => {
       <header className='bg-slate-50 sticky top-0 z-30 shadow-sm flex justify-between md:items-center p-4 big-screen-top'>
         <div className='flex flex-col md:flex-row items-center md:gap-8 '>
           <h1 className='text-xl md:text-2xl font-semibold my-auto'>
-            KIBANDASKI
+            KIBANDASKI Management System
           </h1>
-          <div className='w-full flex gap-1 topbar-search'>
-            <input
-              type='text'
-              className='w-4/5 border focus:outline-none px-2 py-1 rounded text-md'
-              placeholder='Search here...'
-            />
-            <button className='border rounded bg-amber-400 w-1/5'>
-              <SearchOutlinedIcon />
-            </button>
-          </div>
         </div>
         <div className='flex items-center gap-2'>
           <div className='relative md:w-8 md:h-8 rounded-full sm:bg-slate-200 flex items-center justify-center'>

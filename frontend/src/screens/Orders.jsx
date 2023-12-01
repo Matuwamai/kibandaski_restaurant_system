@@ -13,12 +13,18 @@ const Orders = () => {
   const dispatch = useDispatch();
   const { openOrderCreateModal } = useGlobalContext();
 
-  const { loading, ordersList, error, success_delete, success_create } =
-    useSelector((state) => state.orders);
+  const {
+    loading,
+    ordersList,
+    error,
+    success_delete,
+    success_create,
+    success_update,
+  } = useSelector((state) => state.orders);
 
   useEffect(() => {
     dispatch(listOrders());
-  }, [dispatch, success_delete, success_create]);
+  }, [dispatch, success_delete, success_create, success_update]);
 
   useEffect(() => {
     dispatch(listMeals());
