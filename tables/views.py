@@ -15,6 +15,8 @@ def create_table(request):
         if not isinstance(request.data, list):
             return Response({"error": "Data must be a list of tables"}, status=status.HTTP_400_BAD_REQUEST)
 
+        print(len(request.data))
+
         for table_data in request.data:
             serializer = RestaurantTableSerializer(data=table_data)
 
@@ -42,4 +44,13 @@ def delete_table(request, table_id):
     if request.method == 'DELETE':
         table = RestaurantTable.objects.get(id=table_id)
         table.delete()
+        return Response({"message": "Table deleted successfully!"}, status=202)
+
+
+@api_view(['DELETE'])
+def delete_all_tables(request):
+    if request.method == 'DELETE':
+        tables = RestaurantTable.objects.all()
+        for table in tables:
+            table.delete()
         return Response({"message": "Table deleted successfully!"}, status=202)

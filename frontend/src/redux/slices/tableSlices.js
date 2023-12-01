@@ -28,6 +28,7 @@ export const tablesSlice = createSlice({
     deleteTableStart: (state) => {
       state.loading = true;
       state.error = null;
+      state.success_delete = false;
     },
     deleteTableSuccess: (state) => {
       state.loading = false;

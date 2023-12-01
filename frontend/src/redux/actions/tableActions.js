@@ -46,9 +46,21 @@ export const deleteTable = (table_no) => async (dispatch) => {
   try {
     dispatch(deleteTableStart());
 
-    await axios.delete(`${BASE_URL}/delete/${table_no}`);
+    await axios.delete(`${BASE_URL}/tables/delete/${table_no}`);
     dispatch(deleteTableSuccess());
   } catch (err) {
     dispatch(deleteTableFail(`Error deleting TABLE#${table_no}`));
+  }
+};
+
+// DELETE ALL TABLES
+export const deleteAllTable = () => async (dispatch) => {
+  try {
+    dispatch(deleteTableStart());
+
+    await axios.delete(`${BASE_URL}/tables/delete/all`);
+    dispatch(deleteTableSuccess());
+  } catch (err) {
+    dispatch(deleteTableFail(`Error deleting  tables`));
   }
 };
