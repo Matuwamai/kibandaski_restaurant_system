@@ -20,10 +20,7 @@ export const createMeal = (meal) => async (dispatch) => {
   try {
     dispatch(createMealStart());
 
-    const { data } = await axios.post(
-      `${BASE_URL}/meals-and-dishes/create`,
-      meal
-    );
+    await axios.post(`${BASE_URL}/meals-and-dishes/create`, meal);
 
     dispatch(createMealSuccess());
   } catch (err) {

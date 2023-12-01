@@ -39,11 +39,11 @@ export default function DishesList({ list }) {
       },
     },
     {
-      field: "details",
-      headerName: "Meal Details",
+      field: "title",
+      headerName: "Meals & Dishes  Title",
       width: 350,
       renderCell: (params) => {
-        return <h6 className='text-gray-600 my-auto'>{params.row.details}</h6>;
+        return <h6 className='text-gray-600 my-auto'>{params.row.title}</h6>;
       },
     },
     {
@@ -107,9 +107,12 @@ export default function DishesList({ list }) {
             >
               <RemoveRedEyeIcon />
             </Link>
-            <div className='border text-green-400 cursor-pointer p-2 rounded'>
+            <Link
+              to={`/meals-and-dishes/${params.row.id}`}
+              className='border text-green-400 cursor-pointer p-2 rounded'
+            >
               <EditIcon />
-            </div>
+            </Link>
             <div
               className='border text-red-400 cursor-pointer p-2 rounded'
               onClick={() => handleDelete(params.row.id)}
@@ -119,72 +122,6 @@ export default function DishesList({ list }) {
           </div>
         );
       },
-    },
-  ];
-
-  const data = [
-    {
-      id: 1,
-      meal_details: "Chapo Mix - Sukuma/Cabbage",
-      meal_price: 70,
-      qty: 1,
-      is_ready: true,
-    },
-    {
-      id: 2,
-      meal_details: "Ugali Nyama - Supu ya matumbo",
-      meal_price: 100,
-      qty: 1,
-      is_ready: false,
-    },
-    {
-      id: 3,
-      meal_details: "Mchele mix sukuma - supu ya cabbage",
-      meal_price: 50,
-      qty: 1,
-      is_ready: true,
-    },
-    {
-      id: 4,
-      meal_details: "Chips Mwitu",
-      meal_price: 100,
-      qty: 1,
-      is_ready: true,
-    },
-    {
-      id: 5,
-      meal_details: "Chapo Choma - Supu ya Maharagwe",
-      meal_price: 20,
-      qty: 1,
-      is_ready: true,
-    },
-    {
-      id: 6,
-      meal_details: "Chapo Choma - Supu ya Ndengu",
-      meal_price: 20,
-      qty: 1,
-      is_ready: true,
-    },
-    {
-      id: 7,
-      meal_details: "Chai",
-      meal_price: 10,
-      qty: 1,
-      is_ready: true,
-    },
-    {
-      id: 8,
-      meal_details: "Mandazi",
-      meal_price: 10,
-      qty: 1,
-      is_ready: true,
-    },
-    {
-      id: 9,
-      meal_details: "Chapati",
-      meal_price: 20,
-      qty: 1,
-      is_ready: true,
     },
   ];
 

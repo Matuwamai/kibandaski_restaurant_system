@@ -4,11 +4,13 @@ export const reducer = (state, action) => {
       return {
         ...state,
         isOrderViewModalOpen: true,
+        viewOrderNo: action.payload,
       };
     case "CLOSE_ORDER_VIEW_MODAL":
       return {
         ...state,
         isOrderViewModalOpen: false,
+        viewOrderNo: null,
       };
     case "OPEN_ORDER_CREATE_MODAL":
       return {

@@ -50,6 +50,9 @@ const MealsView = () => {
   const handleUpdateStatus = (e) => {
     e.preventDefault();
     dispatch(updateMealStatus(mealId));
+    if (success_update) {
+      toast.success("Item updated successfully!", ToastObjects);
+    }
   };
 
   const handleUpdateMeal = async (e) => {
@@ -90,6 +93,9 @@ const MealsView = () => {
         setImageError(error);
       }
     }
+    if (success_update) {
+      toast.success("Item updated successfully!", ToastObjects);
+    }
   };
 
   const currentMeal = mealsList?.find((meal) => meal.id === mealId);
@@ -101,12 +107,6 @@ const MealsView = () => {
   useEffect(() => {
     setMealInfo(currentMeal);
   }, [currentMeal]);
-
-  useEffect(() => {
-    if (success_update) {
-      toast.success("Item updated successfully!", ToastObjects);
-    }
-  }, [success_update]);
 
   return (
     <div className='w-full bg-slate-50 md:p-4'>

@@ -14,7 +14,8 @@ class OrderSerializer(serializers.ModelSerializer):
 class OrderItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = MealsAndDishes
-        fields = ['id', 'details', 'qty', 'price', 'media_url', 'is_ready']
+        fields = ['id', 'title', 'details', 'qty',
+                  'price', 'media_url', 'is_ready']
 
 
 class ListOrdersSerializer(serializers.ModelSerializer):

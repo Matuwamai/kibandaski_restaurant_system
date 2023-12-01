@@ -7,13 +7,14 @@ const initialState = {
   isOrderViewModalOpen: false,
   isOrderCreateModalOpen: false,
   isMealCreateModalOpen: false,
+  viewOrderNo: null,
 };
 
 function ContextProvider({ children }) {
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  const openOrderViewModal = () => {
-    dispatch({ type: "OPEN_ORDER_VIEW_MODAL" });
+  const openOrderViewModal = (id) => {
+    dispatch({ type: "OPEN_ORDER_VIEW_MODAL", payload: id });
   };
 
   const closeOrderViewModal = () => {

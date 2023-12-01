@@ -14,7 +14,7 @@ export default function OrdersTable({ list }) {
   const dispatch = useDispatch();
 
   const handleViewOrder = (id) => {
-    openOrderViewModal();
+    openOrderViewModal(id);
   };
 
   const handleDeleteOrder = (id) => {
@@ -62,7 +62,7 @@ export default function OrdersTable({ list }) {
       width: 300,
       renderCell: (params) => {
         const order_desc = (params.row.order_items || [])
-          .map((item) => item.details)
+          .map((item) => item.title)
           .join(", ");
         return <h6 className='text-gray-600 my-auto'>{order_desc}</h6>;
       },
@@ -151,75 +151,9 @@ export default function OrdersTable({ list }) {
     },
   ];
 
-  const data = [
-    {
-      id: 1,
-      table_id: 10,
-      username: "Wamae",
-      order_details: "Chapo Mix - Sukuma/Cabbage",
-      is_online_payment: true,
-      is_complete: false,
-      created_at: "10th Nov 2023",
-    },
-    {
-      id: 2,
-      table_id: 7,
-      username: "John Doe",
-      order_details: "Ugali Nyama - Supu ya matumbo",
-      is_online_payment: false,
-      is_complete: true,
-      created_at: "24th Oct 2023",
-    },
-    {
-      id: 3,
-      table_id: 1,
-      username: "Havard",
-      order_details: "Mchele mix sukuma - supu ya cabbage",
-      is_online_payment: true,
-      is_complete: false,
-      created_at: "8th Oct 2023",
-    },
-    {
-      id: 4,
-      table_id: 20,
-      username: "Wamae",
-      order_details: "Mchele mix nyama - sukuma/maharagwe",
-      is_online_payment: true,
-      is_complete: false,
-      created_at: "18th Oct 2023",
-    },
-    {
-      id: 5,
-      table_id: 10,
-      username: "Stacy",
-      order_details: "Chapo chomaa - Supu ya ndengu",
-      is_online_payment: true,
-      is_complete: false,
-      created_at: "18th Oct 2023",
-    },
-    {
-      id: 6,
-      table_id: 10,
-      username: "Betty",
-      order_details: "Chapo chomaa - Supu ya maharagwe",
-      is_online_payment: false,
-      is_complete: false,
-      created_at: "18th Oct 2023",
-    },
-    {
-      id: 7,
-      table_id: 5,
-      username: "carol",
-      order_details: "Chips Mwitu",
-      is_online_payment: false,
-      is_complete: true,
-      created_at: "18th Oct 2023",
-    },
-  ];
-
   return (
     <>
-      <div className='bg-white'>
+      <div className='bg-white '>
         <DataGrid
           rows={list}
           disableSelectionOnClick
