@@ -5,6 +5,7 @@ import TopBar from "../navigation/Topbar";
 import OrderViewModal from "../modals/OrderViewModal";
 import CreateOrderModal from "../modals/CreateOrderModal";
 import CreateMealModal from "../modals/CreateMealModal";
+import Toast from "../utils/Toast";
 
 export default function DashboardLayout({ children }) {
   const [isCollapsed, setCollapsed] = useState(false);
@@ -23,6 +24,7 @@ export default function DashboardLayout({ children }) {
         <main>
           {/* Page Content */}
           <div className='px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto'>
+            <Toast />
             <OrderViewModal />
             <CreateOrderModal />
             <CreateMealModal />

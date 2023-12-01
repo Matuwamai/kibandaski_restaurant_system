@@ -73,15 +73,17 @@ export default function DishesList({ list }) {
     {
       field: "is_ready",
       headerName: "Status",
-      width: 150,
+      width: 120,
       renderCell: (params) => {
         return (
           <>
             {params.row.is_ready ? (
-              <div className='w-32 flex gap-2 items-center justify-center bg-green-400 text-white px-4 py-1 rounded font-semibold'>
-                <MdVerified style={{ fontSize: "18px" }} />
-                <h6 className='my-auto'>Ready</h6>
-              </div>
+              <>
+                <h6 className='bg-slate-100 flex items-center gap-2 px-2 py-1 rounded-md text-green-500 my-auto'>
+                  <MdVerified style={{ fontSize: "18px" }} />
+                  <p>Ready</p>
+                </h6>
+              </>
             ) : (
               <div className='w-32 flex gap-2 items-center justify-center bg-slate-200 text-white px-4 py-1 rounded font-semibold'>
                 <CgDanger style={{ fontSize: "18px" }} />

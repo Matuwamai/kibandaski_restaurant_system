@@ -5,4 +5,5 @@ from meals_and_dishes.models import MealsAndDishes
 class MealsAndDishesSerializer(serializers.ModelSerializer):
     class Meta:
         model = MealsAndDishes
-        fields = ['id', 'details', 'qty', 'media_url', 'price', 'is_ready']
+        fields = ['id', 'title', 'details', 'qty',
+                  'media_url', 'price', 'is_ready']

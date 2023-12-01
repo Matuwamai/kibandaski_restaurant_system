@@ -47,7 +47,7 @@ def update_meal_status(request, meal_id):
     if meal.is_ready == True:
         meal.is_ready = False
     else:
-        meal.is_ready = False
+        meal.is_ready = True
     meal.save()
 
     # Serialize the updated meal
@@ -55,7 +55,27 @@ def update_meal_status(request, meal_id):
     return Response(serializer.data)
 
 
+# Update meal
+@api_view(['PUT'])
+def update_meal(request, meal_id):
+    try:
+        meal = MealsAndDishes.objects.get(id=meal_id)
+    except MealsAndDishes.DoesNotExist:
+        return Response({"message": "Meal or Dishes not found!"}, status=status.HTTP_404_NOT_FOUND)
+    meal.title = request.data.get('title')
+    meal.details = request.data.get('details')
+    meal.qty = request.data.get('qty')
+    meal.media_url = request.data.get('media_url')
+    meal.price = request.data.get('price')
+    meal.save()
+
+    # Serialize the updated meal
+    serializer = MealsAndDishesSerializer(meal)
+    return Response(serializer.data)
+
 # Delete meal & Dishes
+
+
 @api_view(['DELETE'])
 def delete_meal(request, meal_id):
     try:

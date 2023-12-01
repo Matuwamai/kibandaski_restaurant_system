@@ -8,6 +8,7 @@ from django.db import models
 # is_ready
 
 class MealsAndDishes(models.Model):
+    title = models.CharField(max_length=100, null=True, unique=True)
     details = models.CharField(max_length=255, null=False)
     qty = models.IntegerField(default=1)
     media_url = models.CharField(

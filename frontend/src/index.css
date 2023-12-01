@@ -10,6 +10,10 @@
     top: -7px;
 }
 
+.meal-img-view{
+    height: 200px;
+}
+
 @media (max-width: 768.5px){
         .topbar-search {
                 display: none;

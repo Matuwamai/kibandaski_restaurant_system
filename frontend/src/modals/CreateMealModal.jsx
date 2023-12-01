@@ -1,20 +1,13 @@
 import React, { useEffect, useState } from "react";
 import "./Modal.css";
 import { useGlobalContext } from "../context/context";
-import {
-  getStorage,
-  ref,
-  uploadBytesResumable,
-  getDownloadURL,
-} from "firebase/storage";
-import app from "../firebase";
 import Loading from "../utils/Loading";
 import Message from "../utils/Message";
 import { useDispatch, useSelector } from "react-redux";
 import { createMeal, listMeals } from "../redux/actions/mealsActions";
+import { uploadImage } from "../firebase/uploadImage";
 
 export default function CreateMealModal() {
-  const bucket_url = process.env.REACT_APP_BUCKET_URL;
   const dispatch = useDispatch();
   const { isMealCreateModalOpen, closeMealCreateModal } = useGlobalContext();
   const { loading, success_create, error } = useSelector(
@@ -45,43 +38,13 @@ export default function CreateMealModal() {
     });
   };
 
-  const uploadImage = () => {
-    return new Promise((resolve, reject) => {
-      const fileName = new Date().getTime() + file.name;
-      const storage = getStorage(app, bucket_url);
-      const storageRef = ref(storage, fileName);
-      const uploadTask = uploadBytesResumable(storageRef, file);
-
-      uploadTask.on(
-        "state_changed",
-        (snapshot) => {
-          const progress = Math.round(
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-          );
-          console.log(progress);
-        },
-        (error) => {
-          reject(error); // Reject the Promise if an error occurs
-        },
-        async () => {
-          try {
-            const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-            resolve(downloadURL);
-          } catch (error) {
-            reject(error); // Reject the Promise if an error occurs during URL retrieval
-          }
-        }
-      );
-    });
-  };
-
   const handleCreateMeal = async (e) => {
     e.preventDefault();
     try {
       // Wait for the uploadImage function to complete and obtain the download URL
       setImageLoading(true);
       setImageError(null);
-      const downloadURL = await uploadImage();
+      const downloadURL = await uploadImage(file);
       setImageLoading(false);
       dispatch(
         createMeal({
