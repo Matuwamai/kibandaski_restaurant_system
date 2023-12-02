@@ -18,7 +18,7 @@ export default function CartModal() {
 
   const { cartItems } = useSelector((state) => state.cart);
 
-  const { loading, error, success_create } = useSelector(
+  const { loading, error, success_create, table } = useSelector(
     (state) => state.orders
   );
 
@@ -45,6 +45,8 @@ export default function CartModal() {
   const handleRemoveCartItem = (id) => {
     dispatch(removefromcart(id));
   };
+
+  console.log(table);
 
   const handlePayOrder = () => {
     dispatch(

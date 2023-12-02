@@ -5,8 +5,12 @@ import CartModal from "../modals/CartModal";
 import { useGlobalContext } from "../context/context";
 import { addToCart } from "../redux/actions/cartActions";
 import { MdAddShoppingCart } from "react-icons/md";
+import { useLocation, useParams } from "react-router";
+import { updateTable } from "../redux/slices/orderSlices";
 
 const Home = () => {
+  const params = useParams();
+  const t_no = Number(params.table_no);
   const { openCartModal } = useGlobalContext();
   const dispatch = useDispatch();
   const { mealsList } = useSelector((state) => state.meals);
@@ -19,6 +23,10 @@ const Home = () => {
   const addItemToCart = (id) => {
     dispatch(addToCart(id));
   };
+
+  useEffect(() => {
+    dispatch(updateTable(t_no));
+  }, [dispatch]);
   return (
     <>
       <CartModal />

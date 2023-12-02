@@ -1,5 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+const table = localStorage.getItem("t_n")
+  ? JSON.parse(localStorage.getItem("t_n"))
+  : 0;
+
 const initialState = {
   loading: false,
   ordersList: [],
@@ -7,6 +11,7 @@ const initialState = {
   success_delete: false,
   success_update: false,
   error: null,
+  table,
 };
 
 export const ordersSlice = createSlice({
@@ -64,6 +69,10 @@ export const ordersSlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     },
+    updateTable: (state, action) => {
+      state.table = action.payload;
+      localStorage.setItem("t_no", JSON.stringify(state.table));
+    },
   },
 });
 
@@ -80,6 +89,7 @@ export const {
   updateOrderStart,
   updateOrderSuccess,
   updateOrderFail,
+  updateTable,
 } = ordersSlice.actions;
 
 export default ordersSlice.reducer;

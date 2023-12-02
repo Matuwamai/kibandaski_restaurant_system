@@ -16,6 +16,7 @@ function App() {
       <Routes>
         <Route path='/login' element={<Login />} />
         <Route path='/client/' element={<Home />} />
+        <Route path='/client/:table_no' element={<Home />} />
         <Route path='/client/cart' element={<Cart />} />
         <Route element={<DashboardLayout />}>
           <Route path='/' element={<Dashboard />} />
