@@ -29,7 +29,7 @@ export const login = (details) => async (dispatch) => {
     dispatch(loginSuccess(data));
     localStorage.setItem("userInfo", JSON.stringify(data));
   } catch (err) {
-    dispatch(loginFail(err.response ? err.response.data.message : err.message));
+    dispatch(loginFail("Invalid credentials!"));
   }
 };
 

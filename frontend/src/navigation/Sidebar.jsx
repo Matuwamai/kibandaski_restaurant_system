@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
+import { useDispatch } from "react-redux";
+import { logout } from "../redux/actions/userActions";
 // import { useOnClickOutside } from "usehooks-ts";
 
 const Sidebar = ({
@@ -10,6 +12,7 @@ const Sidebar = ({
   sidebarOpen,
   setSidebarOpen,
 }) => {
+  const dispatch = useDispatch();
   const ref = useRef(null);
   const pathname = useLocation().pathname;
   const [activePath, setActivePath] = useState("");
@@ -27,6 +30,10 @@ const Sidebar = ({
 
   const toggleSidebar = () => {
     setIsCollapsed(!isCollapsed);
+  };
+
+  const handleLogout = () => {
+    dispatch(logout());
   };
 
   return (
@@ -93,6 +100,7 @@ const Sidebar = ({
         className={`fixed border-t-2 bottom-0 flex items-center justify-center cursor-pointer text-white bg-amber-600 py-2 transition-all duration-300 ease-in-out ${
           isCollapsed ? "text-xl w-16" : "hover:text-gray-800 w-48"
         } ${sidebarOpen ? "w-64" : ""}`}
+        onClick={handleLogout}
       >
         <i
           className={`fas fa-sign-out-alt mr-2 ${

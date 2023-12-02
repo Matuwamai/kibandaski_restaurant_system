@@ -1,20 +1,28 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Loading from "../utils/Loading";
 import Message from "../utils/Message";
 import { login } from "../redux/actions/userActions";
+import { useNavigate } from "react-router";
 
 const Login = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const { loading, error, userInfo } = useSelector((state) => state.user);
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
   const handleLogin = (e) => {
     e.preventDefault();
-    dispatch(login({ email, password }));
+    dispatch(login({ username, password }));
   };
+
+  useEffect(() => {
+    if (userInfo?.access) {
+      navigate("/");
+    }
+  }, [userInfo]);
 
   return (
     <section
@@ -40,9 +48,9 @@ const Login = () => {
               <input
                 type='text'
                 id='schoolName'
-                name='email'
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                name='username'
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
                 className='w-full bg-gray-100 text-gray-800 rounded-lg py-2 px-4'
                 placeholder='kiganjoprimary@nyeri'
                 required
