@@ -2,8 +2,6 @@ import React, { useEffect, useState } from "react";
 import "./Modal.css";
 import { useGlobalContext } from "../context/context";
 import DeleteIcon from "@mui/icons-material/Delete";
-import Loading from "../utils/Loading";
-import Message from "../utils/Message";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addToCart,
@@ -87,7 +85,7 @@ export default function CartModal() {
                         className='w-10 h-10 border object-cover'
                       />
                     </td>
-                    <td className='py-2 px-2'>{item.title}</td>
+                    <td className='py-2 px-2 text-sm'>{item.title}</td>
                     <td className='py-2 px-2 flex gap-2 justify-center items-center'>
                       <button
                         className='w-8 h-8 flex justify-center items-center border bg-slate-100 text-gray-700'

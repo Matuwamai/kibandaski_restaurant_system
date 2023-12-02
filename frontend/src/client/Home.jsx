@@ -1,15 +1,16 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { listMeals } from "../redux/actions/mealsActions";
-import { Link } from "react-router-dom";
 import CartModal from "../modals/CartModal";
 import { useGlobalContext } from "../context/context";
 import { addToCart } from "../redux/actions/cartActions";
+import { MdAddShoppingCart } from "react-icons/md";
 
 const Home = () => {
   const { openCartModal } = useGlobalContext();
   const dispatch = useDispatch();
   const { mealsList } = useSelector((state) => state.meals);
+  const { cartItems } = useSelector((state) => state.cart);
 
   useEffect(() => {
     dispatch(listMeals());
@@ -22,11 +23,24 @@ const Home = () => {
     <>
       <CartModal />
       <section
-        className='bg-cover bg-center h-screen'
+        className='bg-cover bg-center h-screen relative'
         style={{
           backgroundImage: `url('/assets/mandazi.webp')`,
         }}
       >
+        <div
+          className='w-14 h-14 rounded-full bg-slate-100 border flex items-center justify-center fixed top-8 right-8 cursor-pointer'
+          onClick={openCartModal}
+        >
+          <div className='relative'>
+            <MdAddShoppingCart style={{ fontSize: "28px" }} />
+            {cartItems?.length > 0 && (
+              <p className='bg-red-500 text-white h-4 w-4 rounded-full flex justify-center items-center absolute top-0 right-0 text-sm cart-badge'>
+                {cartItems?.length}
+              </p>
+            )}
+          </div>
+        </div>
         <div className='bg-opacity-75 h-full bg-black flex flex-col justify-center items-center'>
           <h1 className='text-4xl lg:text-5xl font-semibold mb-4 text-white text-center'>
             Welcome to Kibandaski Hotel
@@ -42,10 +56,10 @@ const Home = () => {
             <table className='min-w-full table-auto'>
               <thead>
                 <tr className='bg-gray-100'>
-                  <th className='py-2 px-2 text-left'></th>
                   <th className='py-2 px-2 text-left'>Item</th>
+                  <th className='py-2 px-2 text-left'></th>
                   <th className='py-2 px-2 text-left'>Qty</th>
-                  <th className='py-2 px-2 text-left'>Price</th>
+                  <th className='py-2 px-2 text-left'>Price (KES)</th>
                 </tr>
               </thead>
               <tbody>
