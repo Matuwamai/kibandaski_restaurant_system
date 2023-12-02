@@ -22,7 +22,7 @@ const Login = () => {
     if (userInfo?.access) {
       navigate("/");
     }
-  }, [userInfo]);
+  }, [userInfo, navigate]);
 
   return (
     <section

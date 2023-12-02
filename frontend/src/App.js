@@ -1,9 +1,4 @@
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Outlet,
-} from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Dashboard from "./screens/Dashboard";
 import Orders from "./screens/Orders";
 import Employees from "./screens/Employees";
@@ -38,13 +33,13 @@ function App() {
 
 export default App;
 
-const handleSpeak = () => {
-  const text = "A new order has been made at table number 10. PLease check...";
+// const handleSpeak = () => {
+//   const text = "A new order has been made at table number 10. PLease check...";
 
-  const value = new SpeechSynthesisUtterance(text);
-  value.rate = 0.9;
-  window.speechSynthesis.speak(value);
-};
+//   const value = new SpeechSynthesisUtterance(text);
+//   value.rate = 0.9;
+//   window.speechSynthesis.speak(value);
+// };
 
 // useEffect(() => {
 //   // Set up an interval to call handleSpeak every 5 seconds (adjust the time interval as needed)

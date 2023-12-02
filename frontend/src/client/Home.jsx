@@ -14,7 +14,7 @@ const Home = () => {
 
   useEffect(() => {
     dispatch(listMeals());
-  }, []);
+  }, [dispatch]);
 
   const addItemToCart = (id) => {
     dispatch(addToCart(id));
@@ -93,7 +93,7 @@ const Home = () => {
           </div>
         </div>
       </section>
-      <section className='bg-white p-12' id='meals-and-dishes'>
+      <section className='bg-white md:p-12' id='meals-and-dishes'>
         <h2 className='text-3xl text-gray-700 text-center font-semibold my-3'>
           Meals & Dishes
         </h2>

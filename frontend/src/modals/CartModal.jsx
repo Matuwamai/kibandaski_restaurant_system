@@ -3,17 +3,24 @@ import "./Modal.css";
 import { useGlobalContext } from "../context/context";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useDispatch, useSelector } from "react-redux";
+import Loading from "../utils/Loading";
+import Message from "../utils/Message";
 import {
   addToCart,
   decreaseCartQty,
   removefromcart,
 } from "../redux/actions/cartActions";
+import { createOrder } from "../redux/actions/orderActions";
 
 export default function CartModal() {
   const dispatch = useDispatch();
   const { isCartOpen, closeCartModal } = useGlobalContext();
 
   const { cartItems } = useSelector((state) => state.cart);
+
+  const { loading, error, success_create } = useSelector(
+    (state) => state.orders
+  );
 
   // Memoize the handleCloseModal function
   const handleCloseModal = () => {
@@ -22,6 +29,7 @@ export default function CartModal() {
   };
 
   const [subTotal, setSubTotal] = useState(0);
+  const [orderItems, setOrderItems] = useState([]);
 
   const handleCartQty = (id, qty, type) => {
     if (type === "dec") {
@@ -38,12 +46,29 @@ export default function CartModal() {
     dispatch(removefromcart(id));
   };
 
+  const handlePayOrder = () => {
+    dispatch(
+      createOrder({
+        order_items: orderItems,
+        payment_method: "MPESA",
+        customer_name: "Wamae",
+        table_no: 10,
+      })
+    );
+  };
+
   useEffect(() => {
     const totals = cartItems
       .reduce((itemA, itemB) => itemA + itemB?.quantity * itemB.price, 0)
       .toFixed(2);
     setSubTotal(totals);
   }, [cartItems]);
+
+  useEffect(() => {
+    cartItems?.map((item) => {
+      return setOrderItems([...orderItems, item.id]);
+    });
+  }, [cartItems, orderItems]);
 
   return (
     <div>
@@ -53,7 +78,7 @@ export default function CartModal() {
             <h3 className='h3 text-gray-800 uppercase font-semibold my-2 text-center'>
               Your Cart
             </h3>
-            {/* {loading ? <Loading /> : error && <Message>{error}</Message>} */}
+            {loading ? <Loading /> : error && <Message>{error}</Message>}
             <table className='min-w-full table-auto'>
               <thead>
                 <tr className='bg-gray-100'>
@@ -128,6 +153,7 @@ export default function CartModal() {
               <button
                 type='submit'
                 className='bg-green-500 text-white h-10 uppercase'
+                onClick={handlePayOrder}
               >
                 Pay
               </button>
