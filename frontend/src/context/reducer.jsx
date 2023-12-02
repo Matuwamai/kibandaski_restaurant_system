@@ -32,6 +32,16 @@ export const reducer = (state, action) => {
         ...state,
         isMealCreateModalOpen: false,
       };
+    case "OPEN_CART_MODAL":
+      return {
+        ...state,
+        isCartOpen: true,
+      };
+    case "CLOSE_CART_MODAL":
+      return {
+        ...state,
+        isCartOpen: false,
+      };
     default:
       return state;
   }

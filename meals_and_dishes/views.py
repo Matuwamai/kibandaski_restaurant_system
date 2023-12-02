@@ -33,6 +33,18 @@ def list_meals_and_dishes(request):
 
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+# Get single meal and dishes
+
+
+@api_view(['GET'])
+def get_meal_and_dishes(request, meal_id):
+    if request.method == 'GET':
+        meal = MealsAndDishes.objects.get(id=meal_id)
+
+        serializer = MealsAndDishesSerializer(meal)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
 # Update meal status
 
 

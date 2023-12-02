@@ -13,11 +13,15 @@ import MealsAndDishes from "./screens/MealsAndDishes";
 import MealsView from "./dishes/MealsView";
 import Tables from "./screens/Tables";
 import Login from "./auth/Login";
+import Home from "./client/Home";
+import Cart from "./client/Cart";
 function App() {
   return (
     <Router>
       <Routes>
         <Route path='/login' element={<Login />} />
+        <Route path='/client/' element={<Home />} />
+        <Route path='/client/cart' element={<Cart />} />
         <Route element={<DashboardLayout />}>
           <Route path='/' element={<Dashboard />} />
           <Route path='/orders' element={<Orders />} />

@@ -7,6 +7,7 @@ const initialState = {
   isOrderViewModalOpen: false,
   isOrderCreateModalOpen: false,
   isMealCreateModalOpen: false,
+  isCartOpen: false,
   viewOrderNo: null,
 };
 
@@ -19,6 +20,14 @@ function ContextProvider({ children }) {
 
   const closeOrderViewModal = () => {
     dispatch({ type: "CLOSE_ORDER_VIEW_MODAL" });
+  };
+
+  const openCartModal = () => {
+    dispatch({ type: "OPEN_CART_MODAL" });
+  };
+
+  const closeCartModal = () => {
+    dispatch({ type: "CLOSE_CART_MODAL" });
   };
 
   const openOrderCreateModal = () => {
@@ -47,6 +56,8 @@ function ContextProvider({ children }) {
         closeOrderCreateModal,
         openMealCreateModal,
         closeMealCreateModal,
+        openCartModal,
+        closeCartModal,
       }}
     >
       {children}

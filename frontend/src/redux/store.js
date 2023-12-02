@@ -3,6 +3,7 @@ import mealsReducer from "./slices/mealsSlices";
 import orderReducers from "./slices/orderSlices";
 import tablesReducers from "./slices/tableSlices";
 import userReducers from "./slices/userSlices";
+import { cartReducer } from "./slices/cartReducers";
 
 export const store = configureStore({
   reducer: {
@@ -10,5 +11,6 @@ export const store = configureStore({
     orders: orderReducers,
     tables: tablesReducers,
     user: userReducers,
+    cart: cartReducer,
   },
 });
