@@ -2,7 +2,6 @@ import React from "react";
 import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined";
 import ShoppingBasketIcon from "@mui/icons-material/ShoppingBasket";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
-import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 
 const TopBar = () => {
   return (

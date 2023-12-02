@@ -6,6 +6,7 @@ import OrderViewModal from "../modals/OrderViewModal";
 import CreateOrderModal from "../modals/CreateOrderModal";
 import CreateMealModal from "../modals/CreateMealModal";
 import Toast from "../utils/Toast";
+import { Outlet } from "react-router-dom";
 
 export default function DashboardLayout({ children }) {
   const [isCollapsed, setCollapsed] = useState(false);
@@ -28,7 +29,7 @@ export default function DashboardLayout({ children }) {
             <OrderViewModal />
             <CreateOrderModal />
             <CreateMealModal />
-            {children}
+            <Outlet />
           </div>
         </main>
       </div>

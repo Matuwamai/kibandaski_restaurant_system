@@ -60,7 +60,7 @@ const Tables = () => {
 
   useEffect(() => {
     dispatch(listTables());
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     setLastTableNo(tablesList.length);

@@ -3,7 +3,6 @@ import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { MdVerified } from "react-icons/md";
-import { CgDanger } from "react-icons/cg";
 import { useGlobalContext } from "../context/context";
 import moment from "moment";
 import { useDispatch } from "react-redux";
@@ -124,7 +123,6 @@ export default function OrdersTable({ list }) {
       headerName: "Date",
       width: 150,
       renderCell: (params) => {
-        const date = new Date(params.row.created_at).toLocaleString();
         return (
           <h6 className='bg-slate-100 px-2 py-1 rounded-md text-blue-300 my-auto'>
             {moment(params.row.created_at).fromNow()}

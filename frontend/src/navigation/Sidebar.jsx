@@ -15,11 +15,7 @@ const Sidebar = ({
   const [activePath, setActivePath] = useState("");
 
   useEffect(() => {
-    if (
-      typeof window !== undefined &&
-      window.screen.width < 768 &&
-      activePath !== pathname
-    ) {
+    if (window.screen.width < 768 && activePath !== pathname) {
       setSidebarOpen(false);
     }
     setActivePath(pathname);

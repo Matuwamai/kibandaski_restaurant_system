@@ -28,7 +28,7 @@ const Orders = () => {
 
   useEffect(() => {
     dispatch(listMeals());
-  }, []);
+  }, [dispatch]);
   return (
     <div>
       <div className='grid grid-cols-1 lg:grid-cols-3 my-3'>

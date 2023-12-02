@@ -1,4 +1,9 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Outlet,
+} from "react-router-dom";
 import Dashboard from "./screens/Dashboard";
 import Orders from "./screens/Orders";
 import Employees from "./screens/Employees";
@@ -7,11 +12,13 @@ import DashboardLayout from "./layout";
 import MealsAndDishes from "./screens/MealsAndDishes";
 import MealsView from "./dishes/MealsView";
 import Tables from "./screens/Tables";
+import Login from "./auth/Login";
 function App() {
   return (
     <Router>
-      <DashboardLayout>
-        <Routes>
+      <Routes>
+        <Route path='/login' element={<Login />} />
+        <Route element={<DashboardLayout />}>
           <Route path='/' element={<Dashboard />} />
           <Route path='/orders' element={<Orders />} />
           <Route path='/customers' element={<Customers />} />
@@ -19,8 +26,8 @@ function App() {
           <Route path='/meals-and-dishes' element={<MealsAndDishes />} />
           <Route path='/meals-and-dishes/:id' element={<MealsView />} />
           <Route path='/restaurant-tables' element={<Tables />} />
-        </Routes>
-      </DashboardLayout>
+        </Route>
+      </Routes>
     </Router>
   );
 }

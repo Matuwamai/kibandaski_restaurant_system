@@ -1,14 +1,6 @@
 import { DataGrid } from "@mui/x-data-grid";
-import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
-import EditIcon from "@mui/icons-material/Edit";
-import { useGlobalContext } from "../context/context";
 
 export default function CustomersList() {
-  const { openOrderViewModal } = useGlobalContext();
-
-  const handleViewOrder = (id) => {
-    openOrderViewModal();
-  };
   const columns = [
     {
       field: "id",
