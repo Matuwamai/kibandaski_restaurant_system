@@ -50,7 +50,7 @@ export default function CreateOrderModal() {
   useEffect(() => {
     if (mealsList) {
       const meals = mealsList?.filter((item) =>
-        item.title.startsWith(mealSearch)
+        item.title?.startsWith(mealSearch)
       );
       setSearchedMeals(meals);
     }

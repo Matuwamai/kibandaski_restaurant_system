@@ -20,7 +20,7 @@ def create_order(request):
 
 @api_view(['GET'])
 def list_orders(request):
-    orders = Order.objects.all()
+    orders = Order.objects.all().order_by('-created_at')
     serializer = ListOrdersSerializer(orders, many=True)
     return Response(serializer.data)
 
