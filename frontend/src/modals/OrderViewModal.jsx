@@ -1,6 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import QRCode from "react-qr-code";
 import html2canvas from "html2canvas";
+import { IoCloseOutline } from "react-icons/io5";
+import { MdOutlineLocalPrintshop } from "react-icons/md";
+import { LiaDownloadSolid } from "react-icons/lia";
 import "./Modal.css";
 import { useGlobalContext } from "../context/context";
 import { useDispatch, useSelector } from "react-redux";
@@ -19,7 +22,6 @@ function OrderViewModal() {
   const [items, setItems] = useState(
     currentOrder ? currentOrder.order_items : []
   );
-  const total = 0.0;
 
   const handleCloseModal = () => {
     closeOrderViewModal();
@@ -49,83 +51,120 @@ function OrderViewModal() {
     }
   }, [currentOrder]);
 
+  console.log(currentOrder);
+
+  const originalDatetime = new Date(currentOrder?.created_at);
+
+  // Format the datetime in the desired way
+  const options = {
+    day: "numeric",
+    month: "numeric",
+    year: "numeric",
+    hour: "numeric",
+    minute: "numeric",
+    hour12: true,
+  };
+  const formattedDatetime = originalDatetime.toLocaleString("en-US", options);
+
   return (
     <div>
       {isOrderViewModalOpen && (
         <div className='modal-overlay'>
           <div className='modal-content'>
-            <div className='bg-white p-8' ref={receiptRef}>
-              <div className='mb-4'>
-                <h2 className='text-2xl font-semibold text-center'>
-                  Kibandaski Restaurant
-                </h2>
-                <p className='text-gray-600 text-center'>
-                  P.O Box 30197 - 10100, Nairobi
-                </p>
-                <p className='text-gray-600 text-center'>
-                  Kenya Science, along Ngong' Road
-                </p>
-                <p className='text-gray-600 text-center'>Tel: +254740924507</p>
+            <div className='relative'>
+              <div className='sticky top-0 right-0 left-0 flex justify-end items-center gap-1 bg-amber-100 py-2 pr-2'>
+                <button
+                  className='receipt-btn border text-3xl'
+                  onClick={downloadReceipt}
+                >
+                  <LiaDownloadSolid />
+                </button>
+                <button
+                  className='receipt-btn border text-3xl'
+                  onClick={printReceipt}
+                >
+                  <MdOutlineLocalPrintshop />
+                </button>
+                <button
+                  onClick={handleCloseModal}
+                  className='receipt-btn border text-3xl'
+                >
+                  <IoCloseOutline />
+                </button>
               </div>
+              <div className='bg-white px-4' ref={receiptRef}>
+                <div className='mb-4'>
+                  <h2 className='text-2xl font-semibold text-center'>
+                    Kibandaski Restaurant
+                  </h2>
+                  <p className='text-gray-600 text-center'>
+                    P.O Box 30197 - 10100, Nairobi
+                  </p>
+                  <p className='text-gray-600 text-center'>
+                    Kenya Science, along Ngong' Road
+                  </p>
+                  <p className='text-gray-600 text-center'>
+                    Tel: +254740924507
+                  </p>
+                </div>
 
-              <div className='mb-4'>
-                <p className='font-semibold'>Customer Name: Wamae</p>
-                <p className='text-gray-600'>Sales Date: 1/12/2023 06:30pm</p>
-              </div>
+                <div className='mb-4'>
+                  <p className='font-semibold'>
+                    Customer Name: {currentOrder?.customer_name}
+                  </p>
+                  <p className='text-gray-600'>
+                    Sales Date: {formattedDatetime}
+                  </p>
+                </div>
 
-              <div className='mt-8'>
-                <table className='min-w-full table-auto'>
-                  <thead>
-                    <tr className='bg-gray-100'>
-                      <th className='py-2 px-2 text-left'>Item</th>
-                      <th className='py-2 px-2 text-left'>Qty</th>
-                      <th className='py-2 px-2 text-left'>Price</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {items.map((item, index) => (
-                      <tr
-                        key={index}
-                        className={index % 2 === 0 ? "bg-gray-50" : ""}
-                      >
-                        <td className='py-2 px-2'>{item.title}</td>
-                        <td className='py-2 px-2'>{item.qty}</td>
-                        <td className='py-2 px-2'>{item.price.toFixed(2)}</td>
+                <div className='mt-8'>
+                  <table className='min-w-full table-auto'>
+                    <thead>
+                      <tr className='bg-gray-100'>
+                        <th className='py-2 px-2 text-left'>Item</th>
+                        <th className='py-2 px-2 text-left'>Qty</th>
+                        <th className='py-2 px-2 text-left'>Price</th>
                       </tr>
-                    ))}
-                  </tbody>
-                  <tfoot>
-                    <tr className='bg-white'>
-                      <td className='py-2 px-4 font-semibold'></td>
-                      <td className='py-2 px-4'>Subtotal</td>
-                      <td className='py-2 px-4 font-semibold'>
-                        KES {total.toFixed(2)}
-                      </td>
-                    </tr>
-                  </tfoot>
-                </table>
-              </div>
+                    </thead>
+                    <tbody>
+                      {items.map((item, index) => (
+                        <tr
+                          key={index}
+                          className={index % 2 === 0 ? "bg-gray-50" : ""}
+                        >
+                          <td className='py-2 px-2'>{item.title}</td>
+                          <td className='py-2 px-2'>{item.qty}</td>
+                          <td className='py-2 px-2'>{item.price.toFixed(2)}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                    <tfoot>
+                      <tr className='bg-white'>
+                        <td className='py-2 px-4 font-semibold'></td>
+                        <td className='py-2 px-4'>Subtotal</td>
+                        <td className='py-2 px-4 font-semibold'>
+                          KES {currentOrder?.amount.toFixed(2)}
+                        </td>
+                      </tr>
+                    </tfoot>
+                  </table>
+                </div>
 
-              <div className='mt-8'>
-                <QRCode value={`Receipt for Wamae, Total: KES ${total}`} />
+                <div className='mt-4 mb-3  flex flex-col items-center justify-center '>
+                  <p className='text-sm text-gray-600 mb-2'>
+                    Order made{" "}
+                    <span className='font-semibold text-gray-800'>
+                      {currentOrder?.table_no === 0
+                        ? "Over the Counter"
+                        : `at Table No ${currentOrder?.table_no}`}
+                    </span>
+                  </p>
+                  <QRCode
+                    value={`Receipt for ${currentOrder?.customer_name}, Total: KES ${currentOrder?.amount}`}
+                    size={120}
+                  />
+                </div>
               </div>
-            </div>
-            <div className='flex justify-between'>
-              <button onClick={handleCloseModal} className='mt-3'>
-                Close
-              </button>
-              <button
-                className='bg-green-500 text-white py-2 px-4 rounded'
-                onClick={downloadReceipt}
-              >
-                Download
-              </button>
-              <button
-                className='bg-blue-500 text-white py-2 px-4 rounded mr-2'
-                onClick={printReceipt}
-              >
-                Print
-              </button>
             </div>
           </div>
         </div>

@@ -55,6 +55,7 @@ export default function CartModal() {
         payment_method: "MPESA",
         customer_name: "Wamae",
         table_no: 10,
+        amount: subTotal,
       })
     );
   };
@@ -85,8 +86,8 @@ export default function CartModal() {
               <thead>
                 <tr className='bg-gray-100'>
                   <th className='py-2 px-2 text-left'></th>
-                  <th className='py-2 px-2 text-left'></th>
                   <th className='py-2 px-2 text-left'>Item</th>
+                  <th className='py-2 px-2 text-left'></th>
                   <th className='py-2 px-2 text-left'>Qty</th>
                   <th className='py-2 px-2 text-left'>Total</th>
                 </tr>

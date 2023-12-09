@@ -10,6 +10,7 @@ class Order(models.Model):
     amount = models.IntegerField(default=0)
     is_completed = models.BooleanField(default=False)
     created_at = models.DateTimeField(default=timezone.now)
+    amount = models.FloatField(default=0.0)
     payment_method = models.CharField(
         max_length=10, choices=[("CASH", "Cash"), ("MPESA", "M-Pesa")])
 
