@@ -8,7 +8,14 @@ import {
 } from "../constants/cartConstants";
 
 export const cartReducer = (
-  state = { cartItems: [], billingAddress: {} },
+  state = {
+    cartItems: localStorage.getItem("cartItems")
+      ? JSON.parse(localStorage.getItem("cartItems"))
+      : [],
+    billingAddress: localStorage.getItem("billingAddress")
+      ? JSON.parse(localStorage.getItem("billingAddress"))
+      : {},
+  },
   action
 ) => {
   switch (action.type) {

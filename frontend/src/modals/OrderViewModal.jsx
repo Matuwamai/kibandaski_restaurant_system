@@ -70,7 +70,7 @@ function OrderViewModal() {
     <div>
       {isOrderViewModalOpen && (
         <div className='modal-overlay'>
-          <div className='modal-content'>
+          <div className='modal-content order-view'>
             <div className='relative'>
               <div className='sticky top-0 right-0 left-0 flex justify-end items-center gap-1 bg-amber-100 py-2 pr-2'>
                 <button

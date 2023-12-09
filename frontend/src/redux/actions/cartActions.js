@@ -56,7 +56,6 @@ export const clearCart = () => (dispatch, getState) => {
 
 // SAVE BILLING ADDRESS
 export const saveBillingAddress = (data) => (dispatch) => {
-  console.log(data);
   dispatch({
     type: CART_SAVE_BILLING_ADDRESS,
     payload: data,

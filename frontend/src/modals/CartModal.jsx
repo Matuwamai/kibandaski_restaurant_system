@@ -46,8 +46,6 @@ export default function CartModal() {
     dispatch(removefromcart(id));
   };
 
-  console.log(table);
-
   const handlePayOrder = () => {
     dispatch(
       createOrder({
@@ -68,10 +66,11 @@ export default function CartModal() {
   }, [cartItems]);
 
   useEffect(() => {
-    cartItems?.map((item) => {
-      return setOrderItems([...orderItems, item.id]);
+    setOrderItems((prevOrderItems) => {
+      const itemIds = cartItems?.map((item) => item.id) || [];
+      return [...prevOrderItems, ...itemIds];
     });
-  }, [cartItems, orderItems]);
+  }, [cartItems]);
 
   return (
     <div>
