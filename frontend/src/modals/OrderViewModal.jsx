@@ -97,7 +97,7 @@ function OrderViewModal() {
                   <IoCloseOutline />
                 </button>
               </div>
-              <div className='bg-white px-4' ref={receiptRef}>
+              <div className='bg-white p-4' ref={receiptRef}>
                 <div className='mb-4'>
                   <h2 className='text-2xl font-semibold text-center'>
                     Kibandaski Restaurant

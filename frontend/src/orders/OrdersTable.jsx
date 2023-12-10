@@ -27,7 +27,7 @@ export default function OrdersTable({ list }) {
   const columns = [
     {
       field: "is_completed",
-      headerName: "Status",
+      headerName: "Order Status",
       width: 150,
       renderCell: (params) => {
         return (
@@ -90,10 +90,20 @@ export default function OrdersTable({ list }) {
       headerName: "Order Details",
       width: 220,
       renderCell: (params) => {
-        const order_desc = (params.row.order_items || [])
+        const order_desc = (params.row.orderItems || [])
           .map((item) => item.title)
           .join(", ");
         return <h6 className='text-gray-600 my-auto'>{order_desc}</h6>;
+      },
+    },
+    {
+      field: "amount",
+      headerName: "Amount",
+      width: 100,
+      renderCell: (params) => {
+        return (
+          <h6 className='text-blue-300'>KES {params.row.amount.toFixed(2)}</h6>
+        );
       },
     },
     {
