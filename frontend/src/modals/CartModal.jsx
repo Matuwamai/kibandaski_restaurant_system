@@ -49,7 +49,7 @@ export default function CartModal() {
   const handlePayOrder = () => {
     dispatch(
       createOrder({
-        order_items: orderItems,
+        order_items: cartItems,
         payment_method: "MPESA",
         customer_name: "Wamae",
         table_no: 10,
@@ -67,10 +67,15 @@ export default function CartModal() {
 
   useEffect(() => {
     setOrderItems((prevOrderItems) => {
-      const itemIds = cartItems?.map((item) => item.id) || [];
-      return [...prevOrderItems, ...itemIds];
+      const itemObjs =
+        cartItems?.map((item) => {
+          return { id: item.id, quantity: item.quantity };
+        }) || [];
+      return [...prevOrderItems, ...itemObjs];
     });
   }, [cartItems]);
+
+  console.log(orderItems);
 
   return (
     <div>

@@ -47,7 +47,7 @@ function OrderViewModal() {
 
   useEffect(() => {
     if (currentOrder) {
-      setItems(currentOrder.order_items);
+      setItems(currentOrder.orderItems);
     }
   }, [currentOrder]);
 
@@ -65,6 +65,11 @@ function OrderViewModal() {
     hour12: true,
   };
   const formattedDatetime = originalDatetime.toLocaleString("en-US", options);
+
+  function getItemTotals(a, b) {
+    const sum = a * b;
+    return sum.toFixed(2);
+  }
 
   return (
     <div>
@@ -123,18 +128,22 @@ function OrderViewModal() {
                       <tr className='bg-gray-100'>
                         <th className='py-2 px-2 text-left'>Item</th>
                         <th className='py-2 px-2 text-left'>Qty</th>
-                        <th className='py-2 px-2 text-left'>Price</th>
+                        <th className='py-2 px-2 text-right'>Total</th>
                       </tr>
                     </thead>
                     <tbody>
-                      {items.map((item, index) => (
+                      {items?.map((item, index) => (
                         <tr
                           key={index}
                           className={index % 2 === 0 ? "bg-gray-50" : ""}
                         >
                           <td className='py-2 px-2'>{item.title}</td>
-                          <td className='py-2 px-2'>{item.qty}</td>
-                          <td className='py-2 px-2'>{item.price.toFixed(2)}</td>
+                          <td className='py-2 px-2'>
+                            {item.quantity} * {item.price}
+                          </td>
+                          <td className='py-2 px-2 text-end'>
+                            {getItemTotals(item.price, item.quantity)}
+                          </td>
                         </tr>
                       ))}
                     </tbody>
@@ -142,7 +151,7 @@ function OrderViewModal() {
                       <tr className='bg-white'>
                         <td className='py-2 px-4 font-semibold'></td>
                         <td className='py-2 px-4'>Subtotal</td>
-                        <td className='py-2 px-4 font-semibold'>
+                        <td className='py-2 px-2 font-semibold text-end'>
                           KES {currentOrder?.amount.toFixed(2)}
                         </td>
                       </tr>

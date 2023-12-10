@@ -24,6 +24,7 @@ export const createOrder = (order) => async (dispatch) => {
 
     dispatch(createOrderSuccess());
   } catch (err) {
+    console.log(err);
     dispatch(createOrderFail("Error creating order!"));
   }
 };
