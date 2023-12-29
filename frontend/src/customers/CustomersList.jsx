@@ -104,7 +104,7 @@ export default function CustomersList() {
 
   return (
     <div className=''>
-      <div className='bg-white  w-max'>
+      <div className='bg-white'>
         <DataGrid
           rows={data}
           disableSelectionOnClick

@@ -45,7 +45,7 @@ const Orders = () => {
                 className='w-4/5 border focus:outline-none px-2 py-1 rounded text-md'
                 placeholder='Type Order No or Customer...'
               />
-              <button className='border rounded bg-amber-400 w-1/5'>
+              <button className='border rounded bg-amber-400 w-1/5 text-white'>
                 <SearchOutlinedIcon />
               </button>
             </div>
@@ -57,7 +57,7 @@ const Orders = () => {
                 <option>Completed</option>
               </select>
               <button
-                className='w-1/2 flex gap-2 items-center justify-center bg-amber-400'
+                className='w-1/2 flex gap-2 items-center justify-center bg-amber-400 text-white'
                 onClick={openOrderCreateModal}
               >
                 <MdAddShoppingCart style={{ fontSize: "18px" }} />

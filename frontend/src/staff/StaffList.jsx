@@ -1,8 +1,6 @@
 import { DataGrid } from "@mui/x-data-grid";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
-import { Link } from "react-router-dom";
 
 export default function StaffList() {
   const columns = [
@@ -83,22 +81,13 @@ export default function StaffList() {
     {
       field: "action",
       headerName: "Actions",
-      width: 180,
+      width: 120,
       renderCell: (params) => {
         return (
           <div className='w-full flex gap-3'>
-            <Link
-              to={`/meals-and-dishes/${params.row.id}`}
-              className='border text-blue-300 cursor-pointer p-2 rounded'
-            >
-              <RemoveRedEyeIcon />
-            </Link>
-            <Link
-              to={`/meals-and-dishes/${params.row.id}`}
-              className='border text-green-400 cursor-pointer p-2 rounded'
-            >
+            <div className='border text-green-400 cursor-pointer p-2 rounded'>
               <EditIcon />
-            </Link>
+            </div>
             <div className='border text-red-400 cursor-pointer p-2 rounded'>
               <DeleteIcon />
             </div>
