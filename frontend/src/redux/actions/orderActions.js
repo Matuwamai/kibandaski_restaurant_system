@@ -12,6 +12,7 @@ import {
   updateOrderStart,
   updateOrderSuccess,
   updateOrderFail,
+  clearTable,
 } from "../slices/orderSlices";
 import axios from "axios";
 
@@ -23,6 +24,7 @@ export const createOrder = (order) => async (dispatch) => {
     await axios.post(`${BASE_URL}/orders/create`, order);
 
     dispatch(createOrderSuccess());
+    dispatch(clearTable());
   } catch (err) {
     console.log(err);
     dispatch(createOrderFail("Error creating order!"));

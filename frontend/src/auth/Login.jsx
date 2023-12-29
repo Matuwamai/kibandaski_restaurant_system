@@ -43,7 +43,7 @@ const Login = () => {
             {loading ? <Loading /> : error && <Message>{error}</Message>}
             <div className='mb-4'>
               <label htmlFor='schoolName' className='block text-lg mb-1'>
-                Email
+                Username
               </label>
               <input
                 type='text'
@@ -52,7 +52,7 @@ const Login = () => {
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 className='w-full bg-gray-100 text-gray-800 rounded-lg py-2 px-4'
-                placeholder='kiganjoprimary@nyeri'
+                placeholder='johndoe'
                 required
               />
             </div>
@@ -67,7 +67,7 @@ const Login = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className='w-full bg-gray-100 text-gray-800 rounded-lg py-2 px-4'
-                placeholder='Choose a password'
+                placeholder='********'
                 required
               />
             </div>

@@ -30,7 +30,6 @@ from meals_and_dishes.models import MealsAndDishes
 @api_view(['POST'])
 def create_order(request):
     data = request.data
-    print(data)
     orderItems = data['order_items']
 
     if orderItems and len(orderItems) == 0:

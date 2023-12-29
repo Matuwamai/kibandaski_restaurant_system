@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./Modal.css";
 import { useGlobalContext } from "../context/context";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -7,12 +7,15 @@ import Loading from "../utils/Loading";
 import Message from "../utils/Message";
 import {
   addToCart,
+  clearCart,
   decreaseCartQty,
   removefromcart,
 } from "../redux/actions/cartActions";
 import { createOrder } from "../redux/actions/orderActions";
 
 export default function CartModal() {
+  const insideModalRef = useRef(null);
+  const outsideModalRef = useRef(null);
   const dispatch = useDispatch();
   const { isCartOpen, closeCartModal } = useGlobalContext();
 
@@ -22,14 +25,19 @@ export default function CartModal() {
     (state) => state.orders
   );
 
+  const [qrCodeError, setQrCodeError] = useState(null);
+
   // Memoize the handleCloseModal function
   const handleCloseModal = () => {
     closeCartModal();
     document.body.style.overflow = "auto";
   };
 
+  const handleOutOfFocus = (ref) => {
+    console.log(ref);
+  };
+
   const [subTotal, setSubTotal] = useState(0);
-  const [orderItems, setOrderItems] = useState([]);
 
   const handleCartQty = (id, qty, type) => {
     if (type === "dec") {
@@ -47,15 +55,19 @@ export default function CartModal() {
   };
 
   const handlePayOrder = () => {
-    dispatch(
-      createOrder({
-        order_items: cartItems,
-        payment_method: "MPESA",
-        customer_name: "Wamae",
-        table_no: 10,
-        amount: subTotal,
-      })
-    );
+    if (table === 0) {
+      setQrCodeError("Please scan the QR Code!");
+    } else {
+      dispatch(
+        createOrder({
+          order_items: cartItems,
+          payment_method: "MPESA",
+          customer_name: "Wamae",
+          table_no: table,
+          amount: subTotal,
+        })
+      );
+    }
   };
 
   useEffect(() => {
@@ -66,26 +78,29 @@ export default function CartModal() {
   }, [cartItems]);
 
   useEffect(() => {
-    setOrderItems((prevOrderItems) => {
-      const itemObjs =
-        cartItems?.map((item) => {
-          return { id: item.id, quantity: item.quantity };
-        }) || [];
-      return [...prevOrderItems, ...itemObjs];
-    });
-  }, [cartItems]);
-
-  console.log(orderItems);
+    if (success_create) {
+      dispatch(clearCart());
+    }
+  }, [dispatch, success_create]);
 
   return (
     <div>
       {isCartOpen && (
-        <div className='modal-overlay'>
-          <div className='modal-content'>
+        <div
+          className='modal-overlay'
+          ref={outsideModalRef}
+          onClick={() => handleOutOfFocus(outsideModalRef)}
+        >
+          <div
+            className='modal-content'
+            ref={insideModalRef}
+            onClick={() => handleOutOfFocus(insideModalRef)}
+          >
             <h3 className='h3 text-gray-800 uppercase font-semibold my-2 text-center'>
               Your Cart
             </h3>
             {loading ? <Loading /> : error && <Message>{error}</Message>}
+            {qrCodeError && <Message>{qrCodeError}</Message>}
             <table className='min-w-full table-auto'>
               <thead>
                 <tr className='bg-gray-100'>

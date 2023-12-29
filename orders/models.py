@@ -22,7 +22,7 @@ class OrderItem(models.Model):
     meal = models.ForeignKey(
         MealsAndDishes, on_delete=models.SET_NULL, null=True)
     order = models.ForeignKey(Order, on_delete=models.SET_NULL, null=True)
-    title = models.CharField(max_length=100, null=True, unique=True)
+    title = models.CharField(max_length=100, null=True, unique=False)
     quantity = models.IntegerField(null=True, blank=True, default=0)
     price = models.IntegerField(default=0)
     media_url = models.CharField(

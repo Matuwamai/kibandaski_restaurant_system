@@ -29,7 +29,7 @@ export const sideLinks = [
     id: 3,
     url: "/transactions",
     iconClass: <FaDollarSign style={{ fontSize: "26px" }} />,
-    title: "Revenue",
+    title: "Transactions",
   },
   {
     id: 4,
@@ -39,21 +39,21 @@ export const sideLinks = [
   },
   {
     id: 5,
-    url: "/cooks",
+    url: "/staff",
     iconClass: <GiCook style={{ fontSize: "26px" }} />,
-    title: "Chefs & Cooks",
+    title: "Staff",
   },
   {
     id: 6,
-    url: "/waiters",
-    iconClass: <GiChefToque style={{ fontSize: "26px" }} />,
-    title: "Waiters",
-  },
-  {
-    id: 7,
     url: "/restaurant-tables",
     iconClass: <MdTableRestaurant style={{ fontSize: "26px" }} />,
     title: "Tables & Seats",
+  },
+  {
+    id: 7,
+    url: "/reports",
+    iconClass: <GiChefToque style={{ fontSize: "26px" }} />,
+    title: "Reports",
   },
   {
     id: 8,

@@ -1,4 +1,5 @@
 import { DataGrid } from "@mui/x-data-grid";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 export default function CustomersList() {
   const columns = [
@@ -15,7 +16,7 @@ export default function CustomersList() {
     {
       field: "username",
       headerName: "Customer",
-      width: 150,
+      width: 250,
       renderCell: (params) => {
         return <h6 className='text-gray-600 my-auto'>{params.row.username}</h6>;
       },
@@ -29,6 +30,30 @@ export default function CustomersList() {
       },
     },
     {
+      field: "orders",
+      headerName: "Orders",
+      width: 80,
+      renderCell: (params) => {
+        return (
+          <h6 className='bg-red-500 px-2 py-1 rounded-md text-white flex justify-center items-center mx-auto'>
+            11
+          </h6>
+        );
+      },
+    },
+    {
+      field: "points",
+      headerName: "Points",
+      width: 100,
+      renderCell: (params) => {
+        return (
+          <h6 className='bg-green-400 px-2 py-1 rounded-md text-white my-auto mx-auto'>
+            1000
+          </h6>
+        );
+      },
+    },
+    {
       field: "created_at",
       headerName: "Date Joined",
       width: 150,
@@ -37,6 +62,20 @@ export default function CustomersList() {
           <h6 className='bg-slate-100 px-2 py-1 rounded-md text-blue-300 my-auto'>
             {params.row.created_at}
           </h6>
+        );
+      },
+    },
+    {
+      field: "action",
+      headerName: "Actions",
+      width: 80,
+      renderCell: (params) => {
+        return (
+          <div className='w-full flex justify-center'>
+            <div className='border text-red-400 cursor-pointer p-2 rounded'>
+              <DeleteIcon />
+            </div>
+          </div>
         );
       },
     },
@@ -64,18 +103,18 @@ export default function CustomersList() {
   ];
 
   return (
-    <>
-      <div className='bg-white'>
+    <div className=''>
+      <div className='bg-white  w-max'>
         <DataGrid
           rows={data}
           disableSelectionOnClick
           columns={columns}
           pageSize={8}
           // checkboxSelection
-          //   showColumnVerticalBorder
-          //   showCellVerticalBorder
+          showColumnVerticalBorder
+          showCellVerticalBorder
         />
       </div>
-    </>
+    </div>
   );
 }

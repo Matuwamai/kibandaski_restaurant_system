@@ -24,6 +24,7 @@ export default function CreateMealModal() {
     details: "",
     qty: "",
     price: "",
+    title: "",
   });
   const [file, setFile] = useState("");
   const [imageLoading, setImageLoading] = useState(false);
@@ -84,12 +85,25 @@ export default function CreateMealModal() {
             <form onSubmit={handleCreateMeal}>
               <div className='mb-3 flex flex-col'>
                 <label htmlFor='meals' className='my-1'>
+                  Meal & Dishes Title
+                </label>
+                <input
+                  name='title'
+                  type='text'
+                  placeholder='Chapo Mandondo - Supu ya matumbo'
+                  id='meals'
+                  onChange={handleInputChange}
+                  className='border rounded focus:outline-none p-2'
+                />
+              </div>
+              <div className='mb-3 flex flex-col'>
+                <label htmlFor='meals' className='my-1'>
                   Meal & Dishes Details
                 </label>
                 <input
                   name='details'
                   type='text'
-                  placeholder='Chapo Mandondo - Supu ya matumbo'
+                  placeholder='Describe your meal here...'
                   id='meals'
                   onChange={handleInputChange}
                   className='border rounded focus:outline-none p-2'

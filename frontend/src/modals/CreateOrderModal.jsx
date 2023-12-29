@@ -53,10 +53,11 @@ export default function CreateOrderModal() {
     e.preventDefault();
     dispatch(
       createOrder({
-        order_items: selectedMeals,
-        table_no: 0,
+        order_items: cartItems,
         payment_method: "CASH",
         customer_name: customerName,
+        table_no: 10,
+        amount: totalAmount,
       })
     );
   };
@@ -75,6 +76,11 @@ export default function CreateOrderModal() {
       setCartItems([...cartItems, newItem]);
     }
   };
+
+  function getItemTotals(a, b) {
+    const sum = a * b;
+    return sum.toFixed(2);
+  }
 
   useEffect(() => {
     if (mealsList) {
@@ -176,7 +182,7 @@ export default function CreateOrderModal() {
                             </button>
                           </td>
                           <td className='py-2 px-2'>
-                            {item?.price * item?.quantity}
+                            {getItemTotals(item?.quantity, item?.price)}
                           </td>
                         </tr>
                       );

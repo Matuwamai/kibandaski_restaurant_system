@@ -5,7 +5,7 @@ import CartModal from "../modals/CartModal";
 import { useGlobalContext } from "../context/context";
 import { addToCart } from "../redux/actions/cartActions";
 import { MdAddShoppingCart } from "react-icons/md";
-import { useLocation, useParams } from "react-router";
+import { useParams } from "react-router";
 import { updateTable } from "../redux/slices/orderSlices";
 
 const Home = () => {
@@ -15,6 +15,7 @@ const Home = () => {
   const dispatch = useDispatch();
   const { mealsList } = useSelector((state) => state.meals);
   const { cartItems } = useSelector((state) => state.cart);
+  const { table } = useSelector((state) => state.orders);
 
   useEffect(() => {
     dispatch(listMeals());
@@ -25,8 +26,12 @@ const Home = () => {
   };
 
   useEffect(() => {
-    dispatch(updateTable(t_no));
-  }, [dispatch]);
+    if (t_no) {
+      dispatch(updateTable(t_no));
+    }
+  }, [dispatch, t_no]);
+
+  console.log(table);
   return (
     <>
       <CartModal />
@@ -110,9 +115,10 @@ const Home = () => {
             return (
               <div className='col-span-1 bg-white p-2 shadow m-2' key={item.id}>
                 <img
-                  src='/assets/mandazi.webp'
+                  // src='/assets/mandazi.webp'
+                  src={item?.media_url}
                   alt='...'
-                  className='h-38 object-cover'
+                  className='h-36 w-full'
                 />
                 <div className='flex justify-between items-center'>
                   <h6 className='text-gray-800 text-xl my-1'>{item.title}</h6>
@@ -123,7 +129,11 @@ const Home = () => {
                 <p className='text-gray-600 text-sm py-2'>{item.details}</p>
                 <div className='flex justify-between items-center'>
                   <button
-                    className='bg-amber-500 text-white uppercase'
+                    className={`text-white uppercase ${
+                      item?.is_ready
+                        ? "bg-amber-500"
+                        : "bg-red-100 cursor-not-allowed"
+                    }`}
                     onClick={() => addItemToCart(item.id)}
                   >
                     Add To Cart

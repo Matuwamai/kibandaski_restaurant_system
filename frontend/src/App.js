@@ -1,7 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Dashboard from "./screens/Dashboard";
 import Orders from "./screens/Orders";
-import Employees from "./screens/Employees";
 import Customers from "./screens/Customers";
 import DashboardLayout from "./layout";
 import MealsAndDishes from "./screens/MealsAndDishes";
@@ -10,6 +9,10 @@ import Tables from "./screens/Tables";
 import Login from "./auth/Login";
 import Home from "./client/Home";
 import Cart from "./client/Cart";
+import Transactions from "./transactions/Transactions";
+import Staff from "./screens/Staff";
+import Reports from "./reports/Reports";
+import Settings from "./settings/Settings";
 function App() {
   return (
     <Router>
@@ -22,10 +25,13 @@ function App() {
           <Route path='/' element={<Dashboard />} />
           <Route path='/orders' element={<Orders />} />
           <Route path='/customers' element={<Customers />} />
-          <Route path='/employees' element={<Employees />} />
+          <Route path='/staff' element={<Staff />} />
           <Route path='/meals-and-dishes' element={<MealsAndDishes />} />
           <Route path='/meals-and-dishes/:id' element={<MealsView />} />
           <Route path='/restaurant-tables' element={<Tables />} />
+          <Route path='/transactions' element={<Transactions />} />
+          <Route path='/reports' element={<Reports />} />
+          <Route path='/settings' element={<Settings />} />
         </Route>
       </Routes>
     </Router>
