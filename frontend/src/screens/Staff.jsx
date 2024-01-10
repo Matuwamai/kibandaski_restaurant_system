@@ -3,6 +3,7 @@ import GroupAddOutlinedIcon from "@mui/icons-material/GroupAddOutlined";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import { IoIosAdd } from "react-icons/io";
 import StaffList from "../staff/StaffList";
+import { Link } from "react-router-dom";
 
 const Staff = () => {
   return (
@@ -25,10 +26,13 @@ const Staff = () => {
                 <SearchOutlinedIcon />
               </button>
             </div>
-            <button className='col-span-1 mt-2 md:mt-0 flex gap-1 items-center justify-center bg-amber-400 text-white'>
+            <Link
+              to='/staff/new'
+              className='col-span-1 mt-2 md:mt-0 flex gap-1 items-center justify-center bg-amber-400 text-white'
+            >
               <IoIosAdd style={{ fontSize: "28px" }} />
               Add Staff
-            </button>
+            </Link>
           </div>
         </div>
       </div>

@@ -8,8 +8,8 @@ const TopBar = () => {
     <>
       <header className='bg-slate-50 sticky top-0 z-30 shadow-sm flex justify-between md:items-center p-4 big-screen-top'>
         <div className='flex flex-col md:flex-row items-center md:gap-8 '>
-          <h1 className='text-xl md:text-2xl font-semibold my-auto'>
-            KIBANDASKI Management System
+          <h1 className='text-xl md:text-2xl font-semibold uppercase my-auto'>
+            KMS
           </h1>
         </div>
         <div className='flex items-center gap-2'>

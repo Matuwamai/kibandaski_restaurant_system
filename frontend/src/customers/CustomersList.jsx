@@ -16,9 +16,17 @@ export default function CustomersList() {
     {
       field: "username",
       headerName: "Customer",
-      width: 250,
+      width: 150,
       renderCell: (params) => {
         return <h6 className='text-gray-600 my-auto'>{params.row.username}</h6>;
+      },
+    },
+    {
+      field: "email",
+      headerName: "Email",
+      width: 250,
+      renderCell: (params) => {
+        return <h6 className='text-gray-600 my-auto'>{params.row.email}</h6>;
       },
     },
     {
@@ -85,18 +93,21 @@ export default function CustomersList() {
     {
       id: 1,
       username: "Wamae",
+      email: "wamaejoseph392@gmail.com",
       phone_no: "0740924507",
       created_at: "8thth Nov 2023",
     },
     {
       id: 2,
       username: "JohnDoe",
+      email: "johndoe@gmail.com",
       phone_no: "0739127837",
       created_at: "10th Nov 2023",
     },
     {
       id: 3,
       username: "janembithi",
+      email: "janembithi@gmail.com",
       phone_no: "0710387837",
       created_at: "11th Nov 2023",
     },

@@ -13,6 +13,8 @@ import Transactions from "./transactions/Transactions";
 import Staff from "./screens/Staff";
 import Reports from "./reports/Reports";
 import Settings from "./settings/Settings";
+import Add from "./staff/Add";
+import Edit from "./staff/Edit";
 function App() {
   return (
     <Router>
@@ -26,6 +28,8 @@ function App() {
           <Route path='/orders' element={<Orders />} />
           <Route path='/customers' element={<Customers />} />
           <Route path='/staff' element={<Staff />} />
+          <Route path='/staff/new' element={<Add />} />
+          <Route path='/staff/:id/edit' element={<Edit />} />
           <Route path='/meals-and-dishes' element={<MealsAndDishes />} />
           <Route path='/meals-and-dishes/:id' element={<MealsView />} />
           <Route path='/restaurant-tables' element={<Tables />} />
