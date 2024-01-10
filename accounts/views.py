@@ -105,6 +105,13 @@ class AdminUpdateView(generics.UpdateAPIView):
     queryset = Admin.objects.all()
     serializer_class = AdminReadSerializer
 
+# Deleting an admin
+
+
+class AdminDeleteView(generics.DestroyAPIView):
+    queryset = Admin.objects.all()
+    serializer_class = AdminSerializer
+
 
 class CookRegistrationView(generics.CreateAPIView):
     serializer_class = CookSerializer

@@ -25,7 +25,8 @@ class CustomUser(AbstractUser):
     objects = CustomUserManager()
 
     # Add unique related_name for groups and user_permissions
-    groups = models.ManyToManyField(Group, related_name='custom_user_groups')
+    groups = models.ManyToManyField(
+        Group, related_name='custom_user_groups')
     user_permissions = models.ManyToManyField(
         Permission, related_name='custom_user_permissions')
 
