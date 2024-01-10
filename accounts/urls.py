@@ -4,7 +4,7 @@ from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
 )
-from accounts.views import CustomerRegistrationView, AdminRegistrationView, CookRegistrationView, WaiterRegistrationView, AdminListView, AdminDetailView
+from accounts.views import CustomerRegistrationView, AdminRegistrationView, CookRegistrationView, WaiterRegistrationView, AdminListView, AdminDetailView, AdminUpdateView
 
 urlpatterns = [
     path('login', views.login),
@@ -17,6 +17,7 @@ urlpatterns = [
          name='admin-registration'),
     path('admins/', AdminListView.as_view(), name='admin-list'),
     path('admins/<int:pk>/', AdminDetailView.as_view(), name='admin-detail'),
+    path('admins/<int:pk>/update/', AdminUpdateView.as_view(), name='admin-update'),
     path('register/cook/', CookRegistrationView.as_view(),
          name='cook-registration'),
     path('register/waiter/', WaiterRegistrationView.as_view(),

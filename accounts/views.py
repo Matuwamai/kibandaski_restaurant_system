@@ -98,6 +98,13 @@ class AdminDetailView(generics.RetrieveAPIView):
     queryset = Admin.objects.all()
     serializer_class = AdminReadSerializer
 
+# Update admin
+
+
+class AdminUpdateView(generics.UpdateAPIView):
+    queryset = Admin.objects.all()
+    serializer_class = AdminReadSerializer
+
 
 class CookRegistrationView(generics.CreateAPIView):
     serializer_class = CookSerializer

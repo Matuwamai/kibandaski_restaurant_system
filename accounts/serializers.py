@@ -60,6 +60,21 @@ class AdminReadSerializer(serializers.ModelSerializer):
             representation['user_id'] = user_representation['id']
         return representation
 
+    def update(self, instance, validated_data):
+        user_data = validated_data.pop('user', None)
+        # update the Admin fields
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        instance.save()
+
+        # update the User fields
+        if user_data:
+            for attr, value in user_data.items():
+                setattr(instance.user, attr, value)
+            instance.user.save()
+
+        return instance
+
 
 class CookSerializer(serializers.ModelSerializer):
     user = CustomUserSerializer()
