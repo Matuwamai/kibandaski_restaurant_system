@@ -1,6 +1,6 @@
 from rest_framework import generics
-from accounts.serializers import CustomUserSerializer, AdminSerializer, AdminReadSerializer, CookSerializer, WaiterSerializer
-from accounts.models import Admin, Cook, Waiter
+from accounts.serializers import CustomUserSerializer, AdminSerializer, AdminReadSerializer, StaffSerializer, CustomerSerializer, CustomerReadSerializer
+from accounts.models import Admin, Staff, Customer, CustomUser
 from django.contrib.auth import get_user_model
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -58,15 +58,7 @@ def register(request):
 
 User = get_user_model()
 
-
-class CustomerRegistrationView(generics.CreateAPIView):
-    serializer_class = CustomUserSerializer
-
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        user = serializer.save()
-        return Response({'detail': 'Registration successful'}, status=status.HTTP_201_CREATED)
+# ADMIN
 
 
 class AdminRegistrationView(generics.CreateAPIView):
@@ -113,37 +105,28 @@ class AdminDeleteView(generics.DestroyAPIView):
     serializer_class = AdminSerializer
 
 
-class CookRegistrationView(generics.CreateAPIView):
-    serializer_class = CookSerializer
+class UserDeleteView(generics.DestroyAPIView):
+    queryset = CustomUser.objects.all()
+    serializer_class = CustomUserSerializer
+
+
+# CUSTOMER
+class CustomerRegistrationView(generics.CreateAPIView):
+    serializer_class = CustomerSerializer
 
     def create(self, request, *args, **kwargs):
-        user_data = request.data.get('user', {})
-        user_serializer = CustomUserSerializer(data=user_data)
+        user_serializer = CustomUserSerializer(data=request.data)
         user_serializer.is_valid(raise_exception=True)
         user = user_serializer.save()
 
-        cook_data = {'user': user.id,
-                     'full_name': request.data.get('full_name')}
-        cook_serializer = CookSerializer(data=cook_data)
-        cook_serializer.is_valid(raise_exception=True)
-        cook_serializer.save()
+        customer_data = {'user': user.id}
+        customer_serializer = CustomerSerializer(data=customer_data)
+        customer_serializer.is_valid(raise_exception=True)
+        customer_serializer.save()
 
-        return Response({'detail': 'Cook registration successful'}, status=status.HTTP_201_CREATED)
+        return Response({'detail': 'Account created successful'}, status=status.HTTP_201_CREATED)
 
 
-class WaiterRegistrationView(generics.CreateAPIView):
-    serializer_class = WaiterSerializer
-
-    def create(self, request, *args, **kwargs):
-        user_data = request.data.get('user', {})
-        user_serializer = CustomUserSerializer(data=user_data)
-        user_serializer.is_valid(raise_exception=True)
-        user = user_serializer.save()
-
-        waiter_data = {'user': user.id,
-                       'full_name': request.data.get('full_name')}
-        waiter_serializer = WaiterSerializer(data=waiter_data)
-        waiter_serializer.is_valid(raise_exception=True)
-        waiter_serializer.save()
-
-        return Response({'detail': 'Waiter registration successful'}, status=status.HTTP_201_CREATED)
+class CustomerListView(generics.ListAPIView):
+    queryset = Customer.objects.all()
+    serializer_class = CustomerReadSerializer

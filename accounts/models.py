@@ -42,11 +42,17 @@ class Admin(models.Model):
     id_number = models.CharField(max_length=20)
 
 
-class Cook(models.Model):
+class Customer(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
-    full_name = models.CharField(max_length=255)
 
 
-class Waiter(models.Model):
+class Staff(models.Model):
+    CHEF = 'Chef'
+    WAITER = 'Waiter'
+
+    ROLE_CHOICES = [
+        (CHEF, 'Chef'),
+        (WAITER, 'Waiter'),
+    ]
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
-    full_name = models.CharField(max_length=255)
+    role = models.CharField(max_length=255, choices=ROLE_CHOICES)
