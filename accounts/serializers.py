@@ -53,8 +53,20 @@ class StaffUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
         fields = ['id', 'first_name', 'last_name',
-                  'email', 'contact', 'password']
+                  'username', 'email', 'contact', 'password']
         extra_kwargs = {'password': {'write_only': True}}
+
+    def create(self, validated_data):
+        # Hash the password before saving
+        validated_data['password'] = make_password(
+            validated_data.get('password'))
+        return super().create(validated_data)
+
+    def update(self, instance, validated_data):
+        # Hash the password before saving
+        validated_data['password'] = make_password(
+            validated_data.get('password'))
+        return super().update(instance, validated_data)
 
 # Admin
 
@@ -109,7 +121,7 @@ class StaffSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Staff
-        fields = ['id', 'user', 'id_number']
+        fields = ['id', 'user', 'id_number', 'role']
 
 
 class StaffReadSerializer(serializers.ModelSerializer):
@@ -117,7 +129,7 @@ class StaffReadSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Admin
-        fields = ['id', 'role']
+        fields = ['id', 'user', 'role', 'id_number']
 
     # Flatten serializer data to be one dictionary
     def to_representation(self, instance):

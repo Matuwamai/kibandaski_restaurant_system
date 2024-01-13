@@ -1,5 +1,5 @@
 from rest_framework import generics
-from accounts.serializers import CustomUserSerializer, AdminSerializer, AdminReadSerializer, StaffSerializer, CustomerSerializer, CustomerReadSerializer
+from accounts.serializers import CustomUserSerializer, StaffUserSerializer, AdminSerializer, AdminReadSerializer, StaffSerializer, CustomerSerializer, CustomerReadSerializer
 from accounts.models import Admin, Staff, Customer, CustomUser
 from django.contrib.auth import get_user_model
 from rest_framework.decorators import api_view
@@ -113,7 +113,7 @@ class UserDeleteView(generics.DestroyAPIView):
 
 # CUSTOMER
 class CustomerRegistrationView(generics.CreateAPIView):
-    serializer_class = CustomerSerializer
+    serializer_class = StaffUserSerializer
 
     def create(self, request, *args, **kwargs):
         user_serializer = CustomUserSerializer(data=request.data)
@@ -147,3 +147,26 @@ class CustomerDeleteView(generics.DestroyAPIView):
     """Delete user object both in the CustomUser and Customer"""
     queryset = CustomUser.objects.all()
     serializer_class = CustomerSerializer
+
+# Staff
+
+
+class StaffRegistrationView(generics.CreateAPIView):
+    serializer_class = StaffSerializer
+
+    def create(self, request, *args, **kwargs):
+        user_data = request.data.get('user', {})
+        user_serializer = StaffUserSerializer(data=user_data)
+        user_serializer.is_valid(raise_exception=True)
+        user = user_serializer.save()
+
+        staff_role = request.data.get('role')
+        staff_id = request.data.get('id_number')
+
+        staff_data = {'user': user.id,
+                      'id_number': staff_id, 'role': staff_role}
+        staff_serializer = StaffSerializer(data=staff_data)
+        staff_serializer.is_valid(raise_exception=True)
+        staff_serializer.save()
+
+        return Response({'message': 'Staff registered successfully'}, status=status.HTTP_201_CREATED)

@@ -3,11 +3,12 @@ from django.db import models
 
 
 class CustomUserManager(BaseUserManager):
-    def create_user(self, email, username, password=None, **extra_fields):
+    def create_user(self, email, username, first_name=None, last_name=None, password=None, **extra_fields):
         if not email:
             raise ValueError('The Email field must be set')
         email = self.normalize_email(email)
-        user = self.model(email=email, username=username, **extra_fields)
+        user = self.model(email=email, username=username,
+                          first_name=first_name, last_name=last_name, ** extra_fields)
         user.set_password(password)
         user.save(using=self._db)
         return user
@@ -56,3 +57,4 @@ class Staff(models.Model):
     ]
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     role = models.CharField(max_length=255, choices=ROLE_CHOICES)
+    id_number = models.CharField(max_length=20, null=True)
