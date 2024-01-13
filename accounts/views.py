@@ -97,16 +97,11 @@ class AdminUpdateView(generics.UpdateAPIView):
     queryset = Admin.objects.all()
     serializer_class = AdminReadSerializer
 
-# Deleting an admin
-
-
-class AdminDeleteView(generics.DestroyAPIView):
-    """Delete user object both in the CustomUser and Admin"""
-    queryset = CustomUser.objects.all()
-    serializer_class = AdminSerializer
+# Deleting user
 
 
 class UserDeleteView(generics.DestroyAPIView):
+    """Delete user object both in the CustomUser and any other referenced model"""
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer
 
@@ -142,12 +137,6 @@ class CustomerUpdateView(generics.UpdateAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer
 
-
-class CustomerDeleteView(generics.DestroyAPIView):
-    """Delete user object both in the CustomUser and Customer"""
-    queryset = CustomUser.objects.all()
-    serializer_class = CustomerSerializer
-
 # Staff
 
 
@@ -178,5 +167,10 @@ class StaffListView(generics.ListAPIView):
 
 
 class StaffDetailView(generics.RetrieveAPIView):
+    queryset = Staff.objects.all()
+    serializer_class = StaffReadSerializer
+
+
+class StaffUpdateView(generics.UpdateAPIView):
     queryset = Staff.objects.all()
     serializer_class = StaffReadSerializer

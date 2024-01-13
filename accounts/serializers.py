@@ -143,7 +143,7 @@ class StaffReadSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         user_data = validated_data.pop('user', None)
-        # update the Admin fields
+        # update the Staff fields
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
         instance.save()
@@ -151,7 +151,8 @@ class StaffReadSerializer(serializers.ModelSerializer):
         # update the User fields
         if user_data:
             for attr, value in user_data.items():
-                setattr(instance.user, attr, value)
+                if getattr(instance.user, attr) != value:
+                    setattr(instance.user, attr, value)
             instance.user.save()
 
         return instance
