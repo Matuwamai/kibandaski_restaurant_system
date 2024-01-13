@@ -125,10 +125,10 @@ class StaffSerializer(serializers.ModelSerializer):
 
 
 class StaffReadSerializer(serializers.ModelSerializer):
-    user = CustomUserSerializer()
+    user = StaffUserSerializer()
 
     class Meta:
-        model = Admin
+        model = Staff
         fields = ['id', 'user', 'role', 'id_number']
 
     # Flatten serializer data to be one dictionary

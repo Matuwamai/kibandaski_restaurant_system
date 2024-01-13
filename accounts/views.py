@@ -1,5 +1,5 @@
 from rest_framework import generics
-from accounts.serializers import CustomUserSerializer, StaffUserSerializer, AdminSerializer, AdminReadSerializer, StaffSerializer, CustomerSerializer, CustomerReadSerializer
+from accounts.serializers import CustomUserSerializer, StaffUserSerializer, AdminSerializer, AdminReadSerializer, StaffSerializer, CustomerSerializer, CustomerReadSerializer, StaffReadSerializer
 from accounts.models import Admin, Staff, Customer, CustomUser
 from django.contrib.auth import get_user_model
 from rest_framework.decorators import api_view
@@ -170,3 +170,13 @@ class StaffRegistrationView(generics.CreateAPIView):
         staff_serializer.save()
 
         return Response({'message': 'Staff registered successfully'}, status=status.HTTP_201_CREATED)
+
+
+class StaffListView(generics.ListAPIView):
+    queryset = Staff.objects.all()
+    serializer_class = StaffReadSerializer
+
+
+class StaffDetailView(generics.RetrieveAPIView):
+    queryset = Staff.objects.all()
+    serializer_class = StaffReadSerializer
