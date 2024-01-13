@@ -76,7 +76,7 @@ class AdminRegistrationView(generics.CreateAPIView):
         admin_serializer.is_valid(raise_exception=True)
         admin_serializer.save()
 
-        return Response({'detail': 'Admin registration successful'}, status=status.HTTP_201_CREATED)
+        return Response({'message': 'Admin registration successful'}, status=status.HTTP_201_CREATED)
 
 
 class AdminListView(generics.ListAPIView):
@@ -101,7 +101,8 @@ class AdminUpdateView(generics.UpdateAPIView):
 
 
 class AdminDeleteView(generics.DestroyAPIView):
-    queryset = Admin.objects.all()
+    """Delete user object both in the CustomUser and Admin"""
+    queryset = CustomUser.objects.all()
     serializer_class = AdminSerializer
 
 
@@ -124,9 +125,25 @@ class CustomerRegistrationView(generics.CreateAPIView):
         customer_serializer.is_valid(raise_exception=True)
         customer_serializer.save()
 
-        return Response({'detail': 'Account created successful'}, status=status.HTTP_201_CREATED)
+        return Response({'message': 'Account created successful'}, status=status.HTTP_201_CREATED)
 
 
 class CustomerListView(generics.ListAPIView):
     queryset = Customer.objects.all()
     serializer_class = CustomerReadSerializer
+
+
+class CustomerDetailView(generics.RetrieveAPIView):
+    queryset = Customer.objects.all()
+    serializer_class = CustomerReadSerializer
+
+
+class CustomerUpdateView(generics.UpdateAPIView):
+    queryset = CustomUser.objects.all()
+    serializer_class = CustomUserSerializer
+
+
+class CustomerDeleteView(generics.DestroyAPIView):
+    """Delete user object both in the CustomUser and Customer"""
+    queryset = CustomUser.objects.all()
+    serializer_class = CustomerSerializer
