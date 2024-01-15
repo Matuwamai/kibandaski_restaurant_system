@@ -84,9 +84,17 @@ export default function StaffList() {
       headerName: "Date Joined",
       width: 150,
       renderCell: (params) => {
+        const formattedDate = new Date(
+          params.row.date_joined
+        ).toLocaleDateString("en-GB", {
+          day: "numeric",
+          month: "short",
+          year: "numeric",
+        });
+
         return (
           <h6 className='bg-slate-100 px-2 py-1 rounded-md text-blue-300 my-auto'>
-            {params.row.date_joined}
+            {formattedDate}
           </h6>
         );
       },
