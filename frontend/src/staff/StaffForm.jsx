@@ -1,6 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { createStaff } from "../redux/actions/staffActions";
+import Loading from "../utils/Loading";
+import Message from "../utils/Message";
 
 const StaffForm = ({ type = "add" }) => {
+  const dispatch = useDispatch();
+
+  const { loading, error, created } = useSelector((state) => state.staff);
   const [staffInfo, setStaffInfo] = useState({
     first_name: "",
     last_name: "",
@@ -16,12 +23,39 @@ const StaffForm = ({ type = "add" }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Creating new staff...");
-    console.log(type);
-    console.log(staffInfo);
+    if (type === "add") {
+      dispatch(
+        createStaff({
+          user: {
+            first_name: staffInfo.first_name,
+            last_name: staffInfo.last_name,
+            username: staffInfo.last_name,
+            email: staffInfo.email,
+            contact: staffInfo.contact,
+            password: staffInfo.contact,
+          },
+          id_number: staffInfo.id_no,
+          role: staffInfo.role,
+        })
+      );
+    }
   };
+
+  useEffect(() => {
+    if (created) {
+      setStaffInfo({
+        first_name: "",
+        last_name: "",
+        email: "",
+        id_no: "",
+        role: "",
+        contact: "",
+      });
+    }
+  }, [created]);
   return (
     <form onSubmit={handleSubmit}>
+      {loading ? <Loading /> : error && <Message>{error}</Message>}
       <div className='mb-3 flex flex-wrap justify-between'>
         <div className='flex flex-col'>
           <label htmlFor='first_name' className='my-1'>
@@ -29,6 +63,7 @@ const StaffForm = ({ type = "add" }) => {
           </label>
           <input
             name='first_name'
+            value={staffInfo.first_name}
             type='text'
             placeholder='John'
             id='first_name'
@@ -42,6 +77,7 @@ const StaffForm = ({ type = "add" }) => {
           </label>
           <input
             name='last_name'
+            value={staffInfo.last_name}
             type='text'
             placeholder='Doe'
             id='last_name'
@@ -57,6 +93,7 @@ const StaffForm = ({ type = "add" }) => {
           </label>
           <input
             name='email'
+            value={staffInfo.email}
             type='email'
             placeholder='johndoe@gmail.com'
             id='email'
@@ -74,9 +111,9 @@ const StaffForm = ({ type = "add" }) => {
             onChange={handleInputChange}
             className='w-full border rounded focus:outline-none p-2'
           >
-            <option>---select role---</option>
-            <option className='Chef'>Chef</option>
-            <option className='Waiter'>Waiter</option>
+            <option value=''>---select role---</option>
+            <option value='Chef'>Chef</option>
+            <option value='Waiter'>Waiter</option>
           </select>
         </div>
       </div>
@@ -89,6 +126,7 @@ const StaffForm = ({ type = "add" }) => {
           placeholder='********'
           id='id_no'
           name='id_no'
+          value={staffInfo.id_no}
           onChange={handleInputChange}
           className='border rounded focus:outline-none p-2'
         />
@@ -102,6 +140,7 @@ const StaffForm = ({ type = "add" }) => {
           placeholder='0* ** *** ***'
           id='phone_no'
           name='contact'
+          value={staffInfo.contact}
           onChange={handleInputChange}
           className='border rounded focus:outline-none p-2'
         />
