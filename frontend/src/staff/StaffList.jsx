@@ -2,8 +2,14 @@ import { DataGrid } from "@mui/x-data-grid";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Link } from "react-router-dom";
+import { useEffect } from "react";
+import { listStaff } from "../redux/actions/staffActions";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function StaffList() {
+  const dispatch = useDispatch();
+  const { staffList } = useSelector((state) => state.staff);
+
   const columns = [
     {
       field: "id",
@@ -20,7 +26,11 @@ export default function StaffList() {
       headerName: "Full Names",
       width: 150,
       renderCell: (params) => {
-        return <h6 className='text-gray-600 my-auto'>{params.row.fullName}</h6>;
+        return (
+          <h6 className='text-gray-600 my-auto'>
+            {params.row.first_name + " " + params.row.last_name}
+          </h6>
+        );
       },
     },
     {
@@ -36,7 +46,9 @@ export default function StaffList() {
       headerName: "ID No",
       width: 100,
       renderCell: (params) => {
-        return <h6 className='text-gray-600 my-auto'>{params.row.id_no}</h6>;
+        return (
+          <h6 className='text-gray-600 my-auto'>{params.row.id_number}</h6>
+        );
       },
     },
     {
@@ -44,7 +56,7 @@ export default function StaffList() {
       headerName: "Phone No",
       width: 150,
       renderCell: (params) => {
-        return <h6 className='text-gray-600 my-auto'>{params.row.phone_no}</h6>;
+        return <h6 className='text-gray-600 my-auto'>{params.row.contact}</h6>;
       },
     },
     {
@@ -54,7 +66,7 @@ export default function StaffList() {
       renderCell: (params) => {
         return (
           <>
-            {params.row.role === "chef" ? (
+            {params.row.role === "Chef" ? (
               <h6 className='bg-green-500 w-2/3 px-2 py-1 rounded-md text-white flex justify-center items-center'>
                 Chef/Cook
               </h6>
@@ -74,7 +86,7 @@ export default function StaffList() {
       renderCell: (params) => {
         return (
           <h6 className='bg-slate-100 px-2 py-1 rounded-md text-blue-300 my-auto'>
-            {params.row.created_at}
+            {params.row.date_joined}
           </h6>
         );
       },
@@ -100,6 +112,10 @@ export default function StaffList() {
       },
     },
   ];
+
+  useEffect(() => {
+    dispatch(listStaff());
+  }, [dispatch]);
 
   const data = [
     {
@@ -135,7 +151,7 @@ export default function StaffList() {
     <div className=''>
       <div className='bg-white'>
         <DataGrid
-          rows={data}
+          rows={staffList}
           disableSelectionOnClick
           columns={columns}
           pageSize={8}
