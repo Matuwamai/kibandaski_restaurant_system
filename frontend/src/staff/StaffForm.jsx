@@ -2,11 +2,12 @@ import React, { useState } from "react";
 
 const StaffForm = ({ type = "add" }) => {
   const [staffInfo, setStaffInfo] = useState({
-    fullName: "",
+    first_name: "",
+    last_name: "",
     email: "",
     id_no: "",
     role: "",
-    phone_no: "",
+    contact: "",
   });
 
   const handleInputChange = (e) => {
@@ -21,31 +22,63 @@ const StaffForm = ({ type = "add" }) => {
   };
   return (
     <form onSubmit={handleSubmit}>
-      <div className='mb-3 flex flex-col'>
-        <label htmlFor='meals' className='my-1'>
-          Full Name
-        </label>
-        <input
-          name='fullName'
-          type='text'
-          placeholder='John Doe'
-          id='fullNames'
-          onChange={handleInputChange}
-          className='border rounded focus:outline-none p-2'
-        />
+      <div className='mb-3 flex flex-wrap justify-between'>
+        <div className='flex flex-col'>
+          <label htmlFor='first_name' className='my-1'>
+            First Name
+          </label>
+          <input
+            name='first_name'
+            type='text'
+            placeholder='John'
+            id='first_name'
+            onChange={handleInputChange}
+            className='border rounded focus:outline-none p-2'
+          />
+        </div>
+        <div className='flex flex-col'>
+          <label htmlFor='last_name' className='my-1'>
+            Last Name
+          </label>
+          <input
+            name='last_name'
+            type='text'
+            placeholder='Doe'
+            id='last_name'
+            onChange={handleInputChange}
+            className='border rounded focus:outline-none p-2'
+          />
+        </div>
       </div>
-      <div className='mb-3 flex flex-col'>
-        <label htmlFor='email' className='my-1'>
-          Email
-        </label>
-        <input
-          name='email'
-          type='email'
-          placeholder='johndoe@gmail.com'
-          id='email'
-          onChange={handleInputChange}
-          className='border rounded focus:outline-none p-2'
-        />
+      <div className='mb-3 w-full flex'>
+        <div className='md:w-3/5 md:pr-4 flex flex-col'>
+          <label htmlFor='email' className='my-1'>
+            Email
+          </label>
+          <input
+            name='email'
+            type='email'
+            placeholder='johndoe@gmail.com'
+            id='email'
+            onChange={handleInputChange}
+            className='border rounded focus:outline-none p-2'
+          />
+        </div>
+        <div className='md:w-2/5 flex flex-col'>
+          <label htmlFor='role' className='my-1'>
+            Role
+          </label>
+          <select
+            name='role'
+            id='email'
+            onChange={handleInputChange}
+            className='w-full border rounded focus:outline-none p-2'
+          >
+            <option>---select role---</option>
+            <option className='Chef'>Chef</option>
+            <option className='Waiter'>Waiter</option>
+          </select>
+        </div>
       </div>
       <div className='mb-3 flex flex-col'>
         <label htmlFor='id_no' className='my-1'>
@@ -68,7 +101,7 @@ const StaffForm = ({ type = "add" }) => {
           type='number'
           placeholder='0* ** *** ***'
           id='phone_no'
-          name='phone_no'
+          name='contact'
           onChange={handleInputChange}
           className='border rounded focus:outline-none p-2'
         />
