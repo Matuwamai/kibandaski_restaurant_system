@@ -11,6 +11,9 @@ import {
   updateStaffStart,
   updateStaffSuccess,
   updateStaffFail,
+  deleteStaffStart,
+  deleteStaffFail,
+  deleteStaffSuccess,
 } from "../slices/staffSlices";
 import axios from "axios";
 import { BASE_URL } from "../../url";
@@ -52,5 +55,19 @@ export const updateStaffDetails = (staff_id, staffInfo) => async (dispatch) => {
     dispatch(updateStaffSuccess());
   } catch (err) {
     dispatch(updateStaffFail("Error updating staff!"));
+  }
+};
+
+export const deletStaff = () => async (dispatch, getState) => {
+  dispatch(deleteStaffStart());
+
+  try {
+    const {
+      staff: { staff_flagged },
+    } = getState();
+    await axios.delete(`${BASE_URL}/users/${staff_flagged}/delete/`);
+    dispatch(deleteStaffSuccess());
+  } catch (err) {
+    dispatch(deleteStaffFail("Error removing staff!"));
   }
 };

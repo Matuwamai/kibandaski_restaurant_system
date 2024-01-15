@@ -9,6 +9,9 @@ export const staffSlice = createSlice({
     created: false,
     staffDetails: null,
     updated: false,
+    flag_delete: false,
+    staff_flagged: null,
+    deleted: false,
   },
   reducers: {
     getStaffListStart: (state) => {
@@ -61,6 +64,27 @@ export const staffSlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     },
+    deleteStaffStart: (state) => {
+      state.loading = true;
+      state.error = false;
+      state.deleted = false;
+    },
+    deleteStaffSuccess: (state) => {
+      state.loading = false;
+      state.deleted = true;
+    },
+    deleteStaffFail: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+    showAlert: (state, action) => {
+      state.flag_delete = true;
+      state.staff_flagged = action.payload;
+    },
+    hideAlert: (state) => {
+      state.flag_delete = false;
+      state.staff_flagged = null;
+    },
   },
 });
 
@@ -77,5 +101,10 @@ export const {
   updateStaffStart,
   updateStaffSuccess,
   updateStaffFail,
+  deleteStaffStart,
+  deleteStaffSuccess,
+  deleteStaffFail,
+  showAlert,
+  hideAlert,
 } = staffSlice.actions;
 export default staffSlice.reducer;

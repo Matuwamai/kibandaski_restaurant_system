@@ -8,6 +8,7 @@ import CreateMealModal from "../modals/CreateMealModal";
 import Toast from "../utils/Toast";
 import { Navigate, Outlet } from "react-router-dom";
 import { useSelector } from "react-redux";
+import Alert from "../modals/Alert/Alert";
 
 export default function DashboardLayout({ children }) {
   const [isCollapsed, setCollapsed] = useState(false);
@@ -33,6 +34,7 @@ export default function DashboardLayout({ children }) {
               <OrderViewModal />
               <CreateOrderModal />
               <CreateMealModal />
+              <Alert />
               <Outlet />
             </div>
           </main>

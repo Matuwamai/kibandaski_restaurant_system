@@ -5,10 +5,11 @@ import { Link } from "react-router-dom";
 import { useEffect } from "react";
 import { listStaff } from "../redux/actions/staffActions";
 import { useDispatch, useSelector } from "react-redux";
+import { showAlert } from "../redux/slices/staffSlices";
 
 export default function StaffList() {
   const dispatch = useDispatch();
-  const { staffList } = useSelector((state) => state.staff);
+  const { staffList, deleted } = useSelector((state) => state.staff);
 
   const columns = [
     {
@@ -112,7 +113,10 @@ export default function StaffList() {
             >
               <EditIcon />
             </Link>
-            <div className='border text-red-400 cursor-pointer p-2 rounded'>
+            <div
+              className='border text-red-400 cursor-pointer p-2 rounded'
+              onClick={() => handleDeleteStaff(params.row.user_id)}
+            >
               <DeleteIcon />
             </div>
           </div>
@@ -123,37 +127,11 @@ export default function StaffList() {
 
   useEffect(() => {
     dispatch(listStaff());
-  }, [dispatch]);
+  }, [dispatch, deleted]);
 
-  const data = [
-    {
-      id: 1,
-      fullName: "Wamae J Ndiritu",
-      email: "wamaejoseph392@gmail.com",
-      phone_no: "0740924507",
-      id_no: "20345488",
-      role: "chef",
-      created_at: "8th Nov 2023",
-    },
-    {
-      id: 2,
-      fullName: "John Doe",
-      email: "johndoe@gmail.com",
-      phone_no: "0739127837",
-      id_no: "305445488",
-      role: "waiter",
-      created_at: "10th Nov 2023",
-    },
-    {
-      id: 3,
-      fullName: "Jane Mbithi",
-      email: "janembithi@gmail.com",
-      phone_no: "0710387837",
-      id_no: "40345488",
-      role: "chef",
-      created_at: "11th Nov 2023",
-    },
-  ];
+  const handleDeleteStaff = (id) => {
+    dispatch(showAlert(id));
+  };
 
   return (
     <div className=''>
