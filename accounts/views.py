@@ -80,7 +80,7 @@ class AdminRegistrationView(generics.CreateAPIView):
 
 
 class AdminListView(generics.ListAPIView):
-    queryset = Admin.objects.all()
+    queryset = Admin.objects.all().order_by('-user_id')
     serializer_class = AdminReadSerializer
 
 # Get admin details
@@ -124,7 +124,7 @@ class CustomerRegistrationView(generics.CreateAPIView):
 
 
 class CustomerListView(generics.ListAPIView):
-    queryset = Customer.objects.all()
+    queryset = Customer.objects.all().order_by('-user_id')
     serializer_class = CustomerReadSerializer
 
 
@@ -162,7 +162,7 @@ class StaffRegistrationView(generics.CreateAPIView):
 
 
 class StaffListView(generics.ListAPIView):
-    queryset = Staff.objects.all()
+    queryset = Staff.objects.all().order_by('-user_id')
     serializer_class = StaffReadSerializer
 
 
