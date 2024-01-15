@@ -8,6 +8,7 @@ export const staffSlice = createSlice({
     error: null,
     created: false,
     staffDetails: null,
+    updated: false,
   },
   reducers: {
     getStaffListStart: (state) => {
@@ -47,6 +48,19 @@ export const staffSlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     },
+    updateStaffStart: (state) => {
+      state.loading = false;
+      state.error = false;
+      state.updated = false;
+    },
+    updateStaffSuccess: (state) => {
+      state.loading = false;
+      state.updated = true;
+    },
+    updateStaffFail: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
   },
 });
 
@@ -60,5 +74,8 @@ export const {
   getStaffDetailsStart,
   getStaffDetailsSuccess,
   getStaffDetailsFail,
+  updateStaffStart,
+  updateStaffSuccess,
+  updateStaffFail,
 } = staffSlice.actions;
 export default staffSlice.reducer;

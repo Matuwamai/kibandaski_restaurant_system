@@ -8,6 +8,9 @@ import {
   getStaffDetailsStart,
   getStaffDetailsFail,
   getStaffDetailsSuccess,
+  updateStaffStart,
+  updateStaffSuccess,
+  updateStaffFail,
 } from "../slices/staffSlices";
 import axios from "axios";
 import { BASE_URL } from "../../url";
@@ -39,5 +42,15 @@ export const getStaffDetails = (staff_id) => async (dispatch) => {
     dispatch(getStaffDetailsSuccess(data));
   } catch (err) {
     dispatch(getStaffDetailsFail("Error getting staff data!"));
+  }
+};
+
+export const updateStaffDetails = (staff_id, staffInfo) => async (dispatch) => {
+  dispatch(updateStaffStart());
+  try {
+    await axios.patch(`${BASE_URL}/users/staff/${staff_id}/update/`, staffInfo);
+    dispatch(updateStaffSuccess());
+  } catch (err) {
+    dispatch(updateStaffFail("Error updating staff!"));
   }
 };

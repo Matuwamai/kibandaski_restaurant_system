@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { createStaff, getStaffDetails } from "../redux/actions/staffActions";
+import {
+  createStaff,
+  getStaffDetails,
+  updateStaffDetails,
+} from "../redux/actions/staffActions";
 import Loading from "../utils/Loading";
 import Message from "../utils/Message";
 import { useParams } from "react-router-dom";
@@ -42,6 +46,32 @@ const StaffForm = ({ type = "add" }) => {
           id_number: staffInfo.id_no,
           role: staffInfo.role,
         })
+      );
+    } else if (type === "edit") {
+      dispatch(
+        updateStaffDetails(
+          staff_id,
+          staffDetails.email === staffInfo.email
+            ? {
+                user: {
+                  first_name: staffInfo.first_name,
+                  last_name: staffInfo.last_name,
+                  contact: staffInfo.contact,
+                },
+                id_number: staffInfo.id_no,
+                role: staffInfo.role,
+              }
+            : {
+                user: {
+                  first_name: staffInfo.first_name,
+                  last_name: staffInfo.last_name,
+                  contact: staffInfo.contact,
+                  email: staffInfo.email,
+                },
+                id_number: staffInfo.id_no,
+                role: staffInfo.role,
+              }
+        )
       );
     }
   };
