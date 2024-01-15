@@ -1,13 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { createStaff } from "../redux/actions/staffActions";
+import { createStaff, getStaffDetails } from "../redux/actions/staffActions";
 import Loading from "../utils/Loading";
 import Message from "../utils/Message";
+import { useParams } from "react-router-dom";
 
 const StaffForm = ({ type = "add" }) => {
+  const params = useParams();
+  const staff_id = params.id;
   const dispatch = useDispatch();
 
-  const { loading, error, created } = useSelector((state) => state.staff);
+  const { loading, error, created, staffDetails } = useSelector(
+    (state) => state.staff
+  );
   const [staffInfo, setStaffInfo] = useState({
     first_name: "",
     last_name: "",
@@ -53,6 +58,26 @@ const StaffForm = ({ type = "add" }) => {
       });
     }
   }, [created]);
+
+  useEffect(() => {
+    if (staff_id) {
+      dispatch(getStaffDetails(staff_id));
+    }
+  }, [dispatch, staff_id]);
+
+  useEffect(() => {
+    if (staffDetails) {
+      setStaffInfo({
+        first_name: staffDetails.first_name,
+        last_name: staffDetails.last_name,
+        email: staffDetails.email,
+        id_no: staffDetails.id_number,
+        role: staffDetails.role,
+        contact: staffDetails.contact,
+      });
+    }
+  }, [staffDetails]);
+
   return (
     <form onSubmit={handleSubmit}>
       {loading ? <Loading /> : error && <Message>{error}</Message>}
@@ -107,7 +132,7 @@ const StaffForm = ({ type = "add" }) => {
           </label>
           <select
             name='role'
-            id='email'
+            id='role'
             onChange={handleInputChange}
             className='w-full border rounded focus:outline-none p-2'
           >
