@@ -8,13 +8,21 @@ import {
 import Loading from "../utils/Loading";
 import Message from "../utils/Message";
 import { useParams } from "react-router-dom";
+import { toast } from "react-toastify";
+
+const ToastObjects = {
+  pauseOnFocusLoss: false,
+  draggable: false,
+  pauseOnHover: false,
+  autoClose: 2000,
+};
 
 const StaffForm = ({ type = "add" }) => {
   const params = useParams();
   const staff_id = params.id;
   const dispatch = useDispatch();
 
-  const { loading, error, created, staffDetails } = useSelector(
+  const { loading, error, created, updated, staffDetails } = useSelector(
     (state) => state.staff
   );
   const [staffInfo, setStaffInfo] = useState({
@@ -73,6 +81,9 @@ const StaffForm = ({ type = "add" }) => {
               }
         )
       );
+      if (updated) {
+        toast.success("Staff updated!", ToastObjects);
+      }
     }
   };
 
