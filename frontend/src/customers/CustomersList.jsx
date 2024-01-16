@@ -1,7 +1,12 @@
 import { DataGrid } from "@mui/x-data-grid";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { listCustomers } from "../redux/actions/staffActions";
 
 export default function CustomersList() {
+  const dispatch = useDispatch();
+  const { loading, error, customersList } = useSelector((state) => state.user);
   const columns = [
     {
       field: "id",
@@ -34,7 +39,7 @@ export default function CustomersList() {
       headerName: "Phone No",
       width: 150,
       renderCell: (params) => {
-        return <h6 className='text-gray-600 my-auto'>{params.row.phone_no}</h6>;
+        return <h6 className='text-gray-600 my-auto'>{params.row.contact}</h6>;
       },
     },
     {
@@ -66,9 +71,16 @@ export default function CustomersList() {
       headerName: "Date Joined",
       width: 150,
       renderCell: (params) => {
+        const formattedDate = new Date(
+          params.row.date_joined
+        ).toLocaleDateString("en-GB", {
+          day: "numeric",
+          month: "short",
+          year: "numeric",
+        });
         return (
           <h6 className='bg-slate-100 px-2 py-1 rounded-md text-blue-300 my-auto'>
-            {params.row.created_at}
+            {formattedDate}
           </h6>
         );
       },
@@ -113,11 +125,15 @@ export default function CustomersList() {
     },
   ];
 
+  useEffect(() => {
+    dispatch(listCustomers());
+  }, [dispatch]);
+
   return (
     <div className=''>
       <div className='bg-white'>
         <DataGrid
-          rows={data}
+          rows={customersList}
           disableSelectionOnClick
           columns={columns}
           pageSize={8}

@@ -55,6 +55,9 @@ const StaffForm = ({ type = "add" }) => {
           role: staffInfo.role,
         })
       );
+      if (created) {
+        toast.success("Staff added!", ToastObjects);
+      }
     } else if (type === "edit") {
       dispatch(
         updateStaffDetails(

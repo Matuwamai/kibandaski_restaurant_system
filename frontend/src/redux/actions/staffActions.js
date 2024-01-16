@@ -17,6 +17,11 @@ import {
 } from "../slices/staffSlices";
 import axios from "axios";
 import { BASE_URL } from "../../url";
+import {
+  getCustomerListFail,
+  getCustomerListStart,
+  getCustomerListSuccess,
+} from "../slices/userSlices";
 
 export const listStaff = () => async (dispatch) => {
   dispatch(getStaffListStart());
@@ -69,5 +74,17 @@ export const deletStaff = () => async (dispatch, getState) => {
     dispatch(deleteStaffSuccess());
   } catch (err) {
     dispatch(deleteStaffFail("Error removing staff!"));
+  }
+};
+
+export const listCustomers = () => async (dispatch) => {
+  dispatch(getCustomerListStart());
+
+  try {
+    const { data } = await axios.get(`${BASE_URL}/users/customers/`);
+    dispatch(getCustomerListSuccess(data));
+    console.log(data);
+  } catch (err) {
+    dispatch(getCustomerListFail("Error listing customers!"));
   }
 };

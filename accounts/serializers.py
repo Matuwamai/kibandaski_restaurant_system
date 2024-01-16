@@ -33,7 +33,8 @@ class CustomUserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CustomUser
-        fields = ['id', 'username', 'email', 'contact', 'password']
+        fields = ['id', 'username', 'email',
+                  'contact', 'password', 'date_joined']
 
     def create(self, validated_data):
         # Hash the password before saving
