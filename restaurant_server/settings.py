@@ -8,6 +8,9 @@ load_dotenv()
 
 MPESA_CONSUMER_KEY = config('MPESA_CONSUMER_KEY')
 MPESA_CONSUMER_SECRET = config('MPESA_CONSUMER_SECRET')
+MPESA_PASS_KEY = config('MPESA_PASS_KEY')
+MPESA_BUSINESS_SHORT_CODE = config('MPESA_BUSINESS_SHORT_CODE')
+MPESA_TILL_NO = config('MPESA_TILL_NO')
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
