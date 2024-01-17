@@ -21,6 +21,12 @@ export default function CreateOrderModal() {
   const [customerName, setCustomerName] = useState("");
   const [cartItems, setCartItems] = useState([]);
 
+  const [paymentMethod, setPaymentMethod] = useState("");
+
+  const handlePaymentMethodChange = (event) => {
+    setPaymentMethod(event.target.value);
+  };
+
   const handleCloseModal = () => {
     setSelectedMeals([]);
     setCartItems([]);
@@ -109,7 +115,7 @@ export default function CreateOrderModal() {
     <div>
       {isOrderCreateModalOpen && (
         <div className='modal-overlay'>
-          <div className='modal-content'>
+          <div className='modal-content order-content'>
             <h3 className='h3 text-gray-800 uppercase font-semibold my-2'>
               Create new Order
             </h3>
@@ -126,7 +132,7 @@ export default function CreateOrderModal() {
                   className='border rounded focus:outline-none p-2'
                   onChange={(e) => setMealSearch(e.target.value)}
                 />
-                <section className='grid grid-cols-2'>
+                <section className='grid grid-cols-3'>
                   {searchedMeals?.slice(0, 7).map((item) => {
                     return (
                       <div
@@ -144,7 +150,7 @@ export default function CreateOrderModal() {
                     );
                   })}
                 </section>
-                <table className='mt-2'>
+                <table className='w-full mt-2'>
                   <thead>
                     <tr className='bg-gray-100'>
                       <th className='py-2 px-2 text-left'>Item</th>
@@ -187,28 +193,91 @@ export default function CreateOrderModal() {
                         </tr>
                       );
                     })}
+                    {cartItems.length === 0 && (
+                      <tr className='w-full mt-2'>
+                        <td className='w-full bg-blue-100 text-blue-500 border border-white rounded text-center mx-auto'>
+                          <p className='py-3'>No meal selected!</p>
+                        </td>
+                      </tr>
+                    )}
                   </tbody>
                 </table>
               </div>
-              <div className='mb-3 flex flex-col'>
-                <label htmlFor='amount' className='my-1'>
-                  Cash Amount
-                </label>
-                <div className='border rounded focus:outline-none py-2 px-2 bg-gray-50 cursor-not-allowed'>
-                  {totalAmount}
+              <div className='w-full grid md:grid-cols-2'>
+                <div className='mb-3'>
+                  <label htmlFor='paymentMethod' className='my-1'>
+                    Payment Method
+                  </label>
+                  <div className='flex items-center justify-between'>
+                    <div className='mb-2 flex items-center'>
+                      <input
+                        type='radio'
+                        id='mpesa'
+                        name='paymentMethod'
+                        value='mpesa'
+                        className='h-6 w-6'
+                        checked={paymentMethod === "mpesa"}
+                        onChange={handlePaymentMethodChange}
+                      />
+                      <label htmlFor='mpesa' className='ml-2'>
+                        <img
+                          src='/assets/mpesa.png'
+                          alt='mpesa'
+                          className='w-30 h-16 img-contain my-auto'
+                        />
+                      </label>
+                    </div>
+
+                    <div className='mb-2 flex items-center'>
+                      <input
+                        type='radio'
+                        id='cash'
+                        name='paymentMethod'
+                        value='cash'
+                        className='h-6 w-6'
+                        checked={paymentMethod === "cash"}
+                        onChange={handlePaymentMethodChange}
+                      />
+                      <h6 className='ml-2 font-semibold text-xl uppercase my-auto'>
+                        Cash
+                      </h6>
+                    </div>
+                  </div>
+                </div>
+                <div className='col-span-1 md:mx-8 mb-3 flex flex-col'>
+                  <label htmlFor='amount' className='my-1'>
+                    Amount
+                  </label>
+                  <div className='col-span-1 border rounded focus:outline-none py-2 px-2 bg-gray-50 cursor-not-allowed'>
+                    {totalAmount}
+                  </div>
                 </div>
               </div>
-              <div className='mb-3 flex flex-col'>
-                <label htmlFor='name' className='my-1'>
-                  Customer Name
-                </label>
-                <input
-                  type='text'
-                  placeholder='Customer Name'
-                  id='name'
-                  className='border rounded focus:outline-none p-2'
-                  onChange={(e) => setCustomerName(e.target.value)}
-                />
+              <div className='flex justify-between'>
+                <div className='mb-3 flex flex-col'>
+                  <label htmlFor='name' className='my-1'>
+                    Customer Name
+                  </label>
+                  <input
+                    type='text'
+                    placeholder='Customer Name'
+                    id='name'
+                    className='border rounded focus:outline-none p-2'
+                    onChange={(e) => setCustomerName(e.target.value)}
+                  />
+                </div>
+                <div className='mb-3 flex flex-col'>
+                  <label htmlFor='phone' className='my-1'>
+                    Mpesa No
+                  </label>
+                  <input
+                    type='number'
+                    placeholder='2547********'
+                    id='phone'
+                    className='border rounded focus:outline-none p-2'
+                    onChange={(e) => setCustomerName(e.target.value)}
+                  />
+                </div>
               </div>
               <div className='flex items-center justify-between'>
                 <button className='btn-close' onClick={handleCloseModal}>

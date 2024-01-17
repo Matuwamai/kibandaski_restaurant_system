@@ -25,6 +25,10 @@
   margin-top: 50px;
 }
 
+.order-content{
+  max-width: 600px;
+}
+
 .modal-content.order-view{
   height: 90vh;
   overflow-y: auto;
