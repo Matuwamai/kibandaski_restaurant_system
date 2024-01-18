@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'orders',
     'tables',
     'accounts',
-    'mpesa'
+    'mpesa',
+    'channels_app'
 ]
 
 MIDDLEWARE = [
