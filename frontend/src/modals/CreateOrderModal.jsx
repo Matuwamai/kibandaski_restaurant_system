@@ -5,6 +5,7 @@ import { useGlobalContext } from "../context/context";
 import { createOrder } from "../redux/actions/orderActions";
 import Loading from "../utils/Loading";
 import Message from "../utils/Message";
+import { initiateStkPush } from "../redux/actions/paymentActions";
 
 export default function CreateOrderModal() {
   const dispatch = useDispatch();
@@ -13,6 +14,14 @@ export default function CreateOrderModal() {
   const { loading, error, success_create } = useSelector(
     (state) => state.orders
   );
+  const {
+    loading: loadingPayment,
+    error: errorPayment,
+    success,
+    paymentStatusInfo,
+  } = useSelector((state) => state.payments);
+
+  const [statusMessage, setStatusMessage] = useState("");
 
   const [mealSearch, setMealSearch] = useState("");
   const [searchedMeals, setSearchedMeals] = useState([]);
@@ -20,8 +29,9 @@ export default function CreateOrderModal() {
   const [totalAmount, setTotalAmount] = useState(0);
   const [customerName, setCustomerName] = useState("");
   const [cartItems, setCartItems] = useState([]);
+  const [phone, setPhone] = useState("");
 
-  const [paymentMethod, setPaymentMethod] = useState("");
+  const [paymentMethod, setPaymentMethod] = useState("CASH");
 
   const handlePaymentMethodChange = (event) => {
     setPaymentMethod(event.target.value);
@@ -30,6 +40,7 @@ export default function CreateOrderModal() {
   const handleCloseModal = () => {
     setSelectedMeals([]);
     setCartItems([]);
+    setStatusMessage("");
     closeOrderCreateModal();
     document.body.style.overflow = "auto";
   };
@@ -57,15 +68,22 @@ export default function CreateOrderModal() {
 
   const handleCreateOrder = (e) => {
     e.preventDefault();
-    dispatch(
-      createOrder({
-        order_items: cartItems,
-        payment_method: "CASH",
-        customer_name: customerName,
-        table_no: 10,
-        amount: totalAmount,
-      })
-    );
+    if (paymentMethod === "CASH") {
+      dispatch(
+        createOrder({
+          order_items: cartItems,
+          payment_method: paymentMethod,
+          customer_name: customerName,
+          table_no: 10,
+          amount: totalAmount,
+        })
+      );
+    } else if (paymentMethod === "MPESA") {
+      dispatch(initiateStkPush({ phone, amount: Math.round(totalAmount) }));
+      if (paymentStatusInfo) {
+        setStatusMessage(paymentStatusInfo);
+      }
+    }
   };
 
   const handleSelect = (id) => {
@@ -120,6 +138,16 @@ export default function CreateOrderModal() {
               Create new Order
             </h3>
             {loading ? <Loading /> : error && <Message>{error}</Message>}
+            {loadingPayment ? (
+              <Loading />
+            ) : (
+              errorPayment && <Message>{errorPayment}</Message>
+            )}
+            {statusMessage && (
+              <div className='bg-green-400 border border-white rounded w-full text-white text-center'>
+                <p className='py-3'>{statusMessage}</p>
+              </div>
+            )}
             <form onSubmit={handleCreateOrder}>
               <div className='mb-3 flex flex-col'>
                 <label htmlFor='meals' className='my-1'>
@@ -214,9 +242,9 @@ export default function CreateOrderModal() {
                         type='radio'
                         id='mpesa'
                         name='paymentMethod'
-                        value='mpesa'
+                        value='MPESA'
                         className='h-6 w-6'
-                        checked={paymentMethod === "mpesa"}
+                        checked={paymentMethod === "MPESA"}
                         onChange={handlePaymentMethodChange}
                       />
                       <label htmlFor='mpesa' className='ml-2'>
@@ -233,9 +261,9 @@ export default function CreateOrderModal() {
                         type='radio'
                         id='cash'
                         name='paymentMethod'
-                        value='cash'
+                        value='CASH'
                         className='h-6 w-6'
-                        checked={paymentMethod === "cash"}
+                        checked={paymentMethod === "CASH"}
                         onChange={handlePaymentMethodChange}
                       />
                       <h6 className='ml-2 font-semibold text-xl uppercase my-auto'>
@@ -266,18 +294,20 @@ export default function CreateOrderModal() {
                     onChange={(e) => setCustomerName(e.target.value)}
                   />
                 </div>
-                <div className='mb-3 flex flex-col'>
-                  <label htmlFor='phone' className='my-1'>
-                    Mpesa No
-                  </label>
-                  <input
-                    type='number'
-                    placeholder='2547********'
-                    id='phone'
-                    className='border rounded focus:outline-none p-2'
-                    onChange={(e) => setCustomerName(e.target.value)}
-                  />
-                </div>
+                {paymentMethod === "MPESA" && (
+                  <div className='mb-3 flex flex-col'>
+                    <label htmlFor='phone' className='my-1'>
+                      Mpesa No
+                    </label>
+                    <input
+                      type='number'
+                      placeholder='2547********'
+                      id='phone'
+                      className='border rounded focus:outline-none p-2'
+                      onChange={(e) => setPhone(e.target.value)}
+                    />
+                  </div>
+                )}
               </div>
               <div className='flex items-center justify-between'>
                 <button className='btn-close' onClick={handleCloseModal}>

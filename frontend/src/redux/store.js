@@ -5,6 +5,7 @@ import tablesReducers from "./slices/tableSlices";
 import userReducers from "./slices/userSlices";
 import staffReducer from "./slices/staffSlices";
 import { cartReducer } from "./slices/cartReducers";
+import paymentsReducer from "./slices/paymentSlice";
 
 export const store = configureStore({
   reducer: {
@@ -14,5 +15,6 @@ export const store = configureStore({
     user: userReducers,
     cart: cartReducer,
     staff: staffReducer,
+    payments: paymentsReducer,
   },
 });
