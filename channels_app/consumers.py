@@ -5,6 +5,7 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 
 class TransactionConsumer(AsyncWebsocketConsumer):
     async def connect(self):
+        print("Web socket connected...")
         await self.accept()
 
     async def disconnect(self, close_code):

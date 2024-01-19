@@ -1,4 +1,6 @@
 # views.py
+from asgiref.sync import async_to_sync
+from channels.layers import get_channel_layer
 from django.views import View
 from django.http import JsonResponse
 from django.utils.decorators import method_decorator
@@ -8,6 +10,7 @@ from requests.auth import HTTPBasicAuth
 from django.http import HttpResponse
 import json
 import os
+from rest_framework.decorators import api_view
 from mpesa.mpesa import MpesaAccessToken, LipaNaMpesaPassword
 
 
@@ -68,3 +71,25 @@ class PaymentView(View):
 
         else:
             return HttpResponse({"message": "Invalid request parameters"})
+
+
+# mpesa/views.py
+
+@api_view(['POST'])
+def handle_mpesa_callback(request):
+    # Your existing code to process the M-Pesa callback
+
+    # Send the response data to WebSocket clients
+    channel_layer = get_channel_layer()
+    async_to_sync(channel_layer.group_send)(
+        "transactions_group",
+        {
+            "type": "send_transaction",
+            "message": request.data,
+        },
+    )
+
+    # Additional logic for updating your database, if needed
+
+    # Return a response to Safaricom's callback
+    return HttpResponse(status=200)

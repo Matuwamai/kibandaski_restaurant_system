@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'tables',
     'accounts',
     'mpesa',
-    'channels_app'
+    'channels_app',
+    'channels'
 ]
 
 MIDDLEWARE = [
@@ -117,6 +118,13 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'restaurant_server.wsgi.application'
+ASGI_APPLICATION = "restaurant_server.asgi.application"
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels.layers.InMemoryChannelLayer',
+    },
+}
 
 
 # Database

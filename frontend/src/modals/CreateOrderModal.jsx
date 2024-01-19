@@ -6,6 +6,7 @@ import { createOrder } from "../redux/actions/orderActions";
 import Loading from "../utils/Loading";
 import Message from "../utils/Message";
 import { initiateStkPush } from "../redux/actions/paymentActions";
+import io from "socket.io-client";
 
 export default function CreateOrderModal() {
   const dispatch = useDispatch();
@@ -128,6 +129,18 @@ export default function CreateOrderModal() {
       .toFixed(2);
     setTotalAmount(totals);
   }, [cartItems]);
+
+  useEffect(() => {
+    const socket = io("ws://127.0.0.1:8000/ws/transactions/");
+    socket.on("transaction", (data) => {
+      // Handle the real-time transaction data in your React app
+      console.log("Real-time transaction update:", data);
+    });
+
+    return () => {
+      socket.disconnect();
+    };
+  }, []);
 
   return (
     <div>
