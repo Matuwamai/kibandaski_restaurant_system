@@ -12,6 +12,7 @@ import {
   removefromcart,
 } from "../redux/actions/cartActions";
 import { createOrder } from "../redux/actions/orderActions";
+import CameraInput from "../testComponents/CameraInput";
 
 export default function CartModal() {
   const insideModalRef = useRef(null);
@@ -25,12 +26,13 @@ export default function CartModal() {
     (state) => state.orders
   );
 
-  const [qrCodeError, setQrCodeError] = useState(null);
+  const [qrCodeError, setQrCodeError] = useState(false);
 
   // Memoize the handleCloseModal function
   const handleCloseModal = () => {
     closeCartModal();
     document.body.style.overflow = "auto";
+    setQrCodeError(false);
   };
 
   const handleOutOfFocus = (ref) => {
@@ -56,7 +58,7 @@ export default function CartModal() {
 
   const handlePayOrder = () => {
     if (table === 0) {
-      setQrCodeError("Please scan the QR Code!");
+      setQrCodeError(true);
     } else {
       dispatch(
         createOrder({
@@ -83,6 +85,10 @@ export default function CartModal() {
     }
   }, [dispatch, success_create]);
 
+  useEffect(() => {
+    setQrCodeError(false);
+  }, []);
+
   return (
     <div>
       {isCartOpen && (
@@ -100,7 +106,7 @@ export default function CartModal() {
               Your Cart
             </h3>
             {loading ? <Loading /> : error && <Message>{error}</Message>}
-            {qrCodeError && <Message>{qrCodeError}</Message>}
+            {qrCodeError && <CameraInput />}
             <table className='min-w-full table-auto'>
               <thead>
                 <tr className='bg-gray-100'>

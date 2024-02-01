@@ -2,6 +2,7 @@ from pathlib import Path
 from datetime import timedelta
 from decouple import config
 from dotenv import load_dotenv
+import dj_database_url
 
 # Load environment variables from .env
 load_dotenv()
@@ -11,6 +12,7 @@ MPESA_CONSUMER_SECRET = config('MPESA_CONSUMER_SECRET')
 MPESA_PASS_KEY = config('MPESA_PASS_KEY')
 MPESA_BUSINESS_SHORT_CODE = config('MPESA_BUSINESS_SHORT_CODE')
 MPESA_TILL_NO = config('MPESA_TILL_NO')
+DB_URL = config('DB_URL')
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -22,7 +24,7 @@ SECRET_KEY = 'django-insecure-w8bpp*jxxsf%30@m@t+4eehez3n&%w8r-=o4mecif%pb6-djcy
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -136,6 +138,10 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+# DATABASES = {
+#     'default': dj_database_url.parse(DB_URL),
+# }
 
 
 # Password validation

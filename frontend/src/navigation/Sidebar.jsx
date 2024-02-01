@@ -38,8 +38,8 @@ const Sidebar = ({
 
   return (
     <aside
-      className={`bg-amber-600 shadow ${isCollapsed ? "w-16" : "w-48"} ${
-        sidebarOpen ? "w-64" : ""
+      className={`bg-amber-600 shadow ${isCollapsed ? "w-0" : "w-48"} ${
+        sidebarOpen ? "w-64" : "w-"
       } ${
         isCollapsed ? "z-0" : "absolute z-40"
       } md:relative md:z-0 h-screen overflow-y-scroll scrollbar-hide left-0 top-0 transition-all duration-300 ease-in-out ${
@@ -98,7 +98,7 @@ const Sidebar = ({
       {/* Collapse/Expand Button */}
       <div
         className={`fixed border-t-2 bottom-0 flex items-center justify-center cursor-pointer text-white bg-amber-600 py-2 transition-all duration-300 ease-in-out ${
-          isCollapsed ? "text-xl w-16" : "hover:text-gray-800 w-48"
+          isCollapsed ? "text-xl w-0" : "hover:text-gray-800 w-48"
         } ${sidebarOpen ? "w-64" : ""}`}
         onClick={handleLogout}
       >

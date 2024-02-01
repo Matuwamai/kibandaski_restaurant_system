@@ -11,14 +11,14 @@ export const initiateStkPush = (details) => async (dispatch) => {
 
   try {
     const { data } = await axios.post(`${BASE_URL}/mpesa/stk-push/`, details);
-    console.log(data);
     let message = "";
+    console.log(data);
     if (
       data.ResponseDescription === "Success. Request accepted for processing"
     ) {
       message = "Check your phone to complete the transaction...";
+      dispatch(initiateSTKSuccess(message));
     }
-    dispatch(initiateSTKSuccess(message));
   } catch (err) {
     console.log(err);
     dispatch(initiateSTKFail("An error occurred initiating the transaction!"));

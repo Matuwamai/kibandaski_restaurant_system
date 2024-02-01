@@ -10,7 +10,7 @@ import { Navigate, Outlet } from "react-router-dom";
 import { useSelector } from "react-redux";
 import Alert from "../modals/Alert/Alert";
 
-export default function DashboardLayout({ children }) {
+export default function DashboardLayout() {
   const [isCollapsed, setCollapsed] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 

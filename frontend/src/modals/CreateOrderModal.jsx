@@ -7,6 +7,7 @@ import Loading from "../utils/Loading";
 import Message from "../utils/Message";
 import { initiateStkPush } from "../redux/actions/paymentActions";
 import io from "socket.io-client";
+import { hidePaymentStatusInfo } from "../redux/slices/paymentSlice";
 
 export default function CreateOrderModal() {
   const dispatch = useDispatch();
@@ -18,11 +19,8 @@ export default function CreateOrderModal() {
   const {
     loading: loadingPayment,
     error: errorPayment,
-    success,
     paymentStatusInfo,
   } = useSelector((state) => state.payments);
-
-  const [statusMessage, setStatusMessage] = useState("");
 
   const [mealSearch, setMealSearch] = useState("");
   const [searchedMeals, setSearchedMeals] = useState([]);
@@ -41,7 +39,7 @@ export default function CreateOrderModal() {
   const handleCloseModal = () => {
     setSelectedMeals([]);
     setCartItems([]);
-    setStatusMessage("");
+    dispatch(hidePaymentStatusInfo());
     closeOrderCreateModal();
     document.body.style.overflow = "auto";
   };
@@ -81,9 +79,6 @@ export default function CreateOrderModal() {
       );
     } else if (paymentMethod === "MPESA") {
       dispatch(initiateStkPush({ phone, amount: Math.round(totalAmount) }));
-      if (paymentStatusInfo) {
-        setStatusMessage(paymentStatusInfo);
-      }
     }
   };
 
@@ -130,17 +125,18 @@ export default function CreateOrderModal() {
     setTotalAmount(totals);
   }, [cartItems]);
 
-  useEffect(() => {
-    const socket = io("ws://127.0.0.1:8000/ws/transactions/");
-    socket.on("transaction", (data) => {
-      // Handle the real-time transaction data in your React app
-      console.log("Real-time transaction update:", data);
-    });
+  // useEffect(() => {
+  //   const socket = io("ws://127.0.0.1:8000/ws/transactions/");
+  //   console.log(socket);
+  //   socket.on("transaction", (data) => {
+  //     // Handle the real-time transaction data in your React app
+  //     console.log("Real-time transaction update:", data);
+  //   });
 
-    return () => {
-      socket.disconnect();
-    };
-  }, []);
+  //   return () => {
+  //     socket.disconnect();
+  //   };
+  // }, []);
 
   return (
     <div>
@@ -156,9 +152,9 @@ export default function CreateOrderModal() {
             ) : (
               errorPayment && <Message>{errorPayment}</Message>
             )}
-            {statusMessage && (
+            {paymentStatusInfo && (
               <div className='bg-green-400 border border-white rounded w-full text-white text-center'>
-                <p className='py-3'>{statusMessage}</p>
+                <p className='py-3'>{paymentStatusInfo}</p>
               </div>
             )}
             <form onSubmit={handleCreateOrder}>
@@ -234,15 +230,15 @@ export default function CreateOrderModal() {
                         </tr>
                       );
                     })}
-                    {cartItems.length === 0 && (
-                      <tr className='w-full mt-2'>
-                        <td className='w-full bg-blue-100 text-blue-500 border border-white rounded text-center mx-auto'>
-                          <p className='py-3'>No meal selected!</p>
-                        </td>
-                      </tr>
-                    )}
                   </tbody>
                 </table>
+                {cartItems.length === 0 && (
+                  <div className='w-full mt-2'>
+                    <div className='w-full bg-blue-100 text-blue-500 border border-white rounded text-center mx-auto'>
+                      <p className='py-3'>No meal selected!</p>
+                    </div>
+                  </div>
+                )}
               </div>
               <div className='w-full grid md:grid-cols-2'>
                 <div className='mb-3'>
