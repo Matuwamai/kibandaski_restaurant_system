@@ -1,50 +1,38 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../redux/actions/userActions";
-// import { useOnClickOutside } from "usehooks-ts";
+import { closeSidebar, toggleSidebar } from "../redux/slices/navSlices";
 
-const Sidebar = ({
-  isCollapsed,
-  setIsCollapsed,
-  links,
-  sidebarOpen,
-  setSidebarOpen,
-}) => {
+const Sidebar = ({ links }) => {
+  const { isCollapsed } = useSelector((state) => state.nav);
   const dispatch = useDispatch();
   const ref = useRef(null);
+
   const pathname = useLocation().pathname;
-  const [activePath, setActivePath] = useState("");
 
-  useEffect(() => {
-    if (window.screen.width < 768 && activePath !== pathname) {
-      setSidebarOpen(false);
-    }
-    setActivePath(pathname);
-  }, [setActivePath, pathname, activePath, setSidebarOpen]);
-
-  // useOnClickOutside(ref, (e) => {
-  //   setSidebarOpen(false);
-  // });
-
-  const toggleSidebar = () => {
-    setIsCollapsed(!isCollapsed);
+  const handleSidebar = () => {
+    dispatch(toggleSidebar());
   };
 
   const handleLogout = () => {
     dispatch(logout());
   };
 
+  useEffect(() => {
+    if (window.innerWidth < 526) {
+      dispatch(closeSidebar());
+    }
+  }, [dispatch, pathname]);
+
   return (
     <aside
-      className={`bg-amber-600 shadow ${isCollapsed ? "w-0" : "w-48"} ${
-        sidebarOpen ? "w-64" : "w-"
+      className={`bg-amber-600 shadow ${
+        isCollapsed ? "w-collapse" : "w-not-collapse"
       } ${
         isCollapsed ? "z-0" : "absolute z-40"
-      } md:relative md:z-0 h-screen overflow-y-scroll scrollbar-hide left-0 top-0 transition-all duration-300 ease-in-out ${
-        sidebarOpen ? "" : "hide-sidebar"
-      }`}
+      } md:relative md:z-0 h-screen overflow-y-scroll scrollbar-hide left-0 top-0 transition-all duration-300 ease-in-out`}
       ref={ref}
     >
       <div className='sticky top-0 bg-slate-50 border-b-2 border-r-2 p-2 flex gap-4'>
@@ -54,15 +42,9 @@ const Sidebar = ({
           )}
           <div
             className={`h-8 w-12 flex justify-center items-center cursor-pointer text-yellow-400 `}
-            onClick={toggleSidebar}
+            onClick={handleSidebar}
           >
-            {isCollapsed ? (
-              <FaAngleRight />
-            ) : (
-              // <i className='fas fa-chevron-right text-yellow-400'></i>
-              // <i className='fas fa-chevron-left text-yellow-400'></i>
-              <FaAngleLeft />
-            )}
+            {isCollapsed ? <FaAngleRight /> : <FaAngleLeft />}
           </div>
         </div>
       </div>
@@ -98,8 +80,8 @@ const Sidebar = ({
       {/* Collapse/Expand Button */}
       <div
         className={`fixed border-t-2 bottom-0 flex items-center justify-center cursor-pointer text-white bg-amber-600 py-2 transition-all duration-300 ease-in-out ${
-          isCollapsed ? "text-xl w-0" : "hover:text-gray-800 w-48"
-        } ${sidebarOpen ? "w-64" : ""}`}
+          isCollapsed ? "text-xl w-collapse" : "hover:text-gray-800 w-48"
+        }`}
         onClick={handleLogout}
       >
         <i

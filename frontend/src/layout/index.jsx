@@ -12,7 +12,6 @@ import Alert from "../modals/Alert/Alert";
 
 export default function DashboardLayout() {
   const [isCollapsed, setCollapsed] = useState(false);
-  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const { userInfo } = useSelector((state) => state.user);
   if (userInfo?.access) {
@@ -21,12 +20,10 @@ export default function DashboardLayout() {
         <Sidebar
           isCollapsed={isCollapsed}
           setIsCollapsed={setCollapsed}
-          sidebarOpen={sidebarOpen}
-          setSidebarOpen={setSidebarOpen}
           links={sideLinks}
         />
         <div className='flex flex-col flex-1 overflow-y-auto overflow-x-hidden'>
-          <TopBar setSidebarOpen={setSidebarOpen} />
+          <TopBar />
           <main>
             {/* Page Content */}
             <div className='px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto'>

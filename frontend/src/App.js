@@ -1,4 +1,9 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useLocation,
+} from "react-router-dom";
 import Dashboard from "./screens/Dashboard";
 import Orders from "./screens/Orders";
 import Customers from "./screens/Customers";

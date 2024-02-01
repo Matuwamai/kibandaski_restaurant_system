@@ -19,6 +19,14 @@
     margin-right: -3px;
 }
 
+.w-collapse{
+    width: 54px;
+}
+
+.w-not-collapse{
+    width: 192px;
+}
+
 @media (max-width: 768.5px){
         .topbar-search {
                 display: none;
@@ -32,5 +40,11 @@
 
     .settings-icon{
         display: none;
+    }
+    .w-collapse{
+        width: 0px;
+    }
+    .w-not-collapse{
+        width: 192px;
     }
 }

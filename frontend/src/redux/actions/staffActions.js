@@ -83,7 +83,6 @@ export const listCustomers = () => async (dispatch) => {
   try {
     const { data } = await axios.get(`${BASE_URL}/users/customers/`);
     dispatch(getCustomerListSuccess(data));
-    console.log(data);
   } catch (err) {
     dispatch(getCustomerListFail("Error listing customers!"));
   }
