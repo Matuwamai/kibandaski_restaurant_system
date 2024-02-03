@@ -37,21 +37,22 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'django_extensions',
     'corsheaders',
     'requests',
-    'meals_and_dishes',
+    'channels_app',
     'orders',
+    'meals_and_dishes',
     'tables',
     'accounts',
     'mpesa',
-    'channels_app',
     'channels'
 ]
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -99,7 +100,13 @@ APPEND_SLASH = False
 #     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
 # }
 
+CORS_ALLOW_HEADERS = [
+    'access-control-allow-origin',
+    'access-control-allow-headers',
+    'origin',
+]
 CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = True
 
 ROOT_URLCONF = 'restaurant_server.urls'
 

@@ -1,12 +1,18 @@
-from django.urls import re_path
+# your_app/routing.py
 
-from . import consumers
+from channels.routing import ProtocolTypeRouter, URLRouter
+from django.urls import path
+from channels_app.consumers import SSEConsumer
+
 
 websocket_urlpatterns = [
-    re_path(r'ws/transactions/$', consumers.TransactionConsumer),
+    path('ws/sse/', SSEConsumer.as_asgi()),
+    # Add more URL patterns for other consumers as needed
 ]
 
 
-# websocket_urlpatterns = [
-#     re_path(r'ws/chat/(?P<room_id>\w+)/$', consumers.ChatConsumer),
-# ]
+application = ProtocolTypeRouter({
+    "websocket": URLRouter(
+        websocket_urlpatterns
+    ),
+})
