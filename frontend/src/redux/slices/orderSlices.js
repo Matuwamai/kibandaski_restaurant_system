@@ -10,6 +10,7 @@ const initialState = {
   success_create: false,
   success_delete: false,
   success_update: false,
+  reload: false,
   flag_delete: false,
   order_flagged: null,
   error: null,
@@ -34,6 +35,7 @@ export const ordersSlice = createSlice({
       state.error = action.payload;
     },
     listOrdersStart: (state) => {
+      state.reload = false;
       state.loading = true;
       state.error = false;
     },
@@ -87,6 +89,10 @@ export const ordersSlice = createSlice({
       state.flag_delete = false;
       state.order_flagged = null;
     },
+    updateOrdersList: (state, action) => {
+      state.ordersList = [...state.ordersList, action.payload];
+      state.reload = true;
+    }
   },
 });
 
@@ -107,6 +113,7 @@ export const {
   clearTable,
   showOrderDeleteAlert,
   hideOrderDeleteAlert,
+  updateOrdersList
 } = ordersSlice.actions;
 
 export default ordersSlice.reducer;

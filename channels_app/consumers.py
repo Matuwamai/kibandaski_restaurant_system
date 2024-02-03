@@ -20,7 +20,7 @@ class SSEConsumer(AsyncWebsocketConsumer):
     
     async def send_order(self, event):
         # Send the "send_order" message to the WebSocket
-        await self.send(text_data=json.dumps(event["data"]))
+        await self.send(text_data=json.dumps(event))
 
     async def receive(self, text_data):
         data = json.loads(text_data)

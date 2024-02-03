@@ -6,12 +6,13 @@ import { useGlobalContext } from "../context/context";
 import { useDispatch, useSelector } from "react-redux";
 import { listOrders } from "../redux/actions/orderActions";
 import { listMeals } from "../redux/actions/mealsActions";
+import { updateOrdersList } from "../redux/slices/orderSlices";
 
 const Orders = () => {
   const dispatch = useDispatch();
   const { openOrderCreateModal } = useGlobalContext();
 
-  const { ordersList, success_delete, success_create, success_update } =
+  const { ordersList, reload, success_delete, success_create, success_update } =
     useSelector((state) => state.orders);
 
   useEffect(() => {
@@ -19,11 +20,21 @@ const Orders = () => {
   }, [dispatch, success_delete, success_create, success_update]);
 
   useEffect(() => {
+    if (reload){
+      dispatch(listOrders())
+    }
+  }, [dispatch, reload])
+
+  useEffect(() => {
     const eventSource = new WebSocket("ws://127.0.0.1:8000/ws/sse/");
 
     eventSource.onmessage = (event) => {
       console.log("Received event:", event.data);
       // Handle the received event data as needed
+      const emmittedData = JSON.parse(event.data);
+      if (emmittedData?.type === "send_order") {
+        dispatch(updateOrdersList(JSON.parse(emmittedData.data)));
+      }
     };
 
     eventSource.onerror = (error) => {
@@ -35,7 +46,7 @@ const Orders = () => {
     return () => {
       eventSource.close();
     };
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     dispatch(listMeals());

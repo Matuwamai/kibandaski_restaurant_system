@@ -33,7 +33,7 @@ export default function OrdersTable({ list }) {
       renderCell: (params) => {
         return (
           <>
-            {params.row.is_completed ? (
+            {params.row?.is_completed ? (
               <div className='flex gap-2 items-center justify-center bg-slate-50 text-green-300 px-4 py-1 rounded font-semibold'>
                 <MdVerified style={{ fontSize: "18px" }} />
                 <h6 className='my-auto'>Completed</h6>
@@ -41,7 +41,7 @@ export default function OrdersTable({ list }) {
             ) : (
               <button
                 className='w-32 flex gap-2 items-center justify-center bg-slate-200 text-gray-600'
-                onClick={() => handleUpdateStatus(params.row.id)}
+                onClick={() => handleUpdateStatus(params.row?.id)}
               >
                 Close
               </button>
@@ -57,7 +57,7 @@ export default function OrdersTable({ list }) {
       renderCell: (params) => {
         return (
           <h6 className='text-gray-600 uppercase my-auto'>
-            ORDER#{params.row.id}
+            ORDER#{params.row?.id}
           </h6>
         );
       },
@@ -71,7 +71,7 @@ export default function OrdersTable({ list }) {
           <h6 className='text-gray-600 uppercase my-auto'>
             {params.row.table_no === 0
               ? "Over C"
-              : `TABLE#${params.row.table_no}`}
+              : `TABLE#${params.row?.table_no}`}
           </h6>
         );
       },
@@ -82,7 +82,7 @@ export default function OrdersTable({ list }) {
       width: 100,
       renderCell: (params) => {
         return (
-          <h6 className='text-gray-600 my-auto'>{params.row.customer_name}</h6>
+          <h6 className='text-gray-600 my-auto'>{params.row?.customer_name}</h6>
         );
       },
     },
@@ -91,7 +91,7 @@ export default function OrdersTable({ list }) {
       headerName: "Order Details",
       width: 220,
       renderCell: (params) => {
-        const order_desc = (params.row.orderItems || [])
+        const order_desc = (params.row?.orderItems || [])
           .map((item) => item.title)
           .join(", ");
         return <h6 className='text-gray-600 my-auto'>{order_desc}</h6>;
@@ -103,7 +103,7 @@ export default function OrdersTable({ list }) {
       width: 100,
       renderCell: (params) => {
         return (
-          <h6 className='text-blue-300'>KES {params.row.amount.toFixed(2)}</h6>
+          <h6 className='text-blue-300'>KES {params.row?.amount.toFixed(2)}</h6>
         );
       },
     },
@@ -136,7 +136,7 @@ export default function OrdersTable({ list }) {
       renderCell: (params) => {
         return (
           <h6 className='bg-slate-100 px-2 py-1 rounded-md text-blue-300 my-auto'>
-            {moment(params.row.created_at).fromNow()}
+            {moment(params.row?.created_at).fromNow()}
           </h6>
         );
       },
@@ -150,7 +150,7 @@ export default function OrdersTable({ list }) {
           <div className='w-full flex gap-3'>
             <div className='border text-blue-300 cursor-pointer p-2 rounded'>
               <RemoveRedEyeIcon
-                onClick={() => handleViewOrder(params.row.id)}
+                onClick={() => handleViewOrder(params.row?.id)}
               />
             </div>
             <div className='border text-green-400 cursor-pointer p-2 rounded'>
@@ -158,7 +158,7 @@ export default function OrdersTable({ list }) {
             </div>
             <div
               className='border text-red-400 cursor-pointer p-2 rounded'
-              onClick={() => handleDeleteOrder(params.row.id)}
+              onClick={() => handleDeleteOrder(params.row?.id)}
             >
               <DeleteIcon />
             </div>

@@ -6,6 +6,7 @@ from orders.models import Order, OrderItem
 from meals_and_dishes.models import MealsAndDishes
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
+import json
 
 channel_layer = get_channel_layer()
 
@@ -19,14 +20,8 @@ async def send_order_update(order_data):
 
 
 def to_json(order):
-    return {
-        'id': order.id,
-        'payment_method': order.payment_method,
-        'customer_name': order.customer_name,
-        'table_no': order.table_no,
-        'amount': order.amount,
-        # Add other fields as needed
-    }
+    return json.dumps(order, default=lambda x: dict(x))
+
 
 @api_view(['POST'])
 def create_order(request):
@@ -62,8 +57,10 @@ def create_order(request):
             meal.save()
         
         order = Order.objects.get(id=order.id)
+        order_serializer = OrderSerializer(order)
+        print(order_serializer.data)
         print("Calling socket event....")
-        async_to_sync(send_order_update)(to_json(order))
+        async_to_sync(send_order_update)(to_json(order_serializer.data))
         print("After calling socket event....")
 
         serializer = OrderSerializer(order, many=False)
