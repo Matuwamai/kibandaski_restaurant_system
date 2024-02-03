@@ -60,11 +60,14 @@ export const updateOrderStatus = (order_id) => async (dispatch) => {
 
 // DELETE ORDER
 
-export const deleteOrder = (order_id) => async (dispatch) => {
+export const deleteOrder = () => async (dispatch, getState) => {
+  dispatch(deleteOrderStart());
   try {
-    dispatch(deleteOrderStart());
+    const {
+      orders: { order_flagged },
+    } = getState();
 
-    await axios.delete(`${BASE_URL}/orders/delete/${order_id}`);
+    await axios.delete(`${BASE_URL}/orders/delete/${order_flagged}`);
     dispatch(deleteOrderSuccess());
   } catch (err) {
     dispatch(deleteOrderFail("Item not deleted!"));

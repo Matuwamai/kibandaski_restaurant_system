@@ -6,12 +6,12 @@ import { MdVerified } from "react-icons/md";
 import { CgDanger } from "react-icons/cg";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { deleteMeal } from "../redux/actions/mealsActions";
+import { showMealDeleteAlert } from "../redux/slices/mealsSlices";
 export default function DishesList({ list }) {
   const dispatch = useDispatch();
 
   const handleDelete = (id) => {
-    dispatch(deleteMeal(id));
+    dispatch(showMealDeleteAlert(id));
   };
   const columns = [
     {

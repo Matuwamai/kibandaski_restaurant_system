@@ -6,6 +6,8 @@ const initialState = {
   success_create: false,
   success_delete: false,
   success_update: false,
+  flag_delete: false,
+  meal_flagged: null,
   error: null,
 };
 
@@ -64,6 +66,14 @@ export const mealsSlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     },
+    showMealDeleteAlert: (state, action) => {
+      state.flag_delete = true;
+      state.meal_flagged = action.payload;
+    },
+    hideMealDeleteAlert: (state) => {
+      state.flag_delete = false;
+      state.meal_flagged = null;
+    },
   },
 });
 
@@ -80,6 +90,8 @@ export const {
   updateMealStart,
   updateMealSuccess,
   updateMealFail,
+  showMealDeleteAlert,
+  hideMealDeleteAlert,
 } = mealsSlice.actions;
 
 export default mealsSlice.reducer;

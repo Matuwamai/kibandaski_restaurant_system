@@ -64,7 +64,7 @@ const Customers = () => {
           </div>
         </div>
       </div>
-      <div className='bg-slate-50 p-4 mt-3'>
+      <div className='bg-slate-50 py-4 mt-3'>
         <h3 className='text-gray-800 font-semibold text-xl capitalize mb-3'>
           Registered Customers
         </h3>

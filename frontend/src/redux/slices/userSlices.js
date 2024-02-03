@@ -12,6 +12,9 @@ export const userSlice = createSlice({
     error: null,
     resetPass: false,
     updatePass: false,
+    deleted: false,
+    customer_flagged: null,
+    flag_delete: false,
     customersList: [],
   },
   reducers: {
@@ -80,6 +83,27 @@ export const userSlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     },
+    deleteCustomerStart: (state) => {
+      state.loading = true;
+      state.error = false;
+      state.deleted = false;
+    },
+    deleteCustomerSuccess: (state) => {
+      state.loading = false;
+      state.deleted = true;
+    },
+    deleteCustomerFail: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+    showCustomerDeleteAlert: (state, action) => {
+      state.flag_delete = true;
+      state.customer_flagged = action.payload;
+    },
+    hideCustomerDeleteAlert: (state) => {
+      state.flag_delete = false;
+      state.customer_flagged = null;
+    },
   },
 });
 
@@ -103,5 +127,10 @@ export const {
   getCustomerListStart,
   getCustomerListSuccess,
   getCustomerListFail,
+  deleteCustomerStart,
+  deleteCustomerSuccess,
+  deleteCustomerFail,
+  showCustomerDeleteAlert,
+  hideCustomerDeleteAlert,
 } = userSlice.actions;
 export default userSlice.reducer;

@@ -3,10 +3,14 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { listCustomers } from "../redux/actions/staffActions";
+import { showCustomerDeleteAlert } from "../redux/slices/userSlices";
 
 export default function CustomersList() {
   const dispatch = useDispatch();
-  const { loading, error, customersList } = useSelector((state) => state.user);
+  const { customersList, deleted } = useSelector((state) => state.user);
+  const handleDelete = (id) => {
+    dispatch(showCustomerDeleteAlert(id));
+  };
   const columns = [
     {
       field: "id",
@@ -92,7 +96,10 @@ export default function CustomersList() {
       renderCell: (params) => {
         return (
           <div className='w-full flex justify-center'>
-            <div className='border text-red-400 cursor-pointer p-2 rounded'>
+            <div
+              className='border text-red-400 cursor-pointer p-2 rounded'
+              onClick={() => handleDelete(params.row.user_id)}
+            >
               <DeleteIcon />
             </div>
           </div>
@@ -101,33 +108,9 @@ export default function CustomersList() {
     },
   ];
 
-  const data = [
-    {
-      id: 1,
-      username: "Wamae",
-      email: "wamaejoseph392@gmail.com",
-      phone_no: "0740924507",
-      created_at: "8thth Nov 2023",
-    },
-    {
-      id: 2,
-      username: "JohnDoe",
-      email: "johndoe@gmail.com",
-      phone_no: "0739127837",
-      created_at: "10th Nov 2023",
-    },
-    {
-      id: 3,
-      username: "janembithi",
-      email: "janembithi@gmail.com",
-      phone_no: "0710387837",
-      created_at: "11th Nov 2023",
-    },
-  ];
-
   useEffect(() => {
     dispatch(listCustomers());
-  }, [dispatch]);
+  }, [dispatch, deleted]);
 
   return (
     <div className=''>

@@ -6,7 +6,8 @@ import { MdVerified } from "react-icons/md";
 import { useGlobalContext } from "../context/context";
 import moment from "moment";
 import { useDispatch } from "react-redux";
-import { deleteOrder, updateOrderStatus } from "../redux/actions/orderActions";
+import { updateOrderStatus } from "../redux/actions/orderActions";
+import { showOrderDeleteAlert } from "../redux/slices/orderSlices";
 
 export default function OrdersTable({ list }) {
   const { openOrderViewModal } = useGlobalContext();
@@ -17,7 +18,7 @@ export default function OrdersTable({ list }) {
   };
 
   const handleDeleteOrder = (id) => {
-    dispatch(deleteOrder(id));
+    dispatch(showOrderDeleteAlert(id));
   };
 
   const handleUpdateStatus = (id) => {

@@ -10,6 +10,8 @@ const initialState = {
   success_create: false,
   success_delete: false,
   success_update: false,
+  flag_delete: false,
+  order_flagged: null,
   error: null,
   table,
 };
@@ -77,6 +79,14 @@ export const ordersSlice = createSlice({
       state.table = 0;
       localStorage.removeItem("t_no");
     },
+    showOrderDeleteAlert: (state, action) => {
+      state.flag_delete = true;
+      state.order_flagged = action.payload;
+    },
+    hideOrderDeleteAlert: (state) => {
+      state.flag_delete = false;
+      state.order_flagged = null;
+    },
   },
 });
 
@@ -95,6 +105,8 @@ export const {
   updateOrderFail,
   updateTable,
   clearTable,
+  showOrderDeleteAlert,
+  hideOrderDeleteAlert,
 } = ordersSlice.actions;
 
 export default ordersSlice.reducer;

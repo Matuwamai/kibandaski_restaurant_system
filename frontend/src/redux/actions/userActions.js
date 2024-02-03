@@ -1,4 +1,7 @@
 import {
+  deleteCustomerFail,
+  deleteCustomerStart,
+  deleteCustomerSuccess,
   loginFail,
   loginStart,
   loginSuccess,
@@ -18,6 +21,21 @@ export const register = (details) => async (dispatch) => {
   } catch (err) {
     dispatch(
       registerFail(err.response ? err.response.data.message : err.message)
+    );
+  }
+};
+
+export const deleteCustomer = () => async (dispatch, getState) => {
+  dispatch(deleteCustomerStart());
+  try {
+    const {
+      user: { customer_flagged },
+    } = getState();
+    await axios.delete(`${BASE_URL}/users/${customer_flagged}/delete/`);
+    dispatch(deleteCustomerSuccess());
+  } catch (err) {
+    dispatch(
+      deleteCustomerFail(err.response ? err.response.data.message : err.message)
     );
   }
 };

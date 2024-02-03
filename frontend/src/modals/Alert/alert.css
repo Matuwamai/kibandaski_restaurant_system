@@ -46,3 +46,9 @@
 .alert-modal.hide {
     display: none;
 }
+
+@media (max-width: 525.5px){
+    .alert-modal-content{
+        margin: 0 10px;
+    }
+}

@@ -3,22 +3,54 @@ import "./alert.css";
 import { useDispatch, useSelector } from "react-redux";
 import { hideAlert } from "../../redux/slices/staffSlices";
 import { deletStaff } from "../../redux/actions/staffActions";
+import { deleteOrder } from "../../redux/actions/orderActions";
+import { hideOrderDeleteAlert } from "../../redux/slices/orderSlices";
+import { deleteMeal } from "../../redux/actions/mealsActions";
+import { hideMealDeleteAlert } from "../../redux/slices/mealsSlices";
+import { deleteCustomer } from "../../redux/actions/userActions";
+import { hideCustomerDeleteAlert } from "../../redux/slices/userSlices";
 
 const Alert = () => {
   const dispatch = useDispatch();
-  const { flag_delete } = useSelector((state) => state.staff);
+  const { flag_delete: user_flag } = useSelector((state) => state.staff);
+  const { flag_delete: order_flag } = useSelector((state) => state.orders);
+  const { flag_delete: meal_flag } = useSelector((state) => state.meals);
+  const { flag_delete: customer_flag } = useSelector((state) => state.user);
 
   const handleConfirm = () => {
-    dispatch(deletStaff());
-    dispatch(hideAlert());
+    if (user_flag) {
+      dispatch(deletStaff());
+      dispatch(hideAlert());
+    } else if (order_flag) {
+      dispatch(deleteOrder());
+      dispatch(hideOrderDeleteAlert());
+    } else if (meal_flag) {
+      dispatch(deleteMeal());
+      dispatch(hideMealDeleteAlert());
+    } else if (customer_flag) {
+      dispatch(deleteCustomer());
+      dispatch(hideCustomerDeleteAlert());
+    }
   };
 
   const handleClose = () => {
-    dispatch(hideAlert());
+    if (user_flag) {
+      dispatch(hideAlert());
+    } else if (order_flag) {
+      dispatch(hideOrderDeleteAlert());
+    } else if (meal_flag) {
+      dispatch(hideMealDeleteAlert());
+    } else if (customer_flag) {
+      dispatch(hideCustomerDeleteAlert());
+    }
   };
 
   return (
-    <div className={`alert-modal ${flag_delete ? "show" : "hide"}`}>
+    <div
+      className={`alert-modal ${
+        user_flag || order_flag || meal_flag || customer_flag ? "show" : "hide"
+      }`}
+    >
       <div className='alert-modal-content'>
         <span className='alert-close' onClick={handleClose}>
           &times;

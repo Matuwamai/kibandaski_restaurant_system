@@ -71,11 +71,13 @@ export const updateMealStatus = (meal_id) => async (dispatch) => {
 
 // DELETE MEAL
 
-export const deleteMeal = (meal_id) => async (dispatch) => {
+export const deleteMeal = () => async (dispatch, getState) => {
+  dispatch(deleteMealStart());
   try {
-    dispatch(deleteMealStart());
-
-    await axios.delete(`${BASE_URL}/meals-and-dishes/delete/${meal_id}`);
+    const {
+      meals: { meal_flagged },
+    } = getState();
+    await axios.delete(`${BASE_URL}/meals-and-dishes/delete/${meal_flagged}`);
     dispatch(deleteMealSuccess());
   } catch (err) {
     dispatch(deleteMealFail("Item not deleted!"));
