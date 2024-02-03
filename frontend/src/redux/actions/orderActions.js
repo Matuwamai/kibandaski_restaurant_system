@@ -21,13 +21,21 @@ export const createOrder = (order) => async (dispatch) => {
   try {
     dispatch(createOrderStart());
 
-    await axios.post(`${BASE_URL}/orders/create`, order);
+    const config = {
+      headers: {
+        "Content-Type": "application/json"
+      }
+    }
+
+    await axios.post(`${BASE_URL}/orders/create`, order, config);
 
     dispatch(createOrderSuccess());
     dispatch(clearTable());
   } catch (err) {
     console.log(err);
-    dispatch(createOrderFail("Error creating order!"));
+    dispatch(
+      createOrderFail(err.response ? err.response.data.message : err.message)
+    );
   }
 };
 

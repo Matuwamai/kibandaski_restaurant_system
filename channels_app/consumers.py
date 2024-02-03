@@ -11,10 +11,23 @@ class SSEConsumer(AsyncWebsocketConsumer):
         # Send initial message to the client
         await self.send_message("Connection established")
 
-        # Simulate periodic updates every 10 seconds
-        while True:
-            await asyncio.sleep(10)
-            await self.send_message("Update message")
+        # Add the connected client to the "order_group" group
+        await self.channel_layer.group_add("order_group", self.channel_name)
+
+    async def disconnect(self, close_code):
+        # Remove the connected client from the "order_group" group
+        await self.channel_layer.group_discard("order_group", self.channel_name)
+    
+    async def send_order(self, event):
+        # Send the "send_order" message to the WebSocket
+        await self.send(text_data=json.dumps(event["data"]))
+
+    async def receive(self, text_data):
+        data = json.loads(text_data)
+        message_type = data.get("type")
+
+        if message_type == "send_order":
+            await self.send(text_data=json.dumps(data["data"]))
 
     async def send_message(self, message):
         await self.send(text_data=json.dumps({"message": message}))

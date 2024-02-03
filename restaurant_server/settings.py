@@ -100,12 +100,8 @@ APPEND_SLASH = False
 #     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
 # }
 
-CORS_ALLOW_HEADERS = [
-    'access-control-allow-origin',
-    'access-control-allow-headers',
-    'origin',
-]
 CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_ALL_HEADERS = True
 CORS_ALLOW_CREDENTIALS = True
 
 ROOT_URLCONF = 'restaurant_server.urls'

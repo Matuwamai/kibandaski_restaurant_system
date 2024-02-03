@@ -51,8 +51,6 @@ function OrderViewModal() {
     }
   }, [currentOrder]);
 
-  console.log(currentOrder);
-
   const originalDatetime = new Date(currentOrder?.created_at);
 
   // Format the datetime in the desired way

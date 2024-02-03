@@ -4,28 +4,29 @@ from rest_framework import status
 from orders.serializers import OrderSerializer
 from orders.models import Order, OrderItem
 from meals_and_dishes.models import MealsAndDishes
+from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
+
+channel_layer = get_channel_layer()
 
 
-# @api_view(['POST'])
-# def create_order(request):
-#     print(request.data)
-#     serializer = OrderSerializer(data=request.data)
+async def send_order_update(order_data):
+    group_name = "order_group"  # Group name for all connected OrderConsumers
+    message = {"type": "send_order", "data": order_data}
+    print("When calling socket event....")
+    print(message)
+    await channel_layer.group_send(group_name, message)
 
-#     if serializer.is_valid():
-#         # Extract order_items data from the request
-#         order_items_data = request.data.get('order_items', [])
 
-#         # Save the order without order_items
-#         order = serializer.save()
-
-#         # Add order_items to the order
-#         for item_data in order_items_data:
-#             order.order_items.add(item_data['id'], through_defaults={
-#                                   'quantity': item_data['quantity']})
-
-#         return Response({"message": "Order created successfully", "order_id": order.id})
-
-#     return Response(serializer.errors, status=400)
+def to_json(order):
+    return {
+        'id': order.id,
+        'payment_method': order.payment_method,
+        'customer_name': order.customer_name,
+        'table_no': order.table_no,
+        'amount': order.amount,
+        # Add other fields as needed
+    }
 
 @api_view(['POST'])
 def create_order(request):
@@ -59,6 +60,11 @@ def create_order(request):
 
             # (4) Update Stock
             meal.save()
+        
+        order = Order.objects.get(id=order.id)
+        print("Calling socket event....")
+        async_to_sync(send_order_update)(to_json(order))
+        print("After calling socket event....")
 
         serializer = OrderSerializer(order, many=False)
         return Response(serializer.data)

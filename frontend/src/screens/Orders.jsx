@@ -5,26 +5,37 @@ import OrdersTable from "../orders/OrdersTable";
 import { useGlobalContext } from "../context/context";
 import { useDispatch, useSelector } from "react-redux";
 import { listOrders } from "../redux/actions/orderActions";
-import Loading from "../utils/Loading";
-import Message from "../utils/Message";
 import { listMeals } from "../redux/actions/mealsActions";
 
 const Orders = () => {
   const dispatch = useDispatch();
   const { openOrderCreateModal } = useGlobalContext();
 
-  const {
-    loading,
-    ordersList,
-    error,
-    success_delete,
-    success_create,
-    success_update,
-  } = useSelector((state) => state.orders);
+  const { ordersList, success_delete, success_create, success_update } =
+    useSelector((state) => state.orders);
 
   useEffect(() => {
     dispatch(listOrders());
   }, [dispatch, success_delete, success_create, success_update]);
+
+  useEffect(() => {
+    const eventSource = new WebSocket("ws://127.0.0.1:8000/ws/sse/");
+
+    eventSource.onmessage = (event) => {
+      console.log("Received event:", event.data);
+      // Handle the received event data as needed
+    };
+
+    eventSource.onerror = (error) => {
+      console.error("Error:", error);
+      // Handle errors if necessary
+    };
+
+    // Clean up the EventSource on component unmount
+    return () => {
+      eventSource.close();
+    };
+  }, []);
 
   useEffect(() => {
     dispatch(listMeals());
@@ -67,7 +78,7 @@ const Orders = () => {
           </div>
         </div>
       </div>
-      {loading ? <Loading /> : error && <Message>{error}</Message>}
+      {/* {loading ? <Loading /> : error && <Message>{error}</Message>} */}
       <OrdersTable list={ordersList} />
     </div>
   );
