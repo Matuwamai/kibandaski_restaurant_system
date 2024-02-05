@@ -8,6 +8,3 @@
 /orders/__pycache__/*.pyc
 /tables/__pycache__/*.pyc
 /auth/__pycache__/*.pyc
-
-#Node modules
-/node_modules
