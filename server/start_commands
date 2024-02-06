@@ -1,0 +1,2 @@
+ export DJANGO_SETTINGS_MODULE=restaurant_server.settings
+daphne restaurant_server.asgi:application

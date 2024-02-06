@@ -2,7 +2,6 @@ import {
   BrowserRouter as Router,
   Routes,
   Route,
-  useLocation,
 } from "react-router-dom";
 import Dashboard from "./screens/Dashboard";
 import Orders from "./screens/Orders";
@@ -20,7 +19,35 @@ import Reports from "./reports/Reports";
 import Settings from "./settings/Settings";
 import Add from "./staff/Add";
 import Edit from "./staff/Edit";
+import { useDispatch } from "react-redux";
+import { markOrderCompleted, updateOrdersList } from "./redux/slices/orderSlices";
+import { useEffect } from "react";
 function App() {
+  const dispatch = useDispatch();
+    useEffect(() => {
+      const eventSource = new WebSocket("ws://127.0.0.1:8000/ws/sse/");
+
+      eventSource.onmessage = (event) => {
+        console.log("Received event:", event.data);
+        // Handle the received event data as needed
+        const emmittedData = JSON.parse(event.data);
+        if (emmittedData?.type === "send_order") {
+          dispatch(updateOrdersList(JSON.parse(emmittedData.data)));
+        }else if (emmittedData?.type === "complete_order") {
+          dispatch(markOrderCompleted());
+        }
+      };
+
+      eventSource.onerror = (error) => {
+        console.error("Error:", error);
+        // Handle errors if necessary
+      };
+
+      // Clean up the EventSource on component unmount
+      return () => {
+        eventSource.close();
+      };
+    }, [dispatch]);
   return (
     <Router>
       <Routes>

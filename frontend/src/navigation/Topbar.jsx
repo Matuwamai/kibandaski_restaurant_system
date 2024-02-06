@@ -3,11 +3,13 @@ import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined
 import ShoppingBasketIcon from "@mui/icons-material/ShoppingBasket";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import { CiMenuFries } from "react-icons/ci";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { toggleSidebar } from "../redux/slices/navSlices";
 
 const TopBar = () => {
   const dispatch = useDispatch();
+  const {new_orders} = useSelector((state) => state.orders);
+
   const handleSidebar = () => {
     dispatch(toggleSidebar());
   };
@@ -26,9 +28,11 @@ const TopBar = () => {
         <div className='flex items-center gap-2'>
           <div className='relative md:w-8 md:h-8 rounded-full sm:bg-slate-200 flex items-center justify-center'>
             <ShoppingBasketIcon />
-            <span className='w-4 h-4 bg-red-500 rounded-full flex items-center justify-center text-white absolute top-0 right-0 text-sm badge'>
-              0
-            </span>
+            {new_orders > 0 && (
+              <span className='w-4 h-4 bg-red-500 rounded-full flex items-center justify-center text-white absolute top-0 right-0 text-sm badge'>
+                {new_orders}
+              </span>
+            )}
           </div>
           <div className='relative  md:w-8 md:h-8 rounded-full sm:bg-slate-200 flex items-center justify-center'>
             <NotificationsOutlinedIcon />

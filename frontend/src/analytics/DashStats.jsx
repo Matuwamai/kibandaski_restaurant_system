@@ -4,8 +4,10 @@ import ArrowUpwardOutlinedIcon from "@mui/icons-material/ArrowUpwardOutlined";
 import ArrowDownwardOutlinedIcon from "@mui/icons-material/ArrowDownwardOutlined";
 import PaidOutlinedIcon from "@mui/icons-material/PaidOutlined";
 import GroupAddOutlinedIcon from "@mui/icons-material/GroupAddOutlined";
+import { useSelector } from "react-redux";
 
 const DashStats = ({ type = "main" }) => {
+  const {new_orders} = useSelector((state) => state.orders);
   return (
     <div
       className={`grid ${
@@ -32,9 +34,11 @@ const DashStats = ({ type = "main" }) => {
           </div>
           <div className='my-1 flex items-center justify-between'>
             <h6 className='my-auto text-gray-700 font-semibold'>30 Orders</h6>
-            <span className='px-2 bg-red-500 rounded text-white cursor-pointer text-sm'>
-              10 New
-            </span>
+            {new_orders > 0 && (
+              <span className='px-2 bg-red-500 rounded text-white cursor-pointer text-sm'>
+                {new_orders} New
+              </span>
+            )}
           </div>
         </div>
       </div>

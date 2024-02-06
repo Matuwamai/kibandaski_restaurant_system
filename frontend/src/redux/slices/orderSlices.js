@@ -4,6 +4,10 @@ const table = localStorage.getItem("t_no")
   ? JSON.parse(localStorage.getItem("t_no"))
   : 0;
 
+const new_orders_count = localStorage.getItem("o_new")
+  ? JSON.parse(localStorage.getItem("o_new"))
+  : 0;
+
 const initialState = {
   loading: false,
   ordersList: [],
@@ -15,6 +19,7 @@ const initialState = {
   order_flagged: null,
   error: null,
   table,
+  new_orders: new_orders_count,
 };
 
 export const ordersSlice = createSlice({
@@ -92,6 +97,12 @@ export const ordersSlice = createSlice({
     updateOrdersList: (state, action) => {
       state.ordersList = [...state.ordersList, action.payload];
       state.reload = true;
+      state.new_orders = state.new_orders + 1;
+      localStorage.setItem("o_new", JSON.stringify(state.new_orders));
+    },
+    markOrderCompleted: (state) => {
+      state.new_orders = state.new_orders - 1;
+      localStorage.setItem("o_new", JSON.stringify(state.new_orders));
     }
   },
 });
@@ -113,7 +124,8 @@ export const {
   clearTable,
   showOrderDeleteAlert,
   hideOrderDeleteAlert,
-  updateOrdersList
+  updateOrdersList,
+  markOrderCompleted
 } = ordersSlice.actions;
 
 export default ordersSlice.reducer;

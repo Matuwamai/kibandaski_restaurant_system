@@ -11,11 +11,9 @@ import json
 channel_layer = get_channel_layer()
 
 
-async def send_order_update(order_data):
+async def send_order_update(type, order_data):
     group_name = "order_group"  # Group name for all connected OrderConsumers
-    message = {"type": "send_order", "data": order_data}
-    print("When calling socket event....")
-    print(message)
+    message = {"type": type, "data": order_data}
     await channel_layer.group_send(group_name, message)
 
 
@@ -59,9 +57,7 @@ def create_order(request):
         order = Order.objects.get(id=order.id)
         order_serializer = OrderSerializer(order)
         print(order_serializer.data)
-        print("Calling socket event....")
-        async_to_sync(send_order_update)(to_json(order_serializer.data))
-        print("After calling socket event....")
+        async_to_sync(send_order_update)("send_order", to_json(order_serializer.data))
 
         serializer = OrderSerializer(order, many=False)
         return Response(serializer.data)
@@ -91,6 +87,8 @@ def update_order_status(request, order_id):
 
     # Serialize the updated order
     serializer = OrderSerializer(order)
+    async_to_sync(send_order_update)(
+        "complete_order", to_json(serializer.data))
     return Response(serializer.data)
 
 
