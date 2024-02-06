@@ -13,6 +13,7 @@ import {
   updateOrderSuccess,
   updateOrderFail,
   clearTable,
+  orderStats,
 } from "../slices/orderSlices";
 import axios from "axios";
 
@@ -49,6 +50,17 @@ export const listOrders = () => async (dispatch) => {
     dispatch(listOrdersSuccess(data));
   } catch (err) {
     dispatch(listOrdersFail("Error listing orders!"));
+  }
+};
+
+
+export const getOrderStats = () => async (dispatch) => {
+  try {
+    const { data } = await axios.get(`${BASE_URL}/orders/stats`);
+    dispatch(orderStats(data));
+    console.log(data)
+  } catch (err) {
+    console.log(err)
   }
 };
 

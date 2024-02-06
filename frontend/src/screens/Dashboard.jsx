@@ -1,9 +1,16 @@
-import React from "react";
+import React, { useEffect } from "react";
 import RevenueStats from "../analytics/RevenueStats";
 import OrdersList from "../orders/OrdersList";
 import DashStats from "../analytics/DashStats";
+import { getOrderStats } from "../redux/actions/orderActions";
+import { useDispatch} from "react-redux";
 
 const Dashboard = () => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getOrderStats());
+  }, [dispatch]);
   return (
     <div className=''>
       <DashStats />

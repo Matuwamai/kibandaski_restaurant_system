@@ -20,6 +20,7 @@ const initialState = {
   error: null,
   table,
   new_orders: new_orders_count,
+  orderStats: {},
 };
 
 export const ordersSlice = createSlice({
@@ -103,6 +104,9 @@ export const ordersSlice = createSlice({
     markOrderCompleted: (state) => {
       state.new_orders = state.new_orders - 1;
       localStorage.setItem("o_new", JSON.stringify(state.new_orders));
+    },
+    orderStats: (state, action) => {
+      state.orderStats = action.payload;
     }
   },
 });
@@ -125,7 +129,8 @@ export const {
   showOrderDeleteAlert,
   hideOrderDeleteAlert,
   updateOrdersList,
-  markOrderCompleted
+  markOrderCompleted,
+  orderStats
 } = ordersSlice.actions;
 
 export default ordersSlice.reducer;

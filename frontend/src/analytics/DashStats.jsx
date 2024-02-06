@@ -7,6 +7,7 @@ import GroupAddOutlinedIcon from "@mui/icons-material/GroupAddOutlined";
 import { useSelector } from "react-redux";
 
 const DashStats = ({ type = "main" }) => {
+  const { orderStats } = useSelector((state) => state.orders);
   const {new_orders} = useSelector((state) => state.orders);
   return (
     <div
@@ -24,16 +25,44 @@ const DashStats = ({ type = "main" }) => {
           />
         </div>
         <div className=''>
-          <div className='text-green-500 flex gap-1 items-center text-md'>
-            <ArrowUpwardOutlinedIcon style={{ fontSize: "20px" }} />
-            <p className='text-sm'>7.5 % compared to yesterday</p>
+          <div
+            className={`${
+              orderStats.today_orders > orderStats.yesterday_orders
+                ? "text-green-500"
+                : "text-red-500"
+            } flex gap-1 items-center text-md`}
+          >
+            {orderStats.today_orders > orderStats.yesterday_orders ? (
+              <ArrowUpwardOutlinedIcon style={{ fontSize: "20px" }} />
+            ) : (
+              <ArrowDownwardOutlinedIcon style={{ fontSize: "20px" }} />
+            )}
+            <p className='text-sm'>
+              {orderStats.order_percentage_change_yesterday?.toFixed(1)} %
+              compared to yesterday
+            </p>
           </div>
-          <div className='text-red-500 mt-3 flex gap-1 items-center text-md'>
-            <ArrowDownwardOutlinedIcon style={{ fontSize: "20px" }} />
-            <p className='text-sm'>2.5 % compared to last month</p>
+          <div
+            className={`${
+              orderStats.current_month_orders > orderStats.last_month_orders
+                ? "text-green-500"
+                : "text-red-500"
+            } mt-3 flex gap-1 items-center text-md`}
+          >
+            {orderStats.current_month_orders > orderStats.last_month_orders ? (
+              <ArrowUpwardOutlinedIcon style={{ fontSize: "20px" }} />
+            ) : (
+              <ArrowDownwardOutlinedIcon style={{ fontSize: "20px" }} />
+            )}
+            <p className='text-sm'>
+              {orderStats.order_percentage_change_last_month?.toFixed(1)} %
+              compared to last month
+            </p>
           </div>
           <div className='my-1 flex items-center justify-between'>
-            <h6 className='my-auto text-gray-700 font-semibold'>30 Orders</h6>
+            <h6 className='my-auto text-gray-700 font-semibold'>
+              {orderStats.total_orders} Orders
+            </h6>
             {new_orders > 0 && (
               <span className='px-2 bg-red-500 rounded text-white cursor-pointer text-sm'>
                 {new_orders} New
@@ -81,21 +110,48 @@ const DashStats = ({ type = "main" }) => {
           />
         </div>
         <div className=''>
-          <div className='text-green-500 flex gap-1 items-center text-md'>
-            <ArrowUpwardOutlinedIcon style={{ fontSize: "20px" }} />
-            <p className='text-sm'>7.5 % compared to yesterday</p>
+          <div
+            className={`${
+              orderStats.today_revenue > orderStats.yesterday_revenue
+                ? "text-green-500"
+                : "text-red-500"
+            } flex gap-1 items-center text-md`}
+          >
+            {orderStats.today_revenue > orderStats.yesterday_revenue ? (
+              <ArrowUpwardOutlinedIcon style={{ fontSize: "20px" }} />
+            ) : (
+              <ArrowDownwardOutlinedIcon style={{ fontSize: "20px" }} />
+            )}
+            <p className='text-sm'>
+              {orderStats?.revenue_percentage_change_yesterday?.toFixed(1)} %
+              compared to yesterday
+            </p>
           </div>
 
-          <div className='text-red-500 mt-3 flex gap-1 items-center text-md'>
-            <ArrowDownwardOutlinedIcon style={{ fontSize: "20px" }} />
-            <p className='text-sm'>2.5 % compared to last month</p>
+          <div
+            className={`${
+              orderStats.current_month_revenue > orderStats.last_month_revenue
+                ? "text-green-500"
+                : "text-red-500"
+            } mt-3 flex gap-1 items-center text-md`}
+          >
+            {orderStats.current_month_revenue >
+            orderStats.last_month_revenue ? (
+              <ArrowUpwardOutlinedIcon style={{ fontSize: "20px" }} />
+            ) : (
+              <ArrowDownwardOutlinedIcon style={{ fontSize: "20px" }} />
+            )}
+            <p className='text-sm'>
+              {orderStats?.revenue_percentage_change_last_month?.toFixed(1)} %
+              compared to last month
+            </p>
           </div>
           <div className='my-1 flex items-center justify-between'>
             <h6 className='my-auto text-gray-700 font-semibold'>
               Total Revenue
             </h6>
             <span className='px-2 bg-slate-100 rounded text-indigo-400 cursor-pointer text-sm'>
-              KES 20 000
+              KES {orderStats.total_revenue}
             </span>
           </div>
         </div>

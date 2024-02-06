@@ -20,15 +20,6 @@ const MealsAndDishes = () => {
     dispatch(listMeals());
   }, [dispatch, success_delete]);
 
-  // useEffect(() => {
-  //   if (mealsList) {
-  //     console.log(mealsList);
-  //   } else if (loading) {
-  //     console.log("loading...");
-  //   } else if (error) {
-  //     console.log(error);
-  //   }
-  // }, [dispatch, loading, mealsList, error]);
   return (
     <div>
       <div className='grid grid-cols-1 lg:grid-cols-3 my-3'>

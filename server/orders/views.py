@@ -5,6 +5,9 @@ from orders.serializers import OrderSerializer
 from orders.models import Order, OrderItem
 from meals_and_dishes.models import MealsAndDishes
 from channels.layers import get_channel_layer
+from django.db.models import Sum, Count
+from django.utils import timezone
+from datetime import timedelta
 from asgiref.sync import async_to_sync
 import json
 
@@ -19,6 +22,88 @@ async def send_order_update(type, order_data):
 
 def to_json(order):
     return json.dumps(order, default=lambda x: dict(x))
+
+
+@api_view(['GET'])
+def order_statistics(request):
+    # Total orders done
+    total_orders = Order.objects.count()
+
+    # Percentage change in orders compared to yesterday
+    today_orders = Order.objects.filter(
+        created_at__date=timezone.now()).count()
+    yesterday_orders = Order.objects.filter(
+        created_at__date=timezone.now() - timedelta(days=1)).count()
+    if yesterday_orders != 0:
+        order_percentage_change_yesterday = (
+            today_orders / (today_orders + yesterday_orders)) * 100
+    else:
+        order_percentage_change_yesterday = 0
+
+    # Percentage change in orders compared to last month
+        
+    current_month_orders = Order.objects.filter(
+        created_at__year=timezone.now().year,
+        created_at__month=timezone.now().month
+    ).count()
+
+    last_month_orders = Order.objects.filter(
+        created_at__month=timezone.now().month - 1).count()
+    if last_month_orders != 0:
+        order_percentage_change_last_month = (
+            current_month_orders / (current_month_orders + last_month_orders)) * 100
+    else:
+        order_percentage_change_last_month = 0
+
+    # Total revenue generated from the total orders
+    total_revenue = Order.objects.aggregate(
+        total_revenue=Sum('amount'))['total_revenue']
+
+    # Percentage change in revenue compared to yesterday
+    today_revenue = Order.objects.filter(created_at__date=timezone.now(
+    )).aggregate(total_revenue=Sum('amount'))['total_revenue']
+
+    yesterday_revenue = Order.objects.filter(created_at__date=timezone.now(
+    ) - timedelta(days=1)).aggregate(total_revenue=Sum('amount'))['total_revenue']
+
+    if yesterday_revenue != 0:
+        revenue_percentage_change_yesterday = (
+            today_revenue / (today_revenue + yesterday_revenue)) * 100
+    else:
+        revenue_percentage_change_yesterday = 0
+
+    # Percentage change in revenue compared to last month
+    current_month_revenue = Order.objects.filter(
+        created_at__year=timezone.now().year,
+        created_at__month=timezone.now().month
+    ).aggregate(total_revenue=Sum('amount'))['total_revenue']
+
+    last_month_revenue = Order.objects.filter(created_at__month=timezone.now(
+    ).month - 1).aggregate(total_revenue=Sum('amount'))['total_revenue']
+    if last_month_revenue != 0:
+        revenue_percentage_change_last_month = (
+            current_month_revenue / (current_month_revenue + last_month_revenue)) * 100
+    else:
+        revenue_percentage_change_last_month = 0
+
+    data = {
+        'total_orders': total_orders,
+        'today_orders': today_orders,
+        'yesterday_orders': yesterday_orders,
+        'order_percentage_change_yesterday': order_percentage_change_yesterday,
+        'current_month_orders': current_month_orders,
+        'last_month_orders': last_month_orders,
+        'order_percentage_change_last_month': order_percentage_change_last_month,
+        'total_revenue': total_revenue,
+        'today_revenue': today_revenue,
+        'yesterday_revenue': yesterday_revenue,
+        'revenue_percentage_change_yesterday': revenue_percentage_change_yesterday,
+        'current_month_revenue': current_month_revenue,
+        'last_month_revenue': last_month_revenue,
+        'revenue_percentage_change_last_month': revenue_percentage_change_last_month
+    }
+
+    return Response(data)
 
 
 @api_view(['POST'])
