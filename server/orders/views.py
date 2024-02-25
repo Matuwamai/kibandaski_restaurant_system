@@ -66,7 +66,7 @@ def order_statistics(request):
     yesterday_revenue = Order.objects.filter(created_at__date=timezone.now(
     ) - timedelta(days=1)).aggregate(total_revenue=Sum('amount'))['total_revenue']
 
-    if yesterday_revenue != 0:
+    if yesterday_revenue is not None and today_revenue is not None:
         revenue_percentage_change_yesterday = (
             today_revenue / (today_revenue + yesterday_revenue)) * 100
     else:
@@ -80,7 +80,7 @@ def order_statistics(request):
 
     last_month_revenue = Order.objects.filter(created_at__month=timezone.now(
     ).month - 1).aggregate(total_revenue=Sum('amount'))['total_revenue']
-    if last_month_revenue != 0:
+    if last_month_revenue is not None and current_month_revenue is not None:
         revenue_percentage_change_last_month = (
             current_month_revenue / (current_month_revenue + last_month_revenue)) * 100
     else:
@@ -141,7 +141,6 @@ def create_order(request):
         
         order = Order.objects.get(id=order.id)
         order_serializer = OrderSerializer(order)
-        print(order_serializer.data)
         async_to_sync(send_order_update)("send_order", to_json(order_serializer.data))
 
         serializer = OrderSerializer(order, many=False)
