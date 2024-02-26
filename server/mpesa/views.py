@@ -14,6 +14,9 @@ import os
 from rest_framework.decorators import api_view
 from mpesa.mpesa import MpesaAccessToken, LipaNaMpesaPassword
 from mpesa.models import MpesaTransaction
+from asgiref.sync import async_to_sync
+
+channel_layer = get_channel_layer()
 
 
 class TokenGeneratorView(View):
@@ -76,9 +79,13 @@ class PaymentView(View):
 
 
 # mpesa/views.py
+async def send_mpesa_payment_status(type, order_data, client_id):
+    message = {"type": type, "data": order_data}
+    print("Sending mpesa payment status...")
+    await channel_layer.send(client_id, message)
 
 @api_view(['POST'])
-def handle_mpesa_callback(request):
+def handle_mpesa_callback(request, client_id):
     if request.method == 'POST':
         data = json.loads(request.body)
 
@@ -101,21 +108,9 @@ def handle_mpesa_callback(request):
                 phoneNumber=phone_number
             )
 
+            async_to_sync(send_mpesa_payment_status)(
+                "send_message_to_client", {"message": "Payment verified successfully!"}, client_id)
+
             return Response(status=201)
     return JsonResponse({'message': 'Method not allowed'}, status=405)
 
-
-    # # Send the response data to WebSocket clients
-    # channel_layer = get_channel_layer()
-    # async_to_sync(channel_layer.group_send)(
-    #     "transactions_group",
-    #     {
-    #         "type": "send_transaction",
-    #         "message": request.data,
-    #     },
-    # )
-
-    # # Additional logic for updating your database, if needed
-
-    # # Return a response to Safaricom's callback
-    # return HttpResponse(status=200)

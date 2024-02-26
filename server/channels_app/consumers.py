@@ -14,16 +14,18 @@ class SSEConsumer(AsyncWebsocketConsumer):
 
         # Add the connected client to the "order_group" group
         await self.channel_layer.group_add("order_group", self.channel_name)
-
+        user_id = self.scope['query_string'].decode().split('=')[1]
         # Add this client to the clients dictionary
-        self.clients[self.channel_name] = self
+        self.clients[user_id] = self
+        print(self.clients)
 
     async def disconnect(self, close_code):
         # Remove the connected client from the "order_group" group
         await self.channel_layer.group_discard("order_group", self.channel_name)
+        user_id = self.scope['query_string'].decode().split('=')[1]
 
         # Remove this client from the clients dictionary
-        del self.clients[self.channel_name]
+        del self.clients[user_id]
     
     async def send_order(self, event):
         # Send the "send_order" message to the WebSocket
@@ -59,6 +61,7 @@ class SSEConsumer(AsyncWebsocketConsumer):
             print("Error decoding JSON:", e)
 
     async def send_message(self, message):
+        print("INside the event")
         await self.send(text_data=json.dumps({"message": message}))
     
     @classmethod

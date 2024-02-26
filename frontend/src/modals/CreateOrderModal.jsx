@@ -5,8 +5,7 @@ import { useGlobalContext } from "../context/context";
 import { createOrder } from "../redux/actions/orderActions";
 import Loading from "../utils/Loading";
 import Message from "../utils/Message";
-import { initiateStkPush } from "../redux/actions/paymentActions";
-import io from "socket.io-client";
+import { initiateStkPush, testCallBack } from "../redux/actions/paymentActions";
 import { hidePaymentStatusInfo } from "../redux/slices/paymentSlice";
 
 export default function CreateOrderModal() {
@@ -20,6 +19,7 @@ export default function CreateOrderModal() {
     loading: loadingPayment,
     error: errorPayment,
     paymentStatusInfo,
+    transactionStatus,
   } = useSelector((state) => state.payments);
 
   const [mealSearch, setMealSearch] = useState("");
@@ -78,7 +78,8 @@ export default function CreateOrderModal() {
         })
       );
     } else if (paymentMethod === "MPESA") {
-      dispatch(initiateStkPush({ phone, amount: Math.round(totalAmount) }));
+      dispatch(testCallBack());
+      // dispatch(initiateStkPush({ phone, amount: Math.round(totalAmount)}));
     }
   };
 
@@ -125,19 +126,6 @@ export default function CreateOrderModal() {
     setTotalAmount(totals);
   }, [cartItems]);
 
-  // useEffect(() => {
-  //   const socket = io("ws://127.0.0.1:8000/ws/transactions/");
-  //   console.log(socket);
-  //   socket.on("transaction", (data) => {
-  //     // Handle the real-time transaction data in your React app
-  //     console.log("Real-time transaction update:", data);
-  //   });
-
-  //   return () => {
-  //     socket.disconnect();
-  //   };
-  // }, []);
-
   return (
     <div>
       {isOrderCreateModalOpen && (
@@ -155,6 +143,11 @@ export default function CreateOrderModal() {
             {paymentStatusInfo && (
               <div className='bg-green-400 border border-white rounded w-full text-white text-center'>
                 <p className='py-3'>{paymentStatusInfo}</p>
+              </div>
+            )}
+            {transactionStatus && (
+              <div className='bg-green-400 border border-white rounded w-full text-white text-center my-3'>
+                <p className='py-3'>{transactionStatus}</p>
               </div>
             )}
             <form onSubmit={handleCreateOrder}>

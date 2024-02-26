@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   loading: false,
   paymentStatusInfo: null,
+  transactionStatus: null,
   error: null,
 };
 
@@ -26,6 +27,9 @@ export const paymentsSlice = createSlice({
     hidePaymentStatusInfo: (state) => {
       state.paymentStatusInfo = null;
     },
+    showTransactionStatus: (state, action) => {
+      state.transactionStatus = action.payload;
+    }
   },
 });
 
@@ -34,6 +38,7 @@ export const {
   initiateSTKSuccess,
   initiateSTKFail,
   hidePaymentStatusInfo,
+  showTransactionStatus,
 } = paymentsSlice.actions;
 
 export default paymentsSlice.reducer;

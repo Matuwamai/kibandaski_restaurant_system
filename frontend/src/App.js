@@ -15,43 +15,45 @@ import Reports from "./reports/Reports";
 import Settings from "./settings/Settings";
 import Add from "./staff/Add";
 import Edit from "./staff/Edit";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   markOrderCompleted,
   updateOrdersList,
 } from "./redux/slices/orderSlices";
 import { useEffect } from "react";
+import { addEventSource } from "./redux/slices/globalSlices";
+import { showTransactionStatus } from "./redux/slices/paymentSlice";
+import { jwtDecode } from "jwt-decode";
 
 //  const eventSource = new WebSocket(
 //    "wss://kibandaski-restaurant-system.onrender.com/ws/sse/"
 //  );
 
-const eventSource = new WebSocket("ws://127.0.0.1:8000/ws/sse/");
-
-export const sendDataToServer = (data) => {
-  // Check if the WebSocket connection is open
-  if (eventSource.readyState === WebSocket.OPEN) {
-    // Send data to the server
-    eventSource.send(data);
-  } else {
-    console.error("WebSocket connection is not open.");
-    // Handle the case when the WebSocket connection is not open
-  }
-};
 
 function App() {
   const dispatch = useDispatch();
+  const {userInfo} = useSelector((state) => state.user);
+  console.log(userInfo);
   useEffect(() => {
+    const decoded = jwtDecode(userInfo.access);
+    const eventSource = new WebSocket(
+      `ws://127.0.0.1:8000/ws/sse/?user_id=${decoded.id}`
+    );
+    console.log(eventSource)
+    dispatch(addEventSource(eventSource.channelName))
     eventSource.onmessage = (event) => {
       console.log("Received event:", event.data);
       // Handle the received event data as needed
       const emmittedData = JSON.parse(event.data);
+      console.log(emmittedData);
       if (emmittedData?.type === "send_order") {
         dispatch(updateOrdersList(JSON.parse(emmittedData.data)));
       } else if (emmittedData?.type === "complete_order") {
         dispatch(markOrderCompleted());
       } else if (emmittedData?.type === "send_message") {
-        console.log(emmittedData);
+        if (emmittedData?.data.message === "Payment verified successfully!"){
+          dispatch(showTransactionStatus(emmittedData?.data.message));
+        }
       }
     };
 
@@ -64,13 +66,8 @@ function App() {
     return () => {
       eventSource.close();
     };
-  }, [dispatch]);
+  }, [dispatch, userInfo]);
 
-  sendDataToServer(
-    JSON.stringify({
-      type: "initiate_payment",
-    })
-  );
   return (
     <Router>
       <Routes>

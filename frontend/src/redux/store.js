@@ -7,6 +7,7 @@ import staffReducer from "./slices/staffSlices";
 import { cartReducer } from "./slices/cartReducers";
 import paymentsReducer from "./slices/paymentSlice";
 import navReducer from "./slices/navSlices";
+import globalReducer from "./slices/globalSlices";
 
 export const store = configureStore({
   reducer: {
@@ -18,5 +19,6 @@ export const store = configureStore({
     staff: staffReducer,
     payments: paymentsReducer,
     nav: navReducer,
-  },
+    global: globalReducer,
+  }
 });
