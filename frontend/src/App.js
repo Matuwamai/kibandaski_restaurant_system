@@ -1,8 +1,4 @@
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-} from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Dashboard from "./screens/Dashboard";
 import Orders from "./screens/Orders";
 import Customers from "./screens/Customers";
@@ -20,34 +16,61 @@ import Settings from "./settings/Settings";
 import Add from "./staff/Add";
 import Edit from "./staff/Edit";
 import { useDispatch } from "react-redux";
-import { markOrderCompleted, updateOrdersList } from "./redux/slices/orderSlices";
+import {
+  markOrderCompleted,
+  updateOrdersList,
+} from "./redux/slices/orderSlices";
 import { useEffect } from "react";
+
+//  const eventSource = new WebSocket(
+//    "wss://kibandaski-restaurant-system.onrender.com/ws/sse/"
+//  );
+
+const eventSource = new WebSocket("ws://127.0.0.1:8000/ws/sse/");
+
+export const sendDataToServer = (data) => {
+  // Check if the WebSocket connection is open
+  if (eventSource.readyState === WebSocket.OPEN) {
+    // Send data to the server
+    eventSource.send(data);
+  } else {
+    console.error("WebSocket connection is not open.");
+    // Handle the case when the WebSocket connection is not open
+  }
+};
+
 function App() {
   const dispatch = useDispatch();
-    useEffect(() => {
-      const eventSource = new WebSocket("ws://127.0.0.1:8000/ws/sse/");
+  useEffect(() => {
+    eventSource.onmessage = (event) => {
+      console.log("Received event:", event.data);
+      // Handle the received event data as needed
+      const emmittedData = JSON.parse(event.data);
+      if (emmittedData?.type === "send_order") {
+        dispatch(updateOrdersList(JSON.parse(emmittedData.data)));
+      } else if (emmittedData?.type === "complete_order") {
+        dispatch(markOrderCompleted());
+      } else if (emmittedData?.type === "send_message") {
+        console.log(emmittedData);
+      }
+    };
 
-      eventSource.onmessage = (event) => {
-        console.log("Received event:", event.data);
-        // Handle the received event data as needed
-        const emmittedData = JSON.parse(event.data);
-        if (emmittedData?.type === "send_order") {
-          dispatch(updateOrdersList(JSON.parse(emmittedData.data)));
-        }else if (emmittedData?.type === "complete_order") {
-          dispatch(markOrderCompleted());
-        }
-      };
+    eventSource.onerror = (error) => {
+      console.error("Error:", error);
+      // Handle errors if necessary
+    };
 
-      eventSource.onerror = (error) => {
-        console.error("Error:", error);
-        // Handle errors if necessary
-      };
+    // Clean up the EventSource on component unmount
+    return () => {
+      eventSource.close();
+    };
+  }, [dispatch]);
 
-      // Clean up the EventSource on component unmount
-      return () => {
-        eventSource.close();
-      };
-    }, [dispatch]);
+  sendDataToServer(
+    JSON.stringify({
+      type: "initiate_payment",
+    })
+  );
   return (
     <Router>
       <Routes>
