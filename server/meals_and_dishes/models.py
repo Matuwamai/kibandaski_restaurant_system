@@ -1,12 +1,5 @@
 from django.db import models
 
-
-# details
-# qty
-# price
-# meal_url
-# is_ready
-
 class MealsAndDishes(models.Model):
     title = models.CharField(max_length=100, null=True, unique=True)
     details = models.CharField(max_length=255, null=False)

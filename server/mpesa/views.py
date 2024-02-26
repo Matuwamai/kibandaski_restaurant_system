@@ -3,6 +3,7 @@ from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
 from django.views import View
 from django.http import JsonResponse
+from rest_framework.response import Response
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 import requests
@@ -12,6 +13,7 @@ import json
 import os
 from rest_framework.decorators import api_view
 from mpesa.mpesa import MpesaAccessToken, LipaNaMpesaPassword
+from mpesa.models import MpesaTransaction
 
 
 class TokenGeneratorView(View):
@@ -77,19 +79,43 @@ class PaymentView(View):
 
 @api_view(['POST'])
 def handle_mpesa_callback(request):
-    # Your existing code to process the M-Pesa callback
+    if request.method == 'POST':
+        data = json.loads(request.body)
 
-    # Send the response data to WebSocket clients
-    channel_layer = get_channel_layer()
-    async_to_sync(channel_layer.group_send)(
-        "transactions_group",
-        {
-            "type": "send_transaction",
-            "message": request.data,
-        },
-    )
+        if data['Body']['stkCallback']['CallbackMetadata'] is not None:
+            data = data['Body']['stkCallback']['CallbackMetadata']['Item']
 
-    # Additional logic for updating your database, if needed
+            # Extract relevant fields
+            amount = data[0].get('Value')
+            receipt_number = data[1].get('Value')
+            balance = data[2].get('Value')
+            transaction_date = data[3].get('Value')
+            phone_number = data[4].get('Value')
 
-    # Return a response to Safaricom's callback
-    return HttpResponse(status=200)
+            # Create the MpesaTransaction object
+            transaction = MpesaTransaction.objects.create(
+                amount=amount,
+                receiptNumber=receipt_number,
+                balance=balance,
+                transactionDate=transaction_date,
+                phoneNumber=phone_number
+            )
+
+            return Response(status=201)
+    return JsonResponse({'message': 'Method not allowed'}, status=405)
+
+
+    # # Send the response data to WebSocket clients
+    # channel_layer = get_channel_layer()
+    # async_to_sync(channel_layer.group_send)(
+    #     "transactions_group",
+    #     {
+    #         "type": "send_transaction",
+    #         "message": request.data,
+    #     },
+    # )
+
+    # # Additional logic for updating your database, if needed
+
+    # # Return a response to Safaricom's callback
+    # return HttpResponse(status=200)
