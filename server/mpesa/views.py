@@ -15,7 +15,7 @@ from rest_framework.decorators import api_view
 from mpesa.mpesa import MpesaAccessToken, LipaNaMpesaPassword
 from mpesa.models import MpesaTransaction
 from asgiref.sync import async_to_sync
-
+from channels_app.consumers import SSEConsumer
 channel_layer = get_channel_layer()
 
 
@@ -84,6 +84,11 @@ async def send_mpesa_payment_status(type, order_data, client_id):
     print("Sending mpesa payment status...")
     await channel_layer.send(client_id, message)
 
+
+async def send_message_to_client(client_id, message):
+    # Use SSEConsumer to send message to client
+    await SSEConsumer.send_message_to_client(client_id, message)
+
 @api_view(['POST'])
 def handle_mpesa_callback(request, client_id):
     if request.method == 'POST':
@@ -108,9 +113,19 @@ def handle_mpesa_callback(request, client_id):
                 phoneNumber=phone_number
             )
 
-            async_to_sync(send_mpesa_payment_status)(
-                "send_message_to_client", {"message": "Payment verified successfully!"}, client_id)
+            # channel_layer = get_channel_layer()
+            # async_to_sync(channel_layer.group_send)(
+            #     # Use client_id to send data to the specific client
+            #     f"user_{client_id}",
+            #     {
+            #         "type": "send_message",  # Specify the type of message to be handled by the consumer
+            #         "data": {"message": "Your transaction has been processed successfully!"}
+            #     }
+            # )
+            async_to_sync(send_message_to_client)(
+                client_id, "Your transaction has been processed successfully!")
+            print("Checked whether client id exist")
 
-            return Response(status=201)
+            return Response({"message": "Your transaction has been processed successfully!"}, status=201)
     return JsonResponse({'message': 'Method not allowed'}, status=405)
 

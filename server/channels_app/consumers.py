@@ -67,5 +67,6 @@ class SSEConsumer(AsyncWebsocketConsumer):
     @classmethod
     async def send_message_to_client(cls, client_channel_name, message):
         # Send a message to a specific client identified by the channel name
+        print("Calling send message to client")
         if client_channel_name in cls.clients:
             await cls.clients[client_channel_name].send_message(message)
