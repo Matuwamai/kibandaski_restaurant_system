@@ -34,38 +34,40 @@ function App() {
   const { userInfo } = useSelector((state) => state.user);
   console.log(userInfo);
   useEffect(() => {
-    const decoded = jwtDecode(userInfo.access);
-    const eventSource = new WebSocket(
-      `ws://127.0.0.1:8000/ws/sse/?user_id=${decoded.id}`
-    );
-    console.log(eventSource);
-    dispatch(addEventSource(eventSource.channelName));
-    eventSource.onmessage = (event) => {
-      console.log("Received event:", event.data);
-      // Handle the received event data as needed
-      const emmittedData = JSON.parse(event.data);
-      console.log(emmittedData)
-      if (emmittedData?.type === "send_order") {
-        dispatch(updateOrdersList(JSON.parse(emmittedData.data)));
-      } else if (emmittedData?.type === "complete_order") {
-        dispatch(markOrderCompleted());
-      } else if (
-        emmittedData?.message ===
-        "Your transaction has been processed successfully!"
-      ) {
-        dispatch(showTransactionStatus(emmittedData?.message));
-      }
-    };
+    if (userInfo?.access){
+      const decoded = jwtDecode(userInfo?.access);
+      const eventSource = new WebSocket(
+        `ws://127.0.0.1:8000/ws/sse/?user_id=${decoded.id}`
+      );
+      console.log(eventSource);
+      dispatch(addEventSource(eventSource.channelName));
+      eventSource.onmessage = (event) => {
+        console.log("Received event:", event.data);
+        // Handle the received event data as needed
+        const emmittedData = JSON.parse(event.data);
+        console.log(emmittedData);
+        if (emmittedData?.type === "send_order") {
+          dispatch(updateOrdersList(JSON.parse(emmittedData.data)));
+        } else if (emmittedData?.type === "complete_order") {
+          dispatch(markOrderCompleted());
+        } else if (
+          emmittedData?.message ===
+          "Your transaction has been processed successfully!"
+        ) {
+          dispatch(showTransactionStatus(emmittedData?.message));
+        }
+      };
 
-    eventSource.onerror = (error) => {
-      console.error("Error:", error);
-      // Handle errors if necessary
-    };
+      eventSource.onerror = (error) => {
+        console.error("Error:", error);
+        // Handle errors if necessary
+      };
 
-    // Clean up the EventSource on component unmount
-    return () => {
-      eventSource.close();
-    };
+      // Clean up the EventSource on component unmount
+      return () => {
+        eventSource.close();
+      };
+    }
   }, [dispatch, userInfo]);
 
   return (
