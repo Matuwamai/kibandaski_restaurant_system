@@ -113,17 +113,8 @@ def handle_mpesa_callback(request, client_id):
                 phoneNumber=phone_number
             )
 
-            # channel_layer = get_channel_layer()
-            # async_to_sync(channel_layer.group_send)(
-            #     # Use client_id to send data to the specific client
-            #     f"user_{client_id}",
-            #     {
-            #         "type": "send_message",  # Specify the type of message to be handled by the consumer
-            #         "data": {"message": "Your transaction has been processed successfully!"}
-            #     }
-            # )
             async_to_sync(send_message_to_client)(
-                client_id, "Your transaction has been processed successfully!")
+                client_id, {"message": "Your transaction has been processed successfully!", "amount": transaction.amount, "ReceiptNumber": transaction.receiptNumber})
             print("Checked whether client id exist")
 
             return Response({"message": "Your transaction has been processed successfully!"}, status=201)

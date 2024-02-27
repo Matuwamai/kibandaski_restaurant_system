@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Dashboard from "./screens/Dashboard";
 import Orders from "./screens/Orders";
 import Customers from "./screens/Customers";
@@ -20,10 +20,11 @@ import {
   markOrderCompleted,
   updateOrdersList,
 } from "./redux/slices/orderSlices";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { addEventSource } from "./redux/slices/globalSlices";
 import { showTransactionStatus } from "./redux/slices/paymentSlice";
 import { jwtDecode } from "jwt-decode";
+import PaymentSuccess from "./screens/PaymentSuccess";
 
 //  const eventSource = new WebSocket(
 //    "wss://kibandaski-restaurant-system.onrender.com/ws/sse/"
@@ -32,7 +33,7 @@ import { jwtDecode } from "jwt-decode";
 function App() {
   const dispatch = useDispatch();
   const { userInfo } = useSelector((state) => state.user);
-  console.log(userInfo);
+  const [redirectLink, setRedirentLink] = useState(null);
   useEffect(() => {
     if (userInfo?.access){
       const decoded = jwtDecode(userInfo?.access);
@@ -51,10 +52,13 @@ function App() {
         } else if (emmittedData?.type === "complete_order") {
           dispatch(markOrderCompleted());
         } else if (
-          emmittedData?.message ===
+          emmittedData?.data?.message ===
           "Your transaction has been processed successfully!"
         ) {
-          dispatch(showTransactionStatus(emmittedData?.message));
+          setRedirentLink(
+            `/orders/1/payments/${emmittedData?.data?.ReceiptNumber}/validation`
+          );
+          dispatch(showTransactionStatus(emmittedData?.data));
         }
       };
 
@@ -70,6 +74,10 @@ function App() {
     }
   }, [dispatch, userInfo]);
 
+  if (redirectLink) {
+    return <Navigate to={redirectLink} />
+  }
+
   return (
     <Router>
       <Routes>
@@ -80,6 +88,7 @@ function App() {
         <Route element={<DashboardLayout />}>
           <Route path='/' element={<Dashboard />} />
           <Route path='/orders' element={<Orders />} />
+        <Route path='/orders/:orderId/payments/:referenceCode/validation' element={<PaymentSuccess />} />
           <Route path='/customers' element={<Customers />} />
           <Route path='/staff' element={<Staff />} />
           <Route path='/staff/new' element={<Add />} />
@@ -98,20 +107,3 @@ function App() {
 
 export default App;
 
-// const handleSpeak = () => {
-//   const text = "A new order has been made at table number 10. PLease check...";
-
-//   const value = new SpeechSynthesisUtterance(text);
-//   value.rate = 0.9;
-//   window.speechSynthesis.speak(value);
-// };
-
-// useEffect(() => {
-//   // Set up an interval to call handleSpeak every 5 seconds (adjust the time interval as needed)
-//   const intervalId = setInterval(() => {
-//     handleSpeak();
-//   }, 5000); // 5000 milliseconds = 5 seconds
-
-//   // Clean up the interval when the component is unmounted
-//   return () => clearInterval(intervalId);
-// }, []); // Empty dependency array ensures that the effect runs only once when the component mounts

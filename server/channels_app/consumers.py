@@ -61,8 +61,7 @@ class SSEConsumer(AsyncWebsocketConsumer):
             print("Error decoding JSON:", e)
 
     async def send_message(self, message):
-        print("INside the event")
-        await self.send(text_data=json.dumps({"message": message}))
+        await self.send(text_data=json.dumps({"data": message}))
     
     @classmethod
     async def send_message_to_client(cls, client_channel_name, message):
