@@ -13,6 +13,7 @@ MPESA_PASS_KEY = config('MPESA_PASS_KEY')
 MPESA_BUSINESS_SHORT_CODE = config('MPESA_BUSINESS_SHORT_CODE')
 MPESA_TILL_NO = config('MPESA_TILL_NO')
 DB_URL = config('DB_URL')
+SERVER_URL = config('SERVER_URL')
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.

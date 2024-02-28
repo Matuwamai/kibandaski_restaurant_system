@@ -16,6 +16,7 @@ from mpesa.mpesa import MpesaAccessToken, LipaNaMpesaPassword
 from mpesa.models import MpesaTransaction
 from asgiref.sync import async_to_sync
 from channels_app.consumers import SSEConsumer
+from accounts.models import CustomUser
 channel_layer = get_channel_layer()
 
 
@@ -40,10 +41,13 @@ class TokenGeneratorView(View):
 @method_decorator(csrf_exempt, name='dispatch')
 class PaymentView(View):
     def post(self, request, *args, **kwargs):
-        # Assuming MpesaAccessToken and LipanaMpesaPpassword are defined elsewhere in your code
         access_token = MpesaAccessToken.validated_mpesa_access_token
+        user_id = self.kwargs.get('user_id')
+        order_id = self.kwargs.get('order_id')
+        server_url = os.environ.get('SERVER_URL')
 
-        print("access token: " + access_token)
+        print(f"ORDER ID: {order_id}")
+        print(f"USER ID: {user_id}")
 
         api_url = "https://api.safaricom.co.ke/mpesa/stkpush/v1/processrequest"
         headers = {"Authorization": "Bearer %s" % access_token}
@@ -52,6 +56,7 @@ class PaymentView(View):
 
         phone = data.get('phone')
         amount = data.get('amount')
+        call_back_url = f"{server_url}/mpesa/mpesa-callback/{user_id}/{order_id}"
 
         if phone and amount:
             mpesa = LipaNaMpesaPassword()
@@ -64,7 +69,7 @@ class PaymentView(View):
                 "PartyA": phone,
                 "PartyB": mpesa.business_short_code,
                 "PhoneNumber": phone,
-                "CallBackURL": "https://sandbox.safaricom.co.ke/mpesa/",
+                "CallBackURL": call_back_url,
                 "AccountReference": "Wamae Ndiritu",
                 "TransactionDesc": "Web Development Charges"
             }
@@ -90,7 +95,7 @@ async def send_message_to_client(client_id, message):
     await SSEConsumer.send_message_to_client(client_id, message)
 
 @api_view(['POST'])
-def handle_mpesa_callback(request, client_id):
+def handle_mpesa_callback(request, client_id, order_id):
     if request.method == 'POST':
         data = json.loads(request.body)
 
@@ -104,13 +109,19 @@ def handle_mpesa_callback(request, client_id):
             transaction_date = data[3].get('Value')
             phone_number = data[4].get('Value')
 
+            # GET THER USERNAME
+            user = CustomUser.objects.get(id=client_id)
+            user_full_name = f"{user.first_name} {user.last_name}"
+
             # Create the MpesaTransaction object
             transaction = MpesaTransaction.objects.create(
                 amount=amount,
                 receiptNumber=receipt_number,
                 balance=balance,
                 transactionDate=transaction_date,
-                phoneNumber=phone_number
+                phoneNumber=phone_number,
+                fullName=user_full_name,
+                order_id=order_id
             )
 
             async_to_sync(send_message_to_client)(
