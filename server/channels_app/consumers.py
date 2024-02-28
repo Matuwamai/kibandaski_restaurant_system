@@ -17,7 +17,6 @@ class SSEConsumer(AsyncWebsocketConsumer):
         user_id = self.scope['query_string'].decode().split('=')[1]
         # Add this client to the clients dictionary
         self.clients[user_id] = self
-        print(self.clients)
 
     async def disconnect(self, close_code):
         # Remove the connected client from the "order_group" group
@@ -35,17 +34,6 @@ class SSEConsumer(AsyncWebsocketConsumer):
         # Send the "send_order" message to the WebSocket
         await self.send(text_data=json.dumps(event))
 
-    # async def receive(self, text_data):
-    #     print(text_data)
-    #     data = json.loads(text_data)
-    #     message_type = data.get("type")
-
-    #     if message_type == "send_order":
-    #         await self.send(text_data=json.dumps(data["data"]))
-
-    #     if message_type == "initiate_payment":
-    #         await self.send_message_to_client(self.channel_name, {"status": "success"})
-        
     async def receive(self, text_data):
         try:
             data = json.loads(text_data)
@@ -55,7 +43,6 @@ class SSEConsumer(AsyncWebsocketConsumer):
                 await self.send(text_data=json.dumps(data["data"]))
 
             if message_type == "initiate_payment":
-                print("initiate_payment")
                 await self.send_message_to_client(self.channel_name, {"status": "success"})
         except json.JSONDecodeError as e:
             print("Error decoding JSON:", e)
@@ -66,6 +53,5 @@ class SSEConsumer(AsyncWebsocketConsumer):
     @classmethod
     async def send_message_to_client(cls, client_channel_name, message):
         # Send a message to a specific client identified by the channel name
-        print("Calling send message to client")
         if client_channel_name in cls.clients:
             await cls.clients[client_channel_name].send_message(message)

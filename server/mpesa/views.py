@@ -46,9 +46,6 @@ class PaymentView(View):
         order_id = self.kwargs.get('order_id')
         server_url = os.environ.get('SERVER_URL')
 
-        print(f"ORDER ID: {order_id}")
-        print(f"USER ID: {user_id}")
-
         api_url = "https://api.safaricom.co.ke/mpesa/stkpush/v1/processrequest"
         headers = {"Authorization": "Bearer %s" % access_token}
 
@@ -126,7 +123,6 @@ def handle_mpesa_callback(request, client_id, order_id):
 
             async_to_sync(send_message_to_client)(
                 client_id, {"message": "Your transaction has been processed successfully!", "amount": transaction.amount, "ReceiptNumber": transaction.receiptNumber})
-            print("Checked whether client id exist")
 
             return Response({"message": "Your transaction has been processed successfully!"}, status=201)
     return JsonResponse({'message': 'Method not allowed'}, status=405)
