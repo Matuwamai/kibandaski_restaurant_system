@@ -95,6 +95,7 @@ async def send_message_to_client(client_id, message):
 def handle_mpesa_callback(request, client_id, order_id):
     if request.method == 'POST':
         data = json.loads(request.body)
+        print(data)
 
         if data['Body']['stkCallback']['CallbackMetadata'] is not None:
             data = data['Body']['stkCallback']['CallbackMetadata']['Item']
