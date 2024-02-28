@@ -7,13 +7,14 @@ import {
 import { BASE_URL } from "../../url";
 import { jwtDecode } from "jwt-decode";
 
-export const initiateStkPush = (details) => async (dispatch) => {
+export const initiateStkPush = (orderId, details) => async (dispatch, getState) => {
   dispatch(initiateSTKStart());
 
   try {
-    const { data } = await axios.post(`${BASE_URL}/mpesa/stk-push/`, details);
+    const {user: {userInfo: {access}}} = getState();
+    const decodedUser = jwtDecode(access);
+    const { data } = await axios.post(`${BASE_URL}/mpesa/stk-push/${orderId}/${decodedUser?.id}`, details);
     let message = "";
-    console.log(data);
     if (
       data.ResponseDescription === "Success. Request accepted for processing"
     ) {

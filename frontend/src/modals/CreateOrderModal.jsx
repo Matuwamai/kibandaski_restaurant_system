@@ -14,7 +14,7 @@ export default function CreateOrderModal() {
   const navigate = useNavigate();
   const { isOrderCreateModalOpen, closeOrderCreateModal } = useGlobalContext();
   const { mealsList } = useSelector((state) => state.meals);
-  const { loading, error, success_create } = useSelector(
+  const { loading, error, success_create, orderDetails } = useSelector(
     (state) => state.orders
   );
   const {
@@ -69,20 +69,16 @@ export default function CreateOrderModal() {
 
   const handleCreateOrder = (e) => {
     e.preventDefault();
-    if (paymentMethod === "CASH") {
-      dispatch(
-        createOrder({
-          order_items: cartItems,
-          payment_method: paymentMethod,
-          customer_name: customerName,
-          table_no: 10,
-          amount: totalAmount,
-        })
-      );
-    } else if (paymentMethod === "MPESA") {
-      dispatch(testCallBack());
-      // dispatch(initiateStkPush({ phone, amount: Math.round(totalAmount)}));
-    }
+    dispatch(
+      createOrder({
+        order_items: cartItems,
+        payment_method: paymentMethod,
+        customer_name: customerName,
+        table_no: 10,
+        amount: totalAmount,
+
+      })
+    );
   };
 
   const handleSelect = (id) => {
@@ -115,11 +111,13 @@ export default function CreateOrderModal() {
   }, [mealsList, mealSearch]);
 
   useEffect(() => {
-    if (success_create) {
+    if (success_create && paymentMethod === "MPESA"){
+      dispatch(initiateStkPush(orderDetails?.id, { phone, amount: Math.round(totalAmount) }));
+    }else if (success_create && paymentMethod === "CASH") {
       setSelectedMeals([]);
       handleCloseModal();
     }
-  }, [success_create]);
+  }, [success_create, dispatch, paymentMethod]);
 
   useEffect(() => {
     const totals = cartItems
@@ -129,12 +127,13 @@ export default function CreateOrderModal() {
   }, [cartItems]);
 
   useEffect(() => {
-    if (transactionInfo){
+    if (transactionInfo) {
+      dispatch(hidePaymentStatusInfo());
       navigate(
         `/orders/1/payments/${transactionInfo.ReceiptNumber}/validation`
       );
     }
-  }, [transactionInfo])
+  }, [transactionInfo, dispatch, navigate]);
 
   return (
     <div>
@@ -145,7 +144,7 @@ export default function CreateOrderModal() {
               Create new Order
             </h3>
             {loading ? <Loading /> : error && <Message>{error}</Message>}
-            {loadingPayment ? (
+            {!loading && loadingPayment ? (
               <Loading />
             ) : (
               errorPayment && <Message>{errorPayment}</Message>

@@ -28,9 +28,9 @@ export const createOrder = (order) => async (dispatch) => {
       }
     }
 
-    await axios.post(`${BASE_URL}/orders/create`, order, config);
+    const {data} = await axios.post(`${BASE_URL}/orders/create`, order, config);
 
-    dispatch(createOrderSuccess());
+    dispatch(createOrderSuccess(data));
     dispatch(clearTable());
   } catch (err) {
     console.log(err);

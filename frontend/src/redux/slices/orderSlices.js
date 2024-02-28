@@ -21,6 +21,7 @@ const initialState = {
   table,
   new_orders: new_orders_count,
   orderStats: {},
+  orderDetails: null,
 };
 
 export const ordersSlice = createSlice({
@@ -32,9 +33,10 @@ export const ordersSlice = createSlice({
       state.error = false;
       state.success_create = false;
     },
-    createOrderSuccess: (state) => {
+    createOrderSuccess: (state, action) => {
       state.loading = false;
       state.success_create = true;
+      state.orderDetails = action.payload;
     },
     createOrderFail: (state, action) => {
       state.loading = false;

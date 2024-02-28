@@ -17,7 +17,7 @@ const PaymentSuccess = () => {
         // Clear the timer if the component unmounts before the timeout
         return () => clearTimeout(redirectTimer);
       }
-    }, [transactionInfo, navigate]);
+    }, [transactionInfo, navigate, dispatch]);
   return (
     <div className='modal-overlay'>
       <div className='modal-content'>
