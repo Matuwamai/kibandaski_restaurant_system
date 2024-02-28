@@ -97,7 +97,9 @@ def handle_mpesa_callback(request, client_id, order_id):
         data = json.loads(request.body)
         print(data)
 
-        if data['Body']['stkCallback']['CallbackMetadata'] is not None:
+        callbackMetaData = data['Body']['stkCallback'].get('CallbackMetadata', None)
+
+        if callbackMetaData is not None:
             data = data['Body']['stkCallback']['CallbackMetadata']['Item']
 
             # Extract relevant fields
