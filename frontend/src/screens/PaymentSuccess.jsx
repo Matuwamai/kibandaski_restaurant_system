@@ -1,6 +1,23 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router";
+import { resetTransactionInfo } from "../redux/slices/paymentSlice";
 
 const PaymentSuccess = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const {transactionInfo} = useSelector((state) => state.payments);
+    useEffect(() => {
+      if (transactionInfo) {
+        const redirectTimer = setTimeout(() => {
+          navigate("/orders");
+          dispatch(resetTransactionInfo());
+        }, 5000); // 5000 milliseconds = 5 seconds
+
+        // Clear the timer if the component unmounts before the timeout
+        return () => clearTimeout(redirectTimer);
+      }
+    }, [transactionInfo, navigate]);
   return (
     <div className='modal-overlay'>
       <div className='modal-content'>
@@ -21,13 +38,18 @@ const PaymentSuccess = () => {
               </h3>
               <p className='text-gray-600 text-sm my-2'>
                 Your Mpesa transaction of{" "}
-                <b className='font-semibold'>KES 300 </b> has been received and
-                processed successfully!
+                <b className='font-semibold'>KES {transactionInfo?.amount} </b>{" "}
+                has been received and processed successfully!
               </p>
               <p className='text-gray-600 text-sm my-2 italic'>
-                Your Reference code is <b className='font-semibold'>QRFGDB</b>
+                Your Reference code is{" "}
+                <b className='font-semibold'>
+                  {transactionInfo?.ReceiptNumber}
+                </b>
               </p>
-              <p>Thankyou and have a great day! </p>
+              <p className='text-gray-600 text-sm my-2 italic'>
+                Thankyou, you will be redirected shortly...
+              </p>
               <div className='py-10 text-center'>
                 <a
                   href='/'

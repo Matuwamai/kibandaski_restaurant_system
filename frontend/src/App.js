@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Dashboard from "./screens/Dashboard";
 import Orders from "./screens/Orders";
 import Customers from "./screens/Customers";
@@ -20,9 +20,9 @@ import {
   markOrderCompleted,
   updateOrdersList,
 } from "./redux/slices/orderSlices";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { addEventSource } from "./redux/slices/globalSlices";
-import { showTransactionStatus } from "./redux/slices/paymentSlice";
+import { setTransactionInfo } from "./redux/slices/paymentSlice";
 import { jwtDecode } from "jwt-decode";
 import PaymentSuccess from "./screens/PaymentSuccess";
 
@@ -33,7 +33,6 @@ import PaymentSuccess from "./screens/PaymentSuccess";
 function App() {
   const dispatch = useDispatch();
   const { userInfo } = useSelector((state) => state.user);
-  const [redirectLink, setRedirentLink] = useState(null);
   useEffect(() => {
     if (userInfo?.access){
       const decoded = jwtDecode(userInfo?.access);
@@ -55,10 +54,7 @@ function App() {
           emmittedData?.data?.message ===
           "Your transaction has been processed successfully!"
         ) {
-          setRedirentLink(
-            `/orders/1/payments/${emmittedData?.data?.ReceiptNumber}/validation`
-          );
-          dispatch(showTransactionStatus(emmittedData?.data));
+          dispatch(setTransactionInfo(emmittedData?.data));
         }
       };
 
@@ -74,9 +70,6 @@ function App() {
     }
   }, [dispatch, userInfo]);
 
-  if (redirectLink) {
-    return <Navigate to={redirectLink} />
-  }
 
   return (
     <Router>

@@ -7,9 +7,11 @@ import Loading from "../utils/Loading";
 import Message from "../utils/Message";
 import { initiateStkPush, testCallBack } from "../redux/actions/paymentActions";
 import { hidePaymentStatusInfo } from "../redux/slices/paymentSlice";
+import { useNavigate } from "react-router";
 
 export default function CreateOrderModal() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { isOrderCreateModalOpen, closeOrderCreateModal } = useGlobalContext();
   const { mealsList } = useSelector((state) => state.meals);
   const { loading, error, success_create } = useSelector(
@@ -19,7 +21,7 @@ export default function CreateOrderModal() {
     loading: loadingPayment,
     error: errorPayment,
     paymentStatusInfo,
-    transactionStatus,
+    transactionInfo,
   } = useSelector((state) => state.payments);
 
   const [mealSearch, setMealSearch] = useState("");
@@ -126,6 +128,14 @@ export default function CreateOrderModal() {
     setTotalAmount(totals);
   }, [cartItems]);
 
+  useEffect(() => {
+    if (transactionInfo){
+      navigate(
+        `/orders/1/payments/${transactionInfo.ReceiptNumber}/validation`
+      );
+    }
+  }, [transactionInfo])
+
   return (
     <div>
       {isOrderCreateModalOpen && (
@@ -145,9 +155,9 @@ export default function CreateOrderModal() {
                 <p className='py-3'>{paymentStatusInfo}</p>
               </div>
             )}
-            {transactionStatus && (
+            {transactionInfo && (
               <div className='bg-green-400 border border-white rounded w-full text-white text-center my-3'>
-                <p className='py-3'>{transactionStatus}</p>
+                <p className='py-3'>{transactionInfo.message}</p>
               </div>
             )}
             <form onSubmit={handleCreateOrder}>

@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   loading: false,
   paymentStatusInfo: null,
-  transactionStatus: null,
+  transactionInfo: localStorage.getItem('paymentInfo') ? JSON.parse(localStorage.getItem('paymentInfo')) : null,
   error: null,
 };
 
@@ -27,8 +27,13 @@ export const paymentsSlice = createSlice({
     hidePaymentStatusInfo: (state) => {
       state.paymentStatusInfo = null;
     },
-    showTransactionStatus: (state, action) => {
-      state.transactionStatus = action.payload;
+    setTransactionInfo: (state, action) => {
+      state.transactionInfo = action.payload;
+      localStorage.setItem('paymentInfo', JSON.stringify(state.transactionInfo));
+    },
+    resetTransactionInfo: (state) => {
+      state.transactionInfo = null;
+      localStorage.removeItem('paymentInfo');
     }
   },
 });
@@ -38,7 +43,8 @@ export const {
   initiateSTKSuccess,
   initiateSTKFail,
   hidePaymentStatusInfo,
-  showTransactionStatus,
+  setTransactionInfo,
+  resetTransactionInfo
 } = paymentsSlice.actions;
 
 export default paymentsSlice.reducer;
