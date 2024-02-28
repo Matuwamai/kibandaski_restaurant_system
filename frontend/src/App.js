@@ -37,12 +37,11 @@ function App() {
     if (userInfo?.access){
       const decoded = jwtDecode(userInfo?.access);
       const eventSource = new WebSocket(
-        `ws://127.0.0.1:8000/ws/sse/?user_id=${decoded.id}`
+        `wss://kibandaski-restaurant-system.onrender.com/ws/sse/?user_id=${decoded.id}`
       );
-      console.log(eventSource);
+      // ws://127.0.0.1:8000/ws/sse/ => FOR USE IN DEVELOPMENT
       dispatch(addEventSource(eventSource.channelName));
       eventSource.onmessage = (event) => {
-        console.log("Received event:", event.data);
         // Handle the received event data as needed
         const emmittedData = JSON.parse(event.data);
         console.log(emmittedData);
