@@ -93,6 +93,9 @@ async def send_message_to_client(client_id, message):
 
 @api_view(['POST'])
 def handle_mpesa_callback(request, client_id, order_id):
+    print(request)
+    data = json.loads(request.body)
+    print(data)
     if request.method == 'POST':
         data = json.loads(request.body)
         print(data)
