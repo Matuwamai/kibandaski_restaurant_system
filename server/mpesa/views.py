@@ -130,6 +130,6 @@ def handle_mpesa_callback(request, client_id, order_id):
             async_to_sync(send_message_to_client)(
                 client_id, {"message": "Your transaction has been processed successfully!", "amount": transaction.amount, "ReceiptNumber": transaction.receiptNumber})
 
-            return Response({"message": "Your transaction has been processed successfully!"}, status=201)
+        return Response({"message": "Your transaction has been processed successfully!"}, status=201)
     return JsonResponse({'message': 'Method not allowed'}, status=405)
 
