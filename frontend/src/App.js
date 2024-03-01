@@ -9,7 +9,7 @@ import Tables from "./screens/Tables";
 import Login from "./auth/Login";
 import Home from "./client/Home";
 import Cart from "./client/Cart";
-import Transactions from "./transactions/Transactions";
+import Transactions from "./screens/Transactions";
 import Staff from "./screens/Staff";
 import Reports from "./reports/Reports";
 import Settings from "./settings/Settings";
