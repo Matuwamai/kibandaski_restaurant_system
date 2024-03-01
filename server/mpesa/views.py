@@ -100,6 +100,11 @@ def handle_mpesa_callback(request, client_id, order_id):
         data = json.loads(request.body)
         print(data)
 
+        if data['Body']['stkCallback']['ResultDesc'] == "The operator does not exist.":
+            async_to_sync(send_message_to_client)(
+                client_id, {"type": "incomplete_transaction", "response": {"message": "Transaction failed!!"}})
+            return JsonResponse({"message": "Transaction unsuccessful"}, status=402)
+
         callbackMetaData = data['Body']['stkCallback'].get('CallbackMetadata', None)
 
         if callbackMetaData is not None:
