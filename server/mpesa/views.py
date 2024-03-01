@@ -93,16 +93,11 @@ async def send_message_to_client(client_id, message):
 
 @api_view(['POST'])
 def handle_mpesa_callback(request, client_id, order_id):
-    print(request)
-    data = json.loads(request.body)
-    print(data)
     if request.method == 'POST':
-        data = json.loads(request.body)
-        print(data)
-
-        if data['Body']['stkCallback']['ResultDesc'] == "The operator does not exist.":
+        if data['Body']['stkCallback']['ResultDesc'] != "The service was accepted successfully":
+            # Handles all unsuccessful transactions
             async_to_sync(send_message_to_client)(
-                client_id, {"type": "incomplete_transaction", "response": {"message": "Transaction failed!!"}})
+                client_id, {"type": "incomplete_transaction", "response": {"message": data['Body']['stkCallback']['ResultDesc']}})
             return JsonResponse({"message": "Transaction unsuccessful"}, status=402)
 
         callbackMetaData = data['Body']['stkCallback'].get('CallbackMetadata', None)
