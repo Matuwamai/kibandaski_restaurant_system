@@ -5,6 +5,7 @@ import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import { CiMenuFries } from "react-icons/ci";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleSidebar } from "../redux/slices/navSlices";
+import { Link } from "react-router-dom";
 
 const TopBar = () => {
   const dispatch = useDispatch();
@@ -26,14 +27,14 @@ const TopBar = () => {
           />
         </div>
         <div className='flex items-center gap-2'>
-          <div className='relative md:w-8 md:h-8 rounded-full sm:bg-slate-200 flex items-center justify-center'>
+          <Link to='/orders' className='relative md:w-8 md:h-8 rounded-full sm:bg-slate-200 flex items-center justify-center'>
             <ShoppingBasketIcon />
             {new_orders > 0 && (
               <span className='w-4 h-4 bg-red-500 rounded-full flex items-center justify-center text-white absolute top-0 right-0 text-sm badge'>
                 {new_orders}
               </span>
             )}
-          </div>
+          </Link>
           <div className='relative  md:w-8 md:h-8 rounded-full sm:bg-slate-200 flex items-center justify-center'>
             <NotificationsOutlinedIcon />
             <span className='w-4 h-4 bg-red-500 rounded-full flex items-center justify-center text-white absolute top-0 right-0 text-sm badge'>

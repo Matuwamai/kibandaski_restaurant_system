@@ -22,6 +22,7 @@ export default function CreateOrderModal() {
     error: errorPayment,
     paymentStatusInfo,
     transactionInfo,
+    transactionErr,
   } = useSelector((state) => state.payments);
 
   const [mealSearch, setMealSearch] = useState("");
@@ -127,13 +128,13 @@ export default function CreateOrderModal() {
   }, [cartItems]);
 
   useEffect(() => {
-    if (transactionInfo) {
+    if (transactionInfo || transactionErr) {
       dispatch(hidePaymentStatusInfo());
       navigate(
-        `/orders/1/payments/${transactionInfo.ReceiptNumber}/validation`
+        `/orders/1/payments/${transactionInfo?.ReceiptNumber}/validation`
       );
     }
-  }, [transactionInfo, dispatch, navigate]);
+  }, [transactionInfo, transactionErr, dispatch, navigate]);
 
   return (
     <div>

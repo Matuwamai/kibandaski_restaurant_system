@@ -40,6 +40,7 @@ function App() {
         `wss://kibandaski-restaurant-system.onrender.com/ws/sse/?user_id=${decoded.id}`
       );
       // ws://127.0.0.1:8000/ws/sse/ => FOR USE IN DEVELOPMENT
+      // wss://kibandaski-restaurant-system.onrender.com/ws/sse/ => FOR PRODUCTION
       dispatch(addEventSource(eventSource.channelName));
       eventSource.onmessage = (event) => {
         // Handle the received event data as needed
@@ -50,8 +51,7 @@ function App() {
         } else if (emmittedData?.type === "complete_order") {
           dispatch(markOrderCompleted());
         } else if (
-          emmittedData?.data?.message ===
-          "Your transaction has been processed successfully!"
+          emmittedData?.data?.type === "incomplete_transaction"
         ) {
           dispatch(setTransactionInfo(emmittedData?.data));
         }
