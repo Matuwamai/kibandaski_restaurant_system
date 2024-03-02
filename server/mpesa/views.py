@@ -4,6 +4,7 @@ from channels.layers import get_channel_layer
 from django.views import View
 from django.http import JsonResponse
 from rest_framework.response import Response
+from rest_framework import status
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 import requests
@@ -14,6 +15,8 @@ import os
 from rest_framework.decorators import api_view
 from mpesa.mpesa import MpesaAccessToken, LipaNaMpesaPassword
 from mpesa.models import MpesaTransaction
+from orders.models import Order
+from mpesa.serializer import CompletedTransactionSerializer
 from asgiref.sync import async_to_sync
 from channels_app.consumers import SSEConsumer
 from accounts.models import CustomUser
@@ -116,6 +119,7 @@ def handle_mpesa_callback(request, client_id, order_id):
             # GET THER USERNAME
             user = CustomUser.objects.get(id=client_id)
             user_full_name = f"{user.first_name} {user.last_name}"
+            order = Order.objects.get(id=order_id)
 
             # Create the MpesaTransaction object
             transaction = MpesaTransaction.objects.create(
@@ -125,7 +129,7 @@ def handle_mpesa_callback(request, client_id, order_id):
                 transactionDate=transaction_date,
                 phoneNumber=phone_number,
                 fullName=user_full_name,
-                order_id=order_id
+                order_id=order
             )
 
             async_to_sync(send_message_to_client)(
@@ -133,4 +137,16 @@ def handle_mpesa_callback(request, client_id, order_id):
 
         return Response({"message": "Your transaction has been processed successfully!"}, status=201)
     return JsonResponse({'message': 'Method not allowed'}, status=405)
+
+# Get all Completed Mpesa Transactions
+
+
+@api_view(['GET'])
+def list_completed_transactions(request):
+    if request.method == 'GET':
+        transactions = MpesaTransaction.objects.all()
+
+        serializer = CompletedTransactionSerializer(transactions, many=True)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
