@@ -77,7 +77,6 @@ export default function CreateOrderModal() {
         customer_name: customerName,
         table_no: 10,
         amount: totalAmount,
-
       })
     );
   };
@@ -112,12 +111,18 @@ export default function CreateOrderModal() {
   }, [mealsList, mealSearch]);
 
   useEffect(() => {
-    if (success_create && paymentMethod === "MPESA"){
-      dispatch(initiateStkPush(orderDetails?.id, { phone, amount: Math.round(totalAmount) }));
-    }else if (success_create && paymentMethod === "CASH") {
-      setSelectedMeals([]);
-      handleCloseModal();
+    if (success_create && paymentMethod === "MPESA") {
+      dispatch(
+        initiateStkPush(orderDetails?.id, {
+          phone,
+          amount: Math.round(totalAmount),
+        })
+      );
     }
+    // else if (success_create) {
+    //   setSelectedMeals([]);
+    //   handleCloseModal();
+    // }
   }, [success_create, dispatch, paymentMethod]);
 
   useEffect(() => {

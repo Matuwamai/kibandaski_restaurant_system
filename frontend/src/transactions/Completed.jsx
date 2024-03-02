@@ -7,6 +7,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+import { useSelector } from "react-redux";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -19,6 +20,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 }));
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  padding: 0,
   "&:nth-of-type(odd)": {
     backgroundColor: "rgb(248 250 252)",
   },
@@ -26,65 +28,19 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   "&:last-child td, &:last-child th": {
     border: 0,
   },
+  // "&:hover": {
+  //   backgroundColor: ""
+  // }
 }));
 
 
-const rows = [
-  {
-    id: 1,
-    order_id: 3,
-    ReceiptNumber: "SAJNSJWEQ",
-    Amount: 100,
-    fullName: "Wamae Ndiritu",
-    date: "1/03/2024 13:47",
-  },
-  {
-    id: 2,
-    order_id: 4,
-    ReceiptNumber: "ASDJASDWQ",
-    Amount: 150,
-    fullName: "John Doe",
-    date: "1/03/2024 14:15",
-  },
-  {
-    id: 3,
-    order_id: 5,
-    ReceiptNumber: "POINLKOIN",
-    Amount: 200,
-    fullName: "Jane Smith",
-    date: "1/03/2024 14:32",
-  },
-  {
-    id: 4,
-    order_id: 6,
-    ReceiptNumber: "ZXCVBNNMI",
-    Amount: 180,
-    fullName: "Alice Johnson",
-    date: "1/03/2024 15:02",
-  },
-  {
-    id: 5,
-    order_id: 7,
-    ReceiptNumber: "QWERTYUIO",
-    Amount: 120,
-    fullName: "Bob Brown",
-    date: "1/03/2024 15:21",
-  },
-  {
-    id: 6,
-    order_id: 8,
-    ReceiptNumber: "MNBVCXZLK",
-    Amount: 90,
-    fullName: "Emily Wilson",
-    date: "1/03/2024 15:45",
-  },
-];
-
 
 export default function CompletedTransactions() {
+  const {completTransactions} = useSelector((state) => state.payments);
+  console.log(completTransactions)
   return (
-    <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 700 }} aria-label='customized table'>
+    <TableContainer component={Paper} style={{boxShadow: "none", border: '1px solid lightgray'}}>
+      <Table sx={{ minWidth: 700, boxShadow: 0 }} aria-label='customized table'>
         <TableHead>
           <TableRow>
             <StyledTableCell>Transaction ID</StyledTableCell>
@@ -96,16 +52,16 @@ export default function CompletedTransactions() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
+          {completTransactions.map((row) => (
             <StyledTableRow key={row.id}>
-              <StyledTableCell >{row.id}</StyledTableCell>
+              <StyledTableCell>{row.id}</StyledTableCell>
               <StyledTableCell align='right'>
-                {row.ReceiptNumber}
+                {row.receiptNumber}
               </StyledTableCell>
               <StyledTableCell align='right'>{row.order_id}</StyledTableCell>
               <StyledTableCell align='right'>{row.fullName}</StyledTableCell>
-              <StyledTableCell align='right'>{row.Amount}</StyledTableCell>
-              <StyledTableCell align='right'>{row.date}</StyledTableCell>
+              <StyledTableCell align='right'>{row.amount}</StyledTableCell>
+              <StyledTableCell align='right'>{row.transactionDate}</StyledTableCell>
             </StyledTableRow>
           ))}
         </TableBody>

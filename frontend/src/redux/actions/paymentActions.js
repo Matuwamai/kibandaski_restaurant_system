@@ -1,5 +1,10 @@
 import axios from "axios";
 import {
+  getCancelledTransactionsFail,
+  getCancelledTransactionsSuccess,
+  getCompleteTransactionsFail,
+  getCompleteTransactionsStart,
+  getCompleteTransactionsSuccess,
   initiateSTKFail,
   initiateSTKStart,
   initiateSTKSuccess,
@@ -24,6 +29,19 @@ export const initiateStkPush = (orderId, details) => async (dispatch, getState) 
   } catch (err) {
     console.log(err);
     dispatch(initiateSTKFail("An error occurred initiating the transaction!"));
+  }
+};
+
+// Get Completed Transactions
+export const listCompletedTransactions = () => async (dispatch) => {
+  try {
+    dispatch(getCompleteTransactionsStart());
+
+    const { data } = await axios.get(`${BASE_URL}/mpesa/transactions/completed`);
+    console.log(data)
+    dispatch(getCompleteTransactionsSuccess(data));
+  } catch (err) {
+    dispatch(getCompleteTransactionsFail("Error listing transactions"));
   }
 };
 

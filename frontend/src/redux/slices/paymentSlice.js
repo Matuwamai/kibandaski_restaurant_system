@@ -6,6 +6,8 @@ const initialState = {
   transactionInfo: localStorage.getItem('paymentInfo') ? JSON.parse(localStorage.getItem('paymentInfo')) : null,
   transactionErr: localStorage.getItem('t_err') ? JSON.parse(localStorage.getItem('t_err')) : null,
   error: null,
+  completTransactions: [],
+  cancelledTransactions: [],
 };
 
 export const paymentsSlice = createSlice({
@@ -44,6 +46,30 @@ export const paymentsSlice = createSlice({
       localStorage.removeItem('paymentInfo');
       state.transactionErr = null;
       localStorage.removeItem("t_err");
+    },
+    getCompleteTransactionsStart: (state) => {
+      state.loading = true;
+      state.error = null;
+    },
+    getCompleteTransactionsSuccess: (state, action) => {
+      state.loading = false;
+      state.completTransactions = action.payload;
+    },
+    getCompleteTransactionsFail: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+    getCancelledTransactionsStart: (state) => {
+      state.loading = false;
+      state.error = null;
+    },
+    getCancelledTransactionsSuccess: (state, action) => {
+      state.loading = false;
+      state.cancelledTransactions = action.payload;
+    },
+    getCancelledTransactionsFail: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
     }
   },
 });
@@ -54,7 +80,13 @@ export const {
   initiateSTKFail,
   hidePaymentStatusInfo,
   setTransactionInfo,
-  resetTransactionInfo
+  resetTransactionInfo,
+  getCompleteTransactionsStart,
+  getCompleteTransactionsSuccess,
+  getCompleteTransactionsFail,
+  getCancelledTransactionsStart,
+  getCancelledTransactionsSuccess,
+  getCancelledTransactionsFail,
 } = paymentsSlice.actions;
 
 export default paymentsSlice.reducer;
