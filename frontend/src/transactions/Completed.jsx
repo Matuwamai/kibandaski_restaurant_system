@@ -8,6 +8,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { useSelector } from "react-redux";
+import Pagination from "../pagination/Pagination";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -37,9 +38,9 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 export default function CompletedTransactions() {
   const {completTransactions} = useSelector((state) => state.payments);
-  console.log(completTransactions)
   return (
-    <TableContainer component={Paper} style={{boxShadow: "none", border: '1px solid lightgray'}}>
+    <>
+        <TableContainer component={Paper} style={{boxShadow: "none", border: '1px solid lightgray'}}>
       <Table sx={{ minWidth: 700, boxShadow: 0 }} aria-label='customized table'>
         <TableHead>
           <TableRow>
@@ -52,20 +53,22 @@ export default function CompletedTransactions() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {completTransactions.map((row) => (
-            <StyledTableRow key={row.id}>
-              <StyledTableCell>{row.id}</StyledTableCell>
+          {completTransactions?.transactions?.map((transaction) => (
+            <StyledTableRow key={transaction.id}>
+              <StyledTableCell>{transaction.id}</StyledTableCell>
               <StyledTableCell align='right'>
-                {row.receiptNumber}
+                {transaction.receiptNumber}
               </StyledTableCell>
-              <StyledTableCell align='right'>{row.order_id}</StyledTableCell>
-              <StyledTableCell align='right'>{row.fullName}</StyledTableCell>
-              <StyledTableCell align='right'>{row.amount}</StyledTableCell>
-              <StyledTableCell align='right'>{row.transactionDate}</StyledTableCell>
+              <StyledTableCell align='right'>{transaction.order_id}</StyledTableCell>
+              <StyledTableCell align='right'>{transaction.fullName}</StyledTableCell>
+              <StyledTableCell align='right'>{transaction.amount}</StyledTableCell>
+              <StyledTableCell align='right'>{transaction.transactionDate}</StyledTableCell>
             </StyledTableRow>
           ))}
         </TableBody>
       </Table>
     </TableContainer>
+    <Pagination pages={completTransactions?.total_pages} currentPage={completTransactions?.current_page} />
+    </>
   );
 }

@@ -1,7 +1,5 @@
 import axios from "axios";
 import {
-  getCancelledTransactionsFail,
-  getCancelledTransactionsSuccess,
   getCompleteTransactionsFail,
   getCompleteTransactionsStart,
   getCompleteTransactionsSuccess,
@@ -33,11 +31,11 @@ export const initiateStkPush = (orderId, details) => async (dispatch, getState) 
 };
 
 // Get Completed Transactions
-export const listCompletedTransactions = () => async (dispatch) => {
+export const listCompletedTransactions = (page=1) => async (dispatch) => {
   try {
     dispatch(getCompleteTransactionsStart());
 
-    const { data } = await axios.get(`${BASE_URL}/mpesa/transactions/completed`);
+    const { data } = await axios.get(`${BASE_URL}/mpesa/transactions/completed?pageNo=${page}`);
     console.log(data)
     dispatch(getCompleteTransactionsSuccess(data));
   } catch (err) {

@@ -80,7 +80,10 @@ function App() {
         <Route element={<DashboardLayout />}>
           <Route path='/' element={<Dashboard />} />
           <Route path='/orders' element={<Orders />} />
-        <Route path='/orders/:orderId/payments/:referenceCode/validation' element={<PaymentSuccess />} />
+          <Route
+            path='/orders/:orderId/payments/:referenceCode/validation'
+            element={<PaymentSuccess />}
+          />
           <Route path='/customers' element={<Customers />} />
           <Route path='/staff' element={<Staff />} />
           <Route path='/staff/new' element={<Add />} />
@@ -89,6 +92,7 @@ function App() {
           <Route path='/meals-and-dishes/:id' element={<MealsView />} />
           <Route path='/restaurant-tables' element={<Tables />} />
           <Route path='/transactions' element={<Transactions />} />
+          <Route path='/transactions/page/:pageNo' element={<Transactions />} />
           <Route path='/reports' element={<Reports />} />
           <Route path='/settings' element={<Settings />} />
         </Route>

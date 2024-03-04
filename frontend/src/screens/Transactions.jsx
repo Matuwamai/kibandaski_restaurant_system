@@ -1,16 +1,16 @@
 import React, { useEffect } from 'react'
-import {useDispatch, useSelector} from 'react-redux'
-import { Link } from 'react-router-dom';
+import {useDispatch } from 'react-redux'
+import { Link, useParams } from 'react-router-dom';
 import CompletedTransactions from '../transactions/Completed';
 import { listCompletedTransactions } from '../redux/actions/paymentActions';
 
 const Transactions = () => {
+  const params = useParams();
+  const pageNo = params.pageNo ? Number(params.pageNo) : 1;
   const dispatch = useDispatch();
-  const {completTransactions} = useSelector((state) => state.payments);
-  console.log(completTransactions);
   useEffect(() => {
-    dispatch(listCompletedTransactions());
-  }, [dispatch])
+    dispatch(listCompletedTransactions(pageNo));
+  }, [dispatch, pageNo])
   return (
     <div>
       <h3 className='text-gray-800 font-semibold text-xl uppercase my-auto'>
