@@ -37,7 +37,7 @@ function App() {
     if (userInfo?.access){
       const decoded = jwtDecode(userInfo?.access);
       const eventSource = new WebSocket(
-        `wss://kibandaski-restaurant-system.onrender.com/ws/sse/?user_id=${decoded.id}`
+        `ws://127.0.0.1:8000/ws/sse/?user_id=${decoded.id}`
       );
       // ws://127.0.0.1:8000/ws/sse/ => FOR USE IN DEVELOPMENT
       // wss://kibandaski-restaurant-system.onrender.com/ws/sse/ => FOR PRODUCTION
@@ -80,6 +80,7 @@ function App() {
         <Route element={<DashboardLayout />}>
           <Route path='/' element={<Dashboard />} />
           <Route path='/orders' element={<Orders />} />
+          <Route path='/orders/page/:pageNo' element={<Orders />} />
           <Route
             path='/orders/:orderId/payments/:referenceCode/validation'
             element={<PaymentSuccess />}

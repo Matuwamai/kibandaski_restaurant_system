@@ -68,7 +68,7 @@ export default function CompletedTransactions() {
         </TableBody>
       </Table>
     </TableContainer>
-    <Pagination pages={completTransactions?.total_pages} currentPage={completTransactions?.current_page} />
+    <Pagination rootPath="/transactions" pages={completTransactions?.total_pages} currentPage={completTransactions?.current_page} />
     </>
   );
 }

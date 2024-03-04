@@ -152,7 +152,7 @@ def list_completed_transactions(request):
         page_number = int(query_params.get('pageNo', 1))
 
         # Get the page size from query parameters or default to 1
-        page_size = int(query_params.get('page_size', 2))
+        page_size = 10
 
         # Get the total count of transactions
         total_count = MpesaTransaction.objects.count()
@@ -174,6 +174,7 @@ def list_completed_transactions(request):
 
         # Construct response with pagination metadata
         response_data = {
+            'offset': page_size,
             'total_pages': total_pages,
             'current_page': page_number,
             'transactions': serializer.data

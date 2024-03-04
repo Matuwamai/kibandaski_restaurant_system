@@ -42,11 +42,12 @@ export const createOrder = (order) => async (dispatch) => {
 
 //  LIST ALL ORDERS
 
-export const listOrders = () => async (dispatch) => {
+export const listOrders = (page=1) => async (dispatch) => {
+  console.log(page)
   try {
     dispatch(listOrdersStart());
 
-    const { data } = await axios.get(`${BASE_URL}/orders/list`);
+    const { data } = await axios.get(`${BASE_URL}/orders/list?pageNo=${page}`);
     dispatch(listOrdersSuccess(data));
   } catch (err) {
     dispatch(listOrdersFail("Error listing orders!"));

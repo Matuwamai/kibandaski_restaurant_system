@@ -10,7 +10,7 @@ const new_orders_count = localStorage.getItem("o_new")
 
 const initialState = {
   loading: false,
-  ordersList: [],
+  ordersList: null,
   success_create: false,
   success_delete: false,
   success_update: false,

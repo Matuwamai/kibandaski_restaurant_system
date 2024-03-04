@@ -10,6 +10,7 @@ from django.utils import timezone
 from datetime import timedelta
 from asgiref.sync import async_to_sync
 import json
+from math import ceil
 
 channel_layer = get_channel_layer()
 
@@ -151,10 +152,42 @@ def create_order(request):
 
 @api_view(['GET'])
 def list_orders(request):
-    orders = Order.objects.all().order_by('-created_at')
-    serializer = OrderSerializer(orders, many=True)
-    return Response(serializer.data)
+    if request.method == 'GET':
+        query_params = request.query_params
+        print(query_params)
 
+        page_number = int(query_params.get('pageNo', 1))
+
+        page_size = 50
+
+        # Get the total count of orders
+        total_count = Order.objects.count()
+
+        # Calculate the total number of pages
+        total_pages = ceil(total_count / page_size)
+
+        # Calculate the starting index for the queryset
+        start_index = (page_number - 1) * page_size
+
+        # Calculate the ending index for the queryset
+        end_index = min(start_index + page_size, total_count)
+
+        # Get orders for the specified page
+        orders = Order.objects.all().order_by(
+            '-created_at')[start_index:end_index]
+
+        serializer = OrderSerializer(orders, many=True)
+
+        # Construct response with pagination metadata
+        response_data = {
+            'offset': page_size,
+            'total_pages': total_pages,
+            'current_page': page_number,
+            'orders': serializer.data
+        }
+
+        return Response(response_data, status=status.HTTP_200_OK)
+    
 # Update order
 
 

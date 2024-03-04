@@ -6,29 +6,40 @@ import { useGlobalContext } from "../context/context";
 import { useDispatch, useSelector } from "react-redux";
 import { listOrders } from "../redux/actions/orderActions";
 import { listMeals } from "../redux/actions/mealsActions";
+import Pagination from "../pagination/Pagination";
+import { useParams } from "react-router-dom";
 
 const Orders = () => {
   const dispatch = useDispatch();
   const { openOrderCreateModal } = useGlobalContext();
 
-  const { ordersList, reload, new_orders, success_delete, success_create, success_update } =
-    useSelector((state) => state.orders);
+  const params = useParams();
+  const pageNo = params.pageNo ? Number(params.pageNo) : 1;
+
+const {
+  ordersList,
+  reload,
+  new_orders,
+  success_delete,
+  success_create,
+  success_update,
+} = useSelector((state) => state.orders);
 
   useEffect(() => {
-    dispatch(listOrders());
-  }, [dispatch, success_delete, success_create, success_update]);
+    dispatch(listOrders(pageNo));
+  }, [dispatch, success_delete, success_create, success_update, pageNo]);
 
   useEffect(() => {
-    if (reload){
-      dispatch(listOrders())
+    if (reload) {
+      dispatch(listOrders());
     }
-  }, [dispatch, reload, new_orders])
+  }, [dispatch, reload, new_orders]);
 
   useEffect(() => {
     dispatch(listMeals());
   }, [dispatch]);
   return (
-    <div>
+    <div className=''>
       <div className='grid grid-cols-1 lg:grid-cols-3 my-3'>
         <div className='col-span-1 flex items-center'>
           <h3 className='text-gray-800 font-semibold text-xl uppercase my-auto'>
@@ -65,8 +76,8 @@ const Orders = () => {
           </div>
         </div>
       </div>
-      {/* {loading ? <Loading /> : error && <Message>{error}</Message>} */}
-      <OrdersTable list={ordersList} />
+      <OrdersTable list={ordersList?.orders} />
+      <Pagination rootPath="/orders" pages={ordersList?.total_pages} currentPage={ordersList?.current_page} />
     </div>
   );
 };

@@ -17,7 +17,7 @@ function OrderViewModal() {
 
   const { ordersList } = useSelector((state) => state.orders);
 
-  const currentOrder = ordersList?.find((item) => item.id === viewOrderNo);
+  const currentOrder = ordersList?.orders?.find((item) => item.id === viewOrderNo);
 
   const [items, setItems] = useState(
     currentOrder ? currentOrder.order_items : []
