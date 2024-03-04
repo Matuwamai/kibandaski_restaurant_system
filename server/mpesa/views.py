@@ -20,6 +20,8 @@ from mpesa.serializer import CompletedTransactionSerializer
 from asgiref.sync import async_to_sync
 from channels_app.consumers import SSEConsumer
 from accounts.models import CustomUser
+from rest_framework.pagination import PageNumberPagination
+from math import ceil
 channel_layer = get_channel_layer()
 
 
@@ -144,9 +146,37 @@ def handle_mpesa_callback(request, client_id, order_id):
 @api_view(['GET'])
 def list_completed_transactions(request):
     if request.method == 'GET':
-        transactions = MpesaTransaction.objects.all()
+        query_params = request.query_params
 
+        # Get the page number from query parameters or default to 1
+        page_number = int(query_params.get('pageNo', 1))
+
+        # Get the page size from query parameters or default to 1
+        page_size = int(query_params.get('page_size', 2))
+
+        # Get the total count of transactions
+        total_count = MpesaTransaction.objects.count()
+
+        # Calculate the total number of pages
+        total_pages = ceil(total_count / page_size)
+
+        # Calculate the starting index for the queryset
+        start_index = (page_number - 1) * page_size
+
+        # Calculate the ending index for the queryset
+        end_index = min(start_index + page_size, total_count)
+
+        # Get transactions for the specified page
+        transactions = MpesaTransaction.objects.all()[start_index:end_index]
+
+        # Serialize paginated transactions
         serializer = CompletedTransactionSerializer(transactions, many=True)
 
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        # Construct response with pagination metadata
+        response_data = {
+            'total_pages': total_pages,
+            'current_page': page_number,
+            'transactions': serializer.data
+        }
 
+        return Response(response_data, status=status.HTTP_200_OK)
