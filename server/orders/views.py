@@ -115,9 +115,16 @@ def create_order(request):
     if orderItems and len(orderItems) == 0:
         return Response({'detail': 'No Order Items', "status": status.HTTP_400_BAD_REQUEST})
     else:
+        payment_method=data['payment_method']
+        is_paid = False
+        if payment_method == "CASH":
+            # If CASH, then the cashier collected the money.
+            is_paid = True
+
         # (1) Create Order
         order = Order.objects.create(
-            payment_method=data['payment_method'],
+            payment_method=payment_method,
+            is_paid=is_paid,
             customer_name=data['customer_name'],
             table_no=data['table_no'],
             amount=data['amount']
