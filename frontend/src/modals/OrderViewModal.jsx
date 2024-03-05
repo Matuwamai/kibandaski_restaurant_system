@@ -8,6 +8,7 @@ import "./Modal.css";
 import { useGlobalContext } from "../context/context";
 import { useDispatch, useSelector } from "react-redux";
 import { listOrders } from "../redux/actions/orderActions";
+import jsPDF from "jspdf";
 
 function OrderViewModal() {
   const dispatch = useDispatch();
@@ -32,12 +33,31 @@ function OrderViewModal() {
     window.print();
   };
 
+  // const downloadReceipt = () => {
+  //   html2canvas(receiptRef.current).then((canvas) => {
+  //     const link = document.createElement("a");
+  //     link.href = canvas.toDataURL("image/png");
+  //     link.download = "receipt.png";
+  //     link.click();
+  //   });
+  // };
+
   const downloadReceipt = () => {
     html2canvas(receiptRef.current).then((canvas) => {
-      const link = document.createElement("a");
-      link.href = canvas.toDataURL("image/png");
-      link.download = "receipt.png";
-      link.click();
+      // Create a new jsPDF instance
+      const pdf = new jsPDF("p", "pt", "a4");
+
+      // Calculate the height ratio to maintain aspect ratio
+      const ratio = canvas.height / canvas.width;
+
+      // Calculate the height of the PDF considering the aspect ratio
+      const pdfHeight = pdf.internal.pageSize.width * ratio;
+
+      // Add the canvas image to the PDF
+      pdf.addImage(canvas, "PNG", 0, 0, pdf.internal.pageSize.width, pdfHeight);
+
+      // Save the PDF
+      pdf.save("receipt.pdf");
     });
   };
 

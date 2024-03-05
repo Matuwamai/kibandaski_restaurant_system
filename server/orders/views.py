@@ -11,6 +11,8 @@ from datetime import timedelta
 from asgiref.sync import async_to_sync
 import json
 from math import ceil
+from django.http import Http404
+from django.db.models import Q
 
 channel_layer = get_channel_layer()
 
@@ -161,14 +163,46 @@ def create_order(request):
 def list_orders(request):
     if request.method == 'GET':
         query_params = request.query_params
-        print(query_params)
+
+        # Check if search_id is provided in the query parameters
+        search_id = query_params.get('search_id')
+        if search_id:
+            try:
+                ordersList = []
+                order = Order.objects.get(id=int(search_id))
+                serializer = OrderSerializer(order)
+                ordersList.append(serializer.data)
+                # Return the order directly as a single object
+                response_data = {
+                    'orders': ordersList
+                }
+                return Response(response_data, status=status.HTTP_200_OK)
+            except Order.DoesNotExist:
+                raise Http404("Order does not exist")
 
         page_number = int(query_params.get('pageNo', 1))
-
         page_size = 50
 
-        # Get the total count of orders
-        total_count = Order.objects.count()
+        # Initialize filter for orders
+        order_filter = Q()
+
+        # Filter orders based on order_status query param
+        order_status_param = query_params.get('order_status')
+        payment_status_param = query_params.get('payment_status')
+        if order_status_param == 'true':
+            order_filter &= Q(is_completed=True)
+        elif order_status_param == 'false':
+            order_filter &= Q(is_completed=False)
+        elif payment_status_param == 'true':
+            order_filter &= Q(is_paid=True)
+        elif payment_status_param == 'false':
+            order_filter &= Q(is_paid=False)
+
+        # Filter orders based on the constructed filter
+        filtered_orders = Order.objects.filter(order_filter)
+
+        # Get the total count of filtered orders
+        total_count = filtered_orders.count()
 
         # Calculate the total number of pages
         total_pages = ceil(total_count / page_size)
@@ -180,8 +214,7 @@ def list_orders(request):
         end_index = min(start_index + page_size, total_count)
 
         # Get orders for the specified page
-        orders = Order.objects.all().order_by(
-            '-created_at')[start_index:end_index]
+        orders = filtered_orders.order_by('-created_at')[start_index:end_index]
 
         serializer = OrderSerializer(orders, many=True)
 
@@ -194,7 +227,6 @@ def list_orders(request):
         }
 
         return Response(response_data, status=status.HTTP_200_OK)
-    
 # Update order
 
 

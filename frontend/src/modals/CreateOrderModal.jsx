@@ -5,7 +5,7 @@ import { useGlobalContext } from "../context/context";
 import { createOrder } from "../redux/actions/orderActions";
 import Loading from "../utils/Loading";
 import Message from "../utils/Message";
-import { initiateStkPush, testCallBack } from "../redux/actions/paymentActions";
+import { initiateStkPush } from "../redux/actions/paymentActions";
 import { hidePaymentStatusInfo } from "../redux/slices/paymentSlice";
 import { useNavigate } from "react-router";
 

@@ -42,12 +42,11 @@ export const createOrder = (order) => async (dispatch) => {
 
 //  LIST ALL ORDERS
 
-export const listOrders = (page=1) => async (dispatch) => {
-  console.log(page)
+export const listOrders = (page=1, orderId="", orderStatus=null, paymentStatus=null) => async (dispatch) => {
   try {
     dispatch(listOrdersStart());
 
-    const { data } = await axios.get(`${BASE_URL}/orders/list?pageNo=${page}`);
+    const { data } = await axios.get(`${BASE_URL}/orders/list?pageNo=${page}&search_id=${orderId}&order_status=${orderStatus}&payment_status=${paymentStatus}`);
     dispatch(listOrdersSuccess(data));
   } catch (err) {
     dispatch(listOrdersFail("Error listing orders!"));

@@ -30,14 +30,14 @@ const TopBar = () => {
           <Link to='/orders' className='relative md:w-8 md:h-8 rounded-full sm:bg-slate-200 flex items-center justify-center'>
             <ShoppingBasketIcon />
             {new_orders > 0 && (
-              <span className='w-4 h-4 bg-red-500 rounded-full flex items-center justify-center text-white absolute top-0 right-0 text-sm badge'>
+              <span className='w-5 h-5 bg-red-500 rounded-full flex items-center justify-center text-white absolute top-0 right-0 text-xs badge p-2 text-sm'>
                 {new_orders}
               </span>
             )}
           </Link>
           <div className='relative  md:w-8 md:h-8 rounded-full sm:bg-slate-200 flex items-center justify-center'>
             <NotificationsOutlinedIcon />
-            <span className='w-4 h-4 bg-red-500 rounded-full flex items-center justify-center text-white absolute top-0 right-0 text-sm badge'>
+            <span className='w-5 h-5 bg-red-500 rounded-full flex items-center justify-center text-white absolute top-0 right-0 text-xs badge'>
               1
             </span>
           </div>

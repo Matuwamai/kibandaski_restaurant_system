@@ -98,7 +98,7 @@ export const ordersSlice = createSlice({
       state.order_flagged = null;
     },
     updateOrdersList: (state, action) => {
-      state.ordersList = [...state.ordersList, action.payload];
+      state.ordersList.orders = [...state.ordersList.orders, action.payload];
       state.reload = true;
       state.new_orders = state.new_orders + 1;
       localStorage.setItem("o_new", JSON.stringify(state.new_orders));
