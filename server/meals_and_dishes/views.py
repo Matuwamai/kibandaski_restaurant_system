@@ -4,12 +4,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from meals_and_dishes.serializers import MealsAndDishesSerializer
 from meals_and_dishes.models import MealsAndDishes
-
-
-@api_view()
-def hello_world(request):
-    return Response({"message": "Hello, world!"})
-
+from django.http import Http404
 
 @api_view(['POST'])
 def create_meals_and_dishes(request):
@@ -27,6 +22,21 @@ def create_meals_and_dishes(request):
 @api_view(['GET'])
 def list_meals_and_dishes(request):
     if request.method == 'GET':
+        query_params = request.query_params
+
+        # Check if search_id is provided in the query parameters
+        search_name = query_params.get('search_name')
+        if search_name:
+            try:
+                mealsList = []
+                meal = MealsAndDishes.objects.get(title__iexact=search_name)
+                serializer = MealsAndDishesSerializer(meal)
+                mealsList.append(serializer.data)
+                
+                return Response(mealsList, status=status.HTTP_200_OK)
+            except MealsAndDishes.DoesNotExist:
+                raise Http404("Order does not exist")
+            
         meals_and_dishes = MealsAndDishes.objects.all()
 
         serializer = MealsAndDishesSerializer(meals_and_dishes, many=True)

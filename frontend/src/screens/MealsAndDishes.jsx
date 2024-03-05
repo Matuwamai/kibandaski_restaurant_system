@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import DishesList from "../dishes/DishesList";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import { IoIosAdd } from "react-icons/io";
@@ -16,6 +16,15 @@ const MealsAndDishes = () => {
     (state) => state.meals
   );
 
+  const [searchName, setSearchName] = useState("");
+
+  const handleSearchMeal = (e) => {
+    e.preventDefault();
+    if (searchName !== ""){
+      dispatch(listMeals(searchName));
+    }
+  }
+
   useEffect(() => {
     dispatch(listMeals());
   }, [dispatch, success_delete]);
@@ -30,16 +39,17 @@ const MealsAndDishes = () => {
         </div>
         <div className='col-span-1 lg:col-span-2'>
           <div className='w-full grid lg:grid-cols-4'>
-            <div className='col-span-1 lg:col-span-3 mt-2 lg:mt-0 lg:px-2 mb-2 lg:mb-0 flex gap-1'>
+            <form className='col-span-1 lg:col-span-3 mt-2 lg:mt-0 lg:px-2 mb-2 lg:mb-0 flex gap-1' onClick={handleSearchMeal}>
               <input
                 type='text'
                 className='w-4/5 border focus:outline-none px-2 py-1 rounded text-md'
-                placeholder='Search Meal details...'
+                placeholder='Type meal title'
+                onChange={(e) => setSearchName(e.target.value)}
               />
-              <button className='border rounded bg-amber-400 w-1/5 text-white'>
+              <button type="submit" className='border rounded bg-amber-400 w-1/5 text-white'>
                 <SearchOutlinedIcon />
               </button>
-            </div>
+            </form>
             <button
               className='col-span-1 mt-2 md:mt-0 flex gap-1 items-center justify-center bg-amber-400 text-white'
               onClick={openMealCreateModal}
