@@ -25,6 +25,7 @@ import { addEventSource } from "./redux/slices/globalSlices";
 import { setTransactionInfo } from "./redux/slices/paymentSlice";
 import { jwtDecode } from "jwt-decode";
 import PaymentSuccess from "./screens/PaymentSuccess";
+import Inventory from "./screens/Inventory";
 
 //  const eventSource = new WebSocket(
 //    "wss://kibandaski-restaurant-system.onrender.com/ws/sse/"
@@ -94,6 +95,7 @@ function App() {
           <Route path='/restaurant-tables' element={<Tables />} />
           <Route path='/transactions' element={<Transactions />} />
           <Route path='/transactions/page/:pageNo' element={<Transactions />} />
+          <Route path='/inventory' element={<Inventory />} />
           <Route path='/reports' element={<Reports />} />
           <Route path='/settings' element={<Settings />} />
         </Route>

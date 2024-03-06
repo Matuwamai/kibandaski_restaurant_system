@@ -1,10 +1,11 @@
 import GridViewIcon from "@mui/icons-material/GridView";
 import AddShoppingCartOutlinedIcon from "@mui/icons-material/AddShoppingCartOutlined";
 import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
-import { GiCook, GiChefToque } from "react-icons/gi";
+import { GiCook } from "react-icons/gi";
 import { FaUtensils, FaDollarSign } from "react-icons/fa";
 import { IoSettings } from "react-icons/io5";
 import { MdTableRestaurant } from "react-icons/md";
+import { MdOutlineInventory } from "react-icons/md";
 
 export const sideLinks = [
   {
@@ -51,9 +52,9 @@ export const sideLinks = [
   },
   {
     id: 7,
-    url: "/reports",
-    iconClass: <GiChefToque style={{ fontSize: "26px" }} />,
-    title: "Reports",
+    url: "/inventory",
+    iconClass: <MdOutlineInventory style={{ fontSize: "26px" }} />,
+    title: "Inventory",
   },
   {
     id: 8,
