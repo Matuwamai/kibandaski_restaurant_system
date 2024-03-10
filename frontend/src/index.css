@@ -27,6 +27,11 @@
     width: 192px;
 }
 
+.custom-table {
+    table-layout:auto;
+    white-space: nowrap;
+}
+
 @media (max-width: 768.5px){
         .topbar-search {
                 display: none;

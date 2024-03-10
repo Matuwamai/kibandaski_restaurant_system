@@ -49,7 +49,7 @@ const Sidebar = ({ links }) => {
         </div>
       </div>
       {/* Sidebar Content */}
-      <div className='px-1 pb-4 mb-8'>
+      <div className='px-1 pb-4 mb-8 overflow-y-auto'>
         <ul className='mt-4'>
           {links.map((link) => {
             const { id, url, iconClass, title } = link;

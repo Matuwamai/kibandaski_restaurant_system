@@ -62,4 +62,28 @@ export const sideLinks = [
     iconClass: <IoSettings style={{ fontSize: "22px" }} />,
     title: "Settings",
   },
+  {
+    id: 9,
+    url: "/settings",
+    iconClass: <IoSettings style={{ fontSize: "22px" }} />,
+    title: "Settings",
+  },
+  {
+    id: 10,
+    url: "/settings",
+    iconClass: <IoSettings style={{ fontSize: "22px" }} />,
+    title: "Settings",
+  },
+  {
+    id: 11,
+    url: "/settings",
+    iconClass: <IoSettings style={{ fontSize: "22px" }} />,
+    title: "Settings",
+  },
+  {
+    id: 12,
+    url: "/settings",
+    iconClass: <IoSettings style={{ fontSize: "22px" }} />,
+    title: "Settings",
+  },
 ];

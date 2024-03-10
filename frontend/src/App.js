@@ -26,6 +26,7 @@ import { setTransactionInfo } from "./redux/slices/paymentSlice";
 import { jwtDecode } from "jwt-decode";
 import PaymentSuccess from "./screens/PaymentSuccess";
 import Inventory from "./screens/Inventory";
+import Purchase from "./screens/Purchase";
 
 //  const eventSource = new WebSocket(
 //    "wss://kibandaski-restaurant-system.onrender.com/ws/sse/"
@@ -38,7 +39,7 @@ function App() {
     if (userInfo?.access){
       const decoded = jwtDecode(userInfo?.access);
       const eventSource = new WebSocket(
-        `ws://127.0.0.1:8000/ws/sse/?user_id=${decoded.id}`
+        `wss://kibandaski-restaurant-system.onrender.com/ws/sse/?user_id=${decoded.id}`
       );
       // ws://127.0.0.1:8000/ws/sse/ => FOR USE IN DEVELOPMENT
       // wss://kibandaski-restaurant-system.onrender.com/ws/sse/ => FOR PRODUCTION
@@ -96,6 +97,8 @@ function App() {
           <Route path='/transactions' element={<Transactions />} />
           <Route path='/transactions/page/:pageNo' element={<Transactions />} />
           <Route path='/inventory' element={<Inventory />} />
+          <Route path='/inventory/purchases' element={<Purchase />} />
+          <Route path='/inventory/purchases/:pageNo' element={<Purchase />} />
           <Route path='/reports' element={<Reports />} />
           <Route path='/settings' element={<Settings />} />
         </Route>

@@ -39,6 +39,7 @@ export const createStaff = (staffInfo) => async (dispatch) => {
     await axios.post(`${BASE_URL}/users/staff/register/`, staffInfo);
     dispatch(createStaffSuccess());
   } catch (err) {
+    console.log(err);
     dispatch(createStaffFail("Error adding new staff!"));
   }
 };

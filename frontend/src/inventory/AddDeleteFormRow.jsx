@@ -30,39 +30,48 @@ function AddDeleteFormRow() {
   };
 
   return (
-    <div className='overflow-x-auto'>
-      <table className='w-full table'>
-        <thead>
-          <tr className='w-screen'>
-            <th className="text-left">Item SKU</th>
-            <th className="text-left">Item Title</th>
-            <th className="text-left">Unit</th>
-            <th className="text-left">Unit Type</th>
-            <th className="text-left">Unit Price</th>
-            <th className="text-left">Min Stock Units</th>
-            <th className="text-left">Stock Value</th>
-            <th className="text-left">Supplier</th>
-            <th className="text-left">Purchase Date</th>
-            <th className="px-3">
-              <button
-                className='bg-green-500 text-white uppercase py-1 px-3'
-                onClick={addTableRows}
-              >
-                +
-              </button>
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <FormRows
-            rowsData={rowsData}
-            deleteTableRows={deleteTableRows}
-            handleChange={handleChange}
-          />
-          <tr><button className="bg-green-400 text-white uppercase px-4 py-1 my-3 rounded-none">Save Records</button></tr>
-        </tbody>
-      </table>
-    </div>
+    <section>
+      <div className="flex justify-between">
+        <h4 className='text-xl my-2'>Record Purchase Items</h4>
+        {rowsData.length > 0 && (
+          <button className='bg-green-400 text-white uppercase px-4 py-1 my-3 rounded-none'>
+            Save Records
+          </button>
+        )}
+      </div>
+      <div className='overflow-x-auto bg-slate-100 p-2'>
+        <table className='w-full custom-table'>
+          <thead>
+            <tr className='w-screen'>
+              <th className='text-left'>Item SKU</th>
+              <th className='text-left'>Item Title</th>
+              <th className='text-left'>Unit</th>
+              <th className='text-left'>Unit Type</th>
+              <th className='text-left'>Unit Price</th>
+              <th className='text-left'>Min Stock Units</th>
+              <th className='text-left'>Stock Value</th>
+              <th className='text-left'>Supplier</th>
+              <th className='text-left'>Purchase Date</th>
+              <th className='px-3'>
+                <button
+                  className='bg-green-500 text-white uppercase py-1 px-3'
+                  onClick={addTableRows}
+                >
+                  +
+                </button>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <FormRows
+              rowsData={rowsData}
+              deleteTableRows={deleteTableRows}
+              handleChange={handleChange}
+            />
+          </tbody>
+        </table>
+      </div>
+    </section>
   );
 }
 export default AddDeleteFormRow;
