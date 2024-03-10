@@ -1,9 +1,10 @@
 import React, { useRef, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../redux/actions/userActions";
 import { closeSidebar, toggleSidebar } from "../redux/slices/navSlices";
+import { IoIosArrowDropdownCircle } from "react-icons/io";
 
 const Sidebar = ({ links }) => {
   const { isCollapsed } = useSelector((state) => state.nav);
@@ -25,6 +26,15 @@ const Sidebar = ({ links }) => {
       dispatch(closeSidebar());
     }
   }, [dispatch, pathname]);
+
+  function dropdown() {
+    document.querySelector("#submenu").classList.toggle("hidden");
+    document.querySelector("#arrow").classList.toggle("rotate-0");
+  }
+
+  // useEffect(() => {
+  //   dropdown()
+  // }, [])
 
   return (
     <aside
@@ -55,14 +65,21 @@ const Sidebar = ({ links }) => {
             const { id, url, iconClass, title } = link;
             return (
               <li key={id}>
-                <Link
+                <NavLink
                   to={`${url}`}
-                  className={`text-white w-full p-3 capitalize ${
-                    !isCollapsed &&
-                    "hover:bg-slate-100 hover:text-gray-700 hover:rounded"
-                  } flex gap-2 items-center ${
-                    isCollapsed ? "text-xl" : "rounded-xl"
-                  }`}
+                  className={({ isActive }) =>
+                    isActive
+                      ? `w-full p-3 capitalize flex gap-2 items-center ${
+                          isCollapsed ? "text-xl" : ""
+                        } bg-slate-100 text-gray-700 rounded`
+                      : `text-white w-full p-3 capitalize ${
+                          !isCollapsed &&
+                          "hover:bg-slate-100 hover:text-gray-700 hover:rounded"
+                        } flex gap-2 items-center ${
+                          isCollapsed ? "text-xl" : ""
+                        }`
+                  }
+                  activeClassName='bg-slate-100 rounded'
                 >
                   {/* <i
                     className={`${iconClass} mr-2 my-auto ${
@@ -71,11 +88,51 @@ const Sidebar = ({ links }) => {
                   ></i>{" "} */}
                   {iconClass}
                   {!isCollapsed && <h6 className='my-auto'>{title}</h6>}
-                </Link>
+                </NavLink>
               </li>
             );
           })}
+          <NavLink
+            to='/orders'
+            className={({ isActive, isPending }) =>
+              isPending
+                ? "pending"
+                : isActive
+                ? "bg-slate-100 text-green-700"
+                : ""
+            }
+          >
+            Home
+          </NavLink>
         </ul>
+        <div
+          class='p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600 text-white'
+          onClick={dropdown}
+        >
+          <i class='bi bi-chat-left-text-fill'></i>
+          <div class='flex justify-between w-full items-center'>
+            <span class='text-[15px] ml-4 text-gray-200 font-bold'>
+              Inventory
+            </span>
+            <span class='text-sm rotate-180' id='arrow'>
+              <IoIosArrowDropdownCircle />
+            </span>
+          </div>
+        </div>
+        <div
+          class='text-left text-sm mt-2 w-4/5 mx-auto text-gray-200 font-bold'
+          id='submenu'
+        >
+          <h1 class='cursor-pointer p-2 hover:bg-blue-600 rounded-md mt-1'>
+            Social
+          </h1>
+          <h1 class='cursor-pointer p-2 hover:bg-blue-600 rounded-md mt-1'>
+            Personal
+          </h1>
+          <h1 class='cursor-pointer p-2 hover:bg-blue-600 rounded-md mt-1'>
+            Friends
+          </h1>
+        </div>
       </div>
       {/* Collapse/Expand Button */}
       <div
