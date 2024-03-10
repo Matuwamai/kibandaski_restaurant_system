@@ -186,7 +186,7 @@ export default function OrdersTable({ list }) {
     <>
       <div className='bg-white '>
         <DataGrid
-          rows={list}
+          rows={list || []}
           disableSelectionOnClick
           columns={columns}
           pageSize={8}
