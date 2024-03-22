@@ -55,33 +55,26 @@ export const sideLinks = [
     url: "/inventory",
     iconClass: <MdOutlineInventory style={{ fontSize: "26px" }} />,
     title: "Inventory",
+    subLinks: [
+      {
+        id: 0,
+        title: "Purchases",
+        url: "/inventory/purchases"
+      },
+      {
+        id: 1,
+        title: "Stock",
+        url: "/inventory/stock"
+      },
+      {
+        id: 2, 
+        title: "Categories",
+        url: "/inventory/categories"
+      }
+    ]
   },
   {
     id: 8,
-    url: "/settings",
-    iconClass: <IoSettings style={{ fontSize: "22px" }} />,
-    title: "Settings",
-  },
-  {
-    id: 9,
-    url: "/settings",
-    iconClass: <IoSettings style={{ fontSize: "22px" }} />,
-    title: "Settings",
-  },
-  {
-    id: 10,
-    url: "/settings",
-    iconClass: <IoSettings style={{ fontSize: "22px" }} />,
-    title: "Settings",
-  },
-  {
-    id: 11,
-    url: "/settings",
-    iconClass: <IoSettings style={{ fontSize: "22px" }} />,
-    title: "Settings",
-  },
-  {
-    id: 12,
     url: "/settings",
     iconClass: <IoSettings style={{ fontSize: "22px" }} />,
     title: "Settings",

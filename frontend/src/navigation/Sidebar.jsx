@@ -4,6 +4,7 @@ import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../redux/actions/userActions";
 import { closeSidebar, toggleSidebar } from "../redux/slices/navSlices";
+import { FaCheck } from "react-icons/fa";
 import { IoIosArrowDropdownCircle } from "react-icons/io";
 
 const Sidebar = ({ links }) => {
@@ -32,9 +33,9 @@ const Sidebar = ({ links }) => {
     document.querySelector("#arrow").classList.toggle("rotate-0");
   }
 
-  // useEffect(() => {
-  //   dropdown()
-  // }, [])
+  useEffect(() => {
+    dropdown()
+  }, [])
 
   return (
     <aside
@@ -69,45 +70,59 @@ const Sidebar = ({ links }) => {
                   to={`${url}`}
                   className={({ isActive }) =>
                     isActive
-                      ? `w-full p-3 capitalize flex gap-2 items-center ${
+                      ? `w-full px-3 py-2 my-1 capitalize flex flex-col gap-1${
                           isCollapsed ? "text-xl" : ""
-                        } bg-slate-100 text-gray-700 rounded`
-                      : `text-white w-full p-3 capitalize ${
+                        } ${
+                          link?.subLinks ? "text-white" : "bg-slate-100 rounded"
+                        }`
+                      : `text-white w-full px-3 py-2 my-1 capitalize ${
                           !isCollapsed &&
                           "hover:bg-slate-100 hover:text-gray-700 hover:rounded"
-                        } flex gap-2 items-center ${
+                        } flex gap-1 items-center ${
                           isCollapsed ? "text-xl" : ""
                         }`
                   }
-                  activeClassName='bg-slate-100 rounded'
                 >
-                  {/* <i
-                    className={`${iconClass} mr-2 my-auto ${
-                      isCollapsed ? "py-2" : "mr-2 text-base"
-                    }`}
-                  ></i>{" "} */}
-                  {iconClass}
-                  {!isCollapsed && <h6 className='my-auto'>{title}</h6>}
+                  <div className='flex gap-2 relative' onClick={dropdown}>
+                    {iconClass}
+                    {!isCollapsed && <h6 className='my-auto'>{title}</h6>}
+                    <span
+                      class='rotate-180 absolute right-0 top-0.5 bottom-0 my-auto'
+                      id='arrow'
+                    >
+                      {!isCollapsed && link?.subLinks && (
+                        <IoIosArrowDropdownCircle />
+                      )}
+                    </span>
+                  </div>
+                  {link?.subLinks && (
+                    <div className='mt-0 ml-5 flex flex-col' id='submenu'>
+                      {link?.subLinks?.map((subLink) => {
+                        return (
+                          <NavLink
+                            to={subLink?.url}
+                            className={({ isActive }) =>
+                              `${
+                                isActive && "text-amber-300 underline"
+                              } my-1 flex gap-3 items-center`
+                            }
+                            key={subLink?.id}
+                          >
+                            <FaCheck />
+                            <h6>{subLink?.title}</h6>
+                          </NavLink>
+                        );
+                      })}
+                    </div>
+                  )}
                 </NavLink>
               </li>
             );
           })}
-          <NavLink
-            to='/orders'
-            className={({ isActive, isPending }) =>
-              isPending
-                ? "pending"
-                : isActive
-                ? "bg-slate-100 text-green-700"
-                : ""
-            }
-          >
-            Home
-          </NavLink>
         </ul>
-        <div
+        {/* <div
           class='p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600 text-white'
-          onClick={dropdown}
+          
         >
           <i class='bi bi-chat-left-text-fill'></i>
           <div class='flex justify-between w-full items-center'>
@@ -132,7 +147,7 @@ const Sidebar = ({ links }) => {
           <h1 class='cursor-pointer p-2 hover:bg-blue-600 rounded-md mt-1'>
             Friends
           </h1>
-        </div>
+        </div> */}
       </div>
       {/* Collapse/Expand Button */}
       <div

@@ -123,7 +123,7 @@ export default function CreateOrderModal() {
     //   setSelectedMeals([]);
     //   handleCloseModal();
     // }
-  }, [success_create, dispatch, paymentMethod]);
+  }, [success_create, dispatch, paymentMethod, orderDetails, phone, totalAmount]);
 
   useEffect(() => {
     const totals = cartItems
