@@ -4,8 +4,8 @@ import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../redux/actions/userActions";
 import { closeSidebar, toggleSidebar } from "../redux/slices/navSlices";
-import { FaCheck } from "react-icons/fa";
-import { IoIosArrowDropdownCircle } from "react-icons/io";
+// import { FaCheck } from "react-icons/fa";
+// import { IoIosArrowDropdownCircle } from "react-icons/io";
 
 const Sidebar = ({ links }) => {
   const { isCollapsed } = useSelector((state) => state.nav);
@@ -28,14 +28,14 @@ const Sidebar = ({ links }) => {
     }
   }, [dispatch, pathname]);
 
-  function dropdown() {
-    document.querySelector("#submenu").classList.toggle("hidden");
-    document.querySelector("#arrow").classList.toggle("rotate-0");
-  }
+  // function dropdown() {
+  //   document.querySelector("#submenu").classList.toggle("hidden");
+  //   document.querySelector("#arrow").classList.toggle("rotate-0");
+  // }
 
-  useEffect(() => {
-    dropdown()
-  }, [])
+  // useEffect(() => {
+  //   dropdown()
+  // }, [])
 
   return (
     <aside
@@ -83,19 +83,19 @@ const Sidebar = ({ links }) => {
                         }`
                   }
                 >
-                  <div className='flex gap-2 relative' onClick={dropdown}>
+                  <div className='flex gap-2 relative'>
                     {iconClass}
                     {!isCollapsed && <h6 className='my-auto'>{title}</h6>}
-                    <span
+                    {/* <span
                       class='rotate-180 absolute right-0 top-0.5 bottom-0 my-auto'
                       id='arrow'
                     >
                       {!isCollapsed && link?.subLinks && (
                         <IoIosArrowDropdownCircle />
                       )}
-                    </span>
+                    </span> */}
                   </div>
-                  {link?.subLinks && (
+                  {/* {link?.subLinks && (
                     <div className='mt-0 ml-5 flex flex-col' id='submenu'>
                       {link?.subLinks?.map((subLink) => {
                         return (
@@ -114,7 +114,7 @@ const Sidebar = ({ links }) => {
                         );
                       })}
                     </div>
-                  )}
+                  )} */}
                 </NavLink>
               </li>
             );

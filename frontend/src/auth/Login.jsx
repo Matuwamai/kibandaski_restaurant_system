@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import {Link} from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux";
 import Loading from "../utils/Loading";
 import Message from "../utils/Message";
@@ -31,15 +32,15 @@ const Login = () => {
         backgroundImage: `url('/assets/mandazi.webp')`,
       }}
     >
-      <div className='bg-opacity-75 h-full bg-black flex flex-col justify-center items-center'>
+      <div className='w-screen bg-opacity-75 h-full bg-black flex flex-col justify-center items-center'>
         <h1 className='text-4xl lg:text-5xl font-semibold mb-4 text-white text-center'>
-          Login to Kibandaski Management System
+          Welcome to Kibandaski Management System
         </h1>
         <p className='text-lg mb-6 text-white text-center'>
-          Transform the way you approach your business management.
+          Transform your restaurant business management.
         </p>
-        <div className='bg-white p-8 rounded-lg shadow-lg'>
-          <form onSubmit={handleLogin}>
+        <div className='w-11/12 md:w-2/6 bg-white py-8 md:px-8 rounded-lg shadow-lg'>
+          <form className="w-full p-4 md:px-0" onSubmit={handleLogin}>
             {loading ? <Loading /> : error && <Message>{error}</Message>}
             <div className='mb-4'>
               <label htmlFor='schoolName' className='block text-lg mb-1'>
@@ -51,7 +52,7 @@ const Login = () => {
                 name='username'
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                className='w-full bg-gray-100 text-gray-800 rounded-lg py-2 px-4'
+                className='w-full bg-gray-100 text-gray-800 rounded-lg py-2 px-4 focus:outline-amber-500'
                 placeholder='johndoe'
                 required
               />
@@ -66,7 +67,7 @@ const Login = () => {
                 name='password'
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className='w-full bg-gray-100 text-gray-800 rounded-lg py-2 px-4'
+                className='w-full bg-gray-100 text-gray-800 rounded-lg py-2 px-4 focus:outline-amber-500'
                 placeholder='********'
                 required
               />
@@ -76,10 +77,11 @@ const Login = () => {
             <div className='text-center'>
               <button
                 type='submit'
-                className='bg-amber-400 w-96 hover:bg-amber-500 text-white text-lg py-2 px-6 rounded-full inline-block transition duration-300 ease-in-out'
+                className='w-full bg-amber-400 hover:bg-amber-500 text-white text-lg py-2 px-6 rounded-full inline-block transition duration-300 ease-in-out'
               >
                 Sign In
               </button>
+              <Link to='/reset-password' className="text-amber-400 pt-2 underline cursor-pointer">Forgot Password?</Link>
             </div>
           </form>
         </div>
