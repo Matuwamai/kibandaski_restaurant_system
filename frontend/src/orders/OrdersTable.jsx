@@ -2,12 +2,10 @@ import { DataGrid } from "@mui/x-data-grid";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { MdVerified } from "react-icons/md";
 import { useGlobalContext } from "../context/context";
-import moment from "moment";
 import { useDispatch } from "react-redux";
-import { updateOrderStatus } from "../redux/actions/orderActions";
 import { showOrderDeleteAlert } from "../redux/slices/orderSlices";
+import { formatDate } from "../utils/functions/Helpers";
 
 export default function OrdersTable({ list }) {
   const { openOrderViewModal } = useGlobalContext();
@@ -21,35 +19,11 @@ export default function OrdersTable({ list }) {
     dispatch(showOrderDeleteAlert(id));
   };
 
-  const handleUpdateStatus = (id) => {
-    dispatch(updateOrderStatus(id));
-  };
+  // const handleUpdateStatus = (id) => {
+  //   dispatch(updateOrderStatus(id));
+  // };
 
   const columns = [
-    {
-      field: "is_completed",
-      headerName: "Order Status",
-      width: 150,
-      renderCell: (params) => {
-        return (
-          <>
-            {params.row?.is_completed ? (
-              <div className='flex gap-2 items-center justify-center bg-slate-50 text-green-300 px-4 py-1 rounded font-semibold'>
-                <MdVerified style={{ fontSize: "18px" }} />
-                <h6 className='my-auto'>Completed</h6>
-              </div>
-            ) : (
-              <button
-                className='w-32 flex gap-2 items-center justify-center bg-slate-200 text-gray-600'
-                onClick={() => handleUpdateStatus(params.row?.id)}
-              >
-                Close
-              </button>
-            )}
-          </>
-        );
-      },
-    },
     {
       field: "id",
       headerName: "Order NO",
@@ -57,7 +31,7 @@ export default function OrdersTable({ list }) {
       renderCell: (params) => {
         return (
           <h6 className='text-gray-600 uppercase my-auto'>
-            ORDER#{params.row?.id}
+            ORD#{params.row?.id}
           </h6>
         );
       },
@@ -79,7 +53,7 @@ export default function OrdersTable({ list }) {
     {
       field: "customer_name",
       headerName: "Customer",
-      width: 100,
+      width: 130,
       renderCell: (params) => {
         return (
           <h6 className='text-gray-600 my-auto'>{params.row?.customer_name}</h6>
@@ -103,7 +77,7 @@ export default function OrdersTable({ list }) {
       width: 100,
       renderCell: (params) => {
         return (
-          <h6 className='text-blue-300'>KES {params.row?.amount.toFixed(2)}</h6>
+          <h6 className='text-blue-300'>{params.row?.amount.toFixed(2)}</h6>
         );
       },
     },
@@ -130,13 +104,53 @@ export default function OrdersTable({ list }) {
       },
     },
     {
+      field: "is_completed",
+      headerName: "Order Status",
+      width: 100,
+      renderCell: (params) => {
+        return (
+          <>
+            {params.row?.is_completed ? (
+              <h6 className='mx-auto bg-green-100 px-5 py-1 text-green-500'>
+                Closed
+              </h6>
+            ) : (
+              <h6 className='mx-auto bg-orange-100 px-3 py-1 text-orange-500'>
+                Pending
+              </h6>
+            )}
+          </>
+        );
+      },
+    },
+    {
+      field: "is_paid",
+      headerName: "Payment Status",
+      width: 100,
+      renderCell: (params) => {
+        return (
+          <>
+            {params.row?.is_paid ? (
+              <h6 className='mx-auto bg-green-100 px-6 py-1 text-green-500'>
+                Paid
+              </h6>
+            ) : (
+              <h6 className='mx-auto bg-orange-100 px-3 py-1 text-orange-500'>
+                Pending
+              </h6>
+            )}
+          </>
+        );
+      },
+    },
+    {
       field: "created_at",
       headerName: "Date",
       width: 150,
       renderCell: (params) => {
         return (
-          <h6 className='bg-slate-100 px-2 py-1 rounded-md text-blue-300 my-auto'>
-            {moment(params.row?.created_at).fromNow()}
+          <h6 className='mx-auto bg-slate-100 px-2 py-1 text-blue-300 my-auto'>
+            {formatDate(params.row.created_at)}
           </h6>
         );
       },
@@ -147,7 +161,7 @@ export default function OrdersTable({ list }) {
       width: 180,
       renderCell: (params) => {
         return (
-          <div className='w-full flex gap-3'>
+          <div className='w-full flex justify-center gap-3'>
             <div className='border text-blue-300 cursor-pointer p-2 rounded'>
               <RemoveRedEyeIcon
                 onClick={() => handleViewOrder(params.row?.id)}
@@ -172,7 +186,7 @@ export default function OrdersTable({ list }) {
     <>
       <div className='bg-white '>
         <DataGrid
-          rows={list}
+          rows={list || []}
           disableSelectionOnClick
           columns={columns}
           pageSize={8}

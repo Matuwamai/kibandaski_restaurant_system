@@ -100,40 +100,42 @@ export default function CreateMealModal() {
                 <label htmlFor='meals' className='my-1'>
                   Meal & Dishes Details
                 </label>
-                <input
+                <textarea
                   name='details'
-                  type='text'
                   placeholder='Describe your meal here...'
                   id='meals'
+                  rows={4}
                   onChange={handleInputChange}
                   className='border rounded focus:outline-none p-2'
-                />
+                ></textarea>
               </div>
-              <div className='mb-3 flex flex-col'>
-                <label htmlFor='qty' className='my-1'>
-                  Quantity
-                </label>
-                <input
-                  type='number'
-                  placeholder='1'
-                  id='amount'
-                  name='qty'
-                  onChange={handleInputChange}
-                  className='border rounded focus:outline-none p-2'
-                />
-              </div>
-              <div className='mb-3 flex flex-col'>
-                <label htmlFor='amount' className='my-1'>
-                  Price
-                </label>
-                <input
-                  type='number'
-                  placeholder='100'
-                  id='amount'
-                  name='price'
-                  onChange={handleInputChange}
-                  className='border rounded focus:outline-none p-2'
-                />
+              <div className="grid grid-cols-2 gap-3 mb-3">
+                <div className='col-span-1 flex flex-col'>
+                  <label htmlFor='qty' className='my-1'>
+                    Quantity
+                  </label>
+                  <input
+                    type='number'
+                    placeholder='1'
+                    id='amount'
+                    name='qty'
+                    onChange={handleInputChange}
+                    className='border rounded focus:outline-none p-2'
+                  />
+                </div>
+                <div className='col-span-1 flex flex-col'>
+                  <label htmlFor='amount' className='my-1'>
+                    Price
+                  </label>
+                  <input
+                    type='number'
+                    placeholder='100'
+                    id='amount'
+                    name='price'
+                    onChange={handleInputChange}
+                    className='border rounded focus:outline-none p-2'
+                  />
+                </div>
               </div>
               <div className='mb-3 flex flex-col'>
                 <label htmlFor='file' className='my-1'>

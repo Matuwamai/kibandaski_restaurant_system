@@ -6,20 +6,23 @@ import { createOrder } from "../redux/actions/orderActions";
 import Loading from "../utils/Loading";
 import Message from "../utils/Message";
 import { initiateStkPush } from "../redux/actions/paymentActions";
-import io from "socket.io-client";
 import { hidePaymentStatusInfo } from "../redux/slices/paymentSlice";
+import { useNavigate } from "react-router";
 
 export default function CreateOrderModal() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { isOrderCreateModalOpen, closeOrderCreateModal } = useGlobalContext();
   const { mealsList } = useSelector((state) => state.meals);
-  const { loading, error, success_create } = useSelector(
+  const { loading, error, success_create, orderDetails } = useSelector(
     (state) => state.orders
   );
   const {
     loading: loadingPayment,
     error: errorPayment,
     paymentStatusInfo,
+    transactionInfo,
+    transactionErr,
   } = useSelector((state) => state.payments);
 
   const [mealSearch, setMealSearch] = useState("");
@@ -67,19 +70,15 @@ export default function CreateOrderModal() {
 
   const handleCreateOrder = (e) => {
     e.preventDefault();
-    if (paymentMethod === "CASH") {
-      dispatch(
-        createOrder({
-          order_items: cartItems,
-          payment_method: paymentMethod,
-          customer_name: customerName,
-          table_no: 10,
-          amount: totalAmount,
-        })
-      );
-    } else if (paymentMethod === "MPESA") {
-      dispatch(initiateStkPush({ phone, amount: Math.round(totalAmount) }));
-    }
+    dispatch(
+      createOrder({
+        order_items: cartItems,
+        payment_method: paymentMethod,
+        customer_name: customerName,
+        table_no: 10,
+        amount: totalAmount,
+      })
+    );
   };
 
   const handleSelect = (id) => {
@@ -112,11 +111,19 @@ export default function CreateOrderModal() {
   }, [mealsList, mealSearch]);
 
   useEffect(() => {
-    if (success_create) {
-      setSelectedMeals([]);
-      handleCloseModal();
+    if (success_create && paymentMethod === "MPESA") {
+      dispatch(
+        initiateStkPush(orderDetails?.id, {
+          phone,
+          amount: Math.round(totalAmount),
+        })
+      );
     }
-  }, [success_create]);
+    // else if (success_create) {
+    //   setSelectedMeals([]);
+    //   handleCloseModal();
+    // }
+  }, [success_create, dispatch, paymentMethod, orderDetails, phone, totalAmount]);
 
   useEffect(() => {
     const totals = cartItems
@@ -125,18 +132,14 @@ export default function CreateOrderModal() {
     setTotalAmount(totals);
   }, [cartItems]);
 
-  // useEffect(() => {
-  //   const socket = io("ws://127.0.0.1:8000/ws/transactions/");
-  //   console.log(socket);
-  //   socket.on("transaction", (data) => {
-  //     // Handle the real-time transaction data in your React app
-  //     console.log("Real-time transaction update:", data);
-  //   });
-
-  //   return () => {
-  //     socket.disconnect();
-  //   };
-  // }, []);
+  useEffect(() => {
+    if (transactionInfo || transactionErr) {
+      dispatch(hidePaymentStatusInfo());
+      navigate(
+        `/orders/1/payments/${transactionInfo?.ReceiptNumber}/validation`
+      );
+    }
+  }, [transactionInfo, transactionErr, dispatch, navigate]);
 
   return (
     <div>
@@ -147,7 +150,7 @@ export default function CreateOrderModal() {
               Create new Order
             </h3>
             {loading ? <Loading /> : error && <Message>{error}</Message>}
-            {loadingPayment ? (
+            {!loading && loadingPayment ? (
               <Loading />
             ) : (
               errorPayment && <Message>{errorPayment}</Message>
@@ -155,6 +158,11 @@ export default function CreateOrderModal() {
             {paymentStatusInfo && (
               <div className='bg-green-400 border border-white rounded w-full text-white text-center'>
                 <p className='py-3'>{paymentStatusInfo}</p>
+              </div>
+            )}
+            {transactionInfo && (
+              <div className='bg-green-400 border border-white rounded w-full text-white text-center my-3'>
+                <p className='py-3'>{transactionInfo.message}</p>
               </div>
             )}
             <form onSubmit={handleCreateOrder}>

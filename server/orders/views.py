@@ -10,6 +10,9 @@ from django.utils import timezone
 from datetime import timedelta
 from asgiref.sync import async_to_sync
 import json
+from math import ceil
+from django.http import Http404
+from django.db.models import Q
 
 channel_layer = get_channel_layer()
 
@@ -114,9 +117,16 @@ def create_order(request):
     if orderItems and len(orderItems) == 0:
         return Response({'detail': 'No Order Items', "status": status.HTTP_400_BAD_REQUEST})
     else:
+        payment_method=data['payment_method']
+        is_paid = False
+        if payment_method == "CASH":
+            # If CASH, then the cashier collected the money.
+            is_paid = True
+
         # (1) Create Order
         order = Order.objects.create(
-            payment_method=data['payment_method'],
+            payment_method=payment_method,
+            is_paid=is_paid,
             customer_name=data['customer_name'],
             table_no=data['table_no'],
             amount=data['amount']
@@ -151,10 +161,72 @@ def create_order(request):
 
 @api_view(['GET'])
 def list_orders(request):
-    orders = Order.objects.all().order_by('-created_at')
-    serializer = OrderSerializer(orders, many=True)
-    return Response(serializer.data)
+    if request.method == 'GET':
+        query_params = request.query_params
 
+        # Check if search_id is provided in the query parameters
+        search_id = query_params.get('search_id')
+        if search_id:
+            try:
+                ordersList = []
+                order = Order.objects.get(id=int(search_id))
+                serializer = OrderSerializer(order)
+                ordersList.append(serializer.data)
+                # Return the order directly as a single object
+                response_data = {
+                    'orders': ordersList
+                }
+                return Response(response_data, status=status.HTTP_200_OK)
+            except Order.DoesNotExist:
+                raise Http404("Order does not exist")
+
+        page_number = int(query_params.get('pageNo', 1))
+        page_size = 50
+
+        # Initialize filter for orders
+        order_filter = Q()
+
+        # Filter orders based on order_status query param
+        order_status_param = query_params.get('order_status')
+        payment_status_param = query_params.get('payment_status')
+        if order_status_param == 'true':
+            order_filter &= Q(is_completed=True)
+        elif order_status_param == 'false':
+            order_filter &= Q(is_completed=False)
+        elif payment_status_param == 'true':
+            order_filter &= Q(is_paid=True)
+        elif payment_status_param == 'false':
+            order_filter &= Q(is_paid=False)
+
+        # Filter orders based on the constructed filter
+        filtered_orders = Order.objects.filter(order_filter)
+
+        # Get the total count of filtered orders
+        total_count = filtered_orders.count()
+
+        # Calculate the total number of pages
+        total_pages = ceil(total_count / page_size)
+
+        # Calculate the starting index for the queryset
+        start_index = (page_number - 1) * page_size
+
+        # Calculate the ending index for the queryset
+        end_index = min(start_index + page_size, total_count)
+
+        # Get orders for the specified page
+        orders = filtered_orders.order_by('-created_at')[start_index:end_index]
+
+        serializer = OrderSerializer(orders, many=True)
+
+        # Construct response with pagination metadata
+        response_data = {
+            'offset': page_size,
+            'total_pages': total_pages,
+            'current_page': page_number,
+            'orders': serializer.data
+        }
+
+        return Response(response_data, status=status.HTTP_200_OK)
 # Update order
 
 

@@ -110,7 +110,7 @@ const StaffForm = ({ type = "add" }) => {
   }, [dispatch, staff_id]);
 
   useEffect(() => {
-    if (staffDetails) {
+    if (staffDetails && staff_id) {
       setStaffInfo({
         first_name: staffDetails.first_name,
         last_name: staffDetails.last_name,
@@ -120,7 +120,7 @@ const StaffForm = ({ type = "add" }) => {
         contact: staffDetails.contact,
       });
     }
-  }, [staffDetails]);
+  }, [staffDetails, staff_id]);
 
   return (
     <form onSubmit={handleSubmit}>

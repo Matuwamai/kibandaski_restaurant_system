@@ -2,8 +2,6 @@ import { DataGrid } from "@mui/x-data-grid";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { MdVerified } from "react-icons/md";
-import { CgDanger } from "react-icons/cg";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { showMealDeleteAlert } from "../redux/slices/mealsSlices";
@@ -41,9 +39,17 @@ export default function DishesList({ list }) {
     {
       field: "title",
       headerName: "Meals & Dishes  Title",
-      width: 350,
+      width: 180,
       renderCell: (params) => {
         return <h6 className='text-gray-600 my-auto'>{params.row.title}</h6>;
+      },
+    },
+    {
+      field: "details",
+      headerName: "Description",
+      width: 400,
+      renderCell: (params) => {
+        return <h6 className='text-gray-600 my-auto'>{params.row.details}</h6>;
       },
     },
     {
@@ -52,7 +58,7 @@ export default function DishesList({ list }) {
       width: 80,
       renderCell: (params) => {
         return (
-          <h6 className='bg-slate-100 w-12 text-center px-2 py-1 rounded-md text-blue-300 my-auto'>
+          <h6 className='w-12 text-end px-2 py-1 text-blue-300 my-auto'>
             {params.row.qty}
           </h6>
         );
@@ -64,7 +70,7 @@ export default function DishesList({ list }) {
       width: 100,
       renderCell: (params) => {
         return (
-          <h6 className='bg-slate-100 px-2 py-1 rounded-md text-blue-300 my-auto'>
+          <h6 className='bg-slate-100 px-3 py-1 text-blue-300 my-auto'>
             KES {params.row.price}
           </h6>
         );
@@ -78,17 +84,13 @@ export default function DishesList({ list }) {
         return (
           <>
             {params.row.is_ready ? (
-              <>
-                <h6 className='bg-slate-100 flex items-center gap-2 px-2 py-1 rounded-md text-green-500 my-auto'>
-                  <MdVerified style={{ fontSize: "18px" }} />
-                  <p>Ready</p>
-                </h6>
-              </>
+              <h6 className='mx-auto bg-green-100 px-5 py-1 text-green-500'>
+                Ready
+              </h6>
             ) : (
-              <div className='w-32 flex gap-2 items-center justify-center bg-slate-200 text-white px-4 py-1 rounded font-semibold'>
-                <CgDanger style={{ fontSize: "18px" }} />
-                <h6 className='my-auto'>Ready</h6>
-              </div>
+              <h6 className='mx-auto bg-orange-100 px-3 py-1 text-orange-500'>
+                Not Ready
+              </h6>
             )}
           </>
         );

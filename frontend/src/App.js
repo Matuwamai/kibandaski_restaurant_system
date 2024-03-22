@@ -1,8 +1,4 @@
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-} from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Dashboard from "./screens/Dashboard";
 import Orders from "./screens/Orders";
 import Customers from "./screens/Customers";
@@ -13,28 +9,53 @@ import Tables from "./screens/Tables";
 import Login from "./auth/Login";
 import Home from "./client/Home";
 import Cart from "./client/Cart";
-import Transactions from "./transactions/Transactions";
+import Transactions from "./screens/Transactions";
 import Staff from "./screens/Staff";
 import Reports from "./reports/Reports";
 import Settings from "./settings/Settings";
 import Add from "./staff/Add";
 import Edit from "./staff/Edit";
-import { useDispatch } from "react-redux";
-import { markOrderCompleted, updateOrdersList } from "./redux/slices/orderSlices";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  markOrderCompleted,
+  updateOrdersList,
+} from "./redux/slices/orderSlices";
 import { useEffect } from "react";
+import { addEventSource } from "./redux/slices/globalSlices";
+import { setTransactionInfo } from "./redux/slices/paymentSlice";
+import { jwtDecode } from "jwt-decode";
+import PaymentSuccess from "./screens/PaymentSuccess";
+import Inventory from "./screens/Inventory";
+import Purchase from "./screens/Purchase";
+
+//  const eventSource = new WebSocket(
+//    "wss://kibandaski-restaurant-system.onrender.com/ws/sse/"
+//  );
+
 function App() {
   const dispatch = useDispatch();
-    useEffect(() => {
-      const eventSource = new WebSocket("ws://127.0.0.1:8000/ws/sse/");
-
+  const { userInfo } = useSelector((state) => state.user);
+  useEffect(() => {
+    if (userInfo?.access){
+      const decoded = jwtDecode(userInfo?.access);
+      const eventSource = new WebSocket(
+        `wss://kibandaski-restaurant-system.onrender.com/ws/sse/?user_id=${decoded.id}`
+      );
+      // ws://127.0.0.1:8000/ws/sse/ => FOR USE IN DEVELOPMENT
+      // wss://kibandaski-restaurant-system.onrender.com/ws/sse/ => FOR PRODUCTION
+      dispatch(addEventSource(eventSource.channelName));
       eventSource.onmessage = (event) => {
-        console.log("Received event:", event.data);
         // Handle the received event data as needed
         const emmittedData = JSON.parse(event.data);
+        console.log(emmittedData);
         if (emmittedData?.type === "send_order") {
           dispatch(updateOrdersList(JSON.parse(emmittedData.data)));
-        }else if (emmittedData?.type === "complete_order") {
+        } else if (emmittedData?.type === "complete_order") {
           dispatch(markOrderCompleted());
+        } else if (
+          emmittedData?.data?.type === "incomplete_transaction"
+        ) {
+          dispatch(setTransactionInfo(emmittedData?.data));
         }
       };
 
@@ -47,7 +68,10 @@ function App() {
       return () => {
         eventSource.close();
       };
-    }, [dispatch]);
+    }
+  }, [dispatch, userInfo]);
+
+
   return (
     <Router>
       <Routes>
@@ -58,6 +82,11 @@ function App() {
         <Route element={<DashboardLayout />}>
           <Route path='/' element={<Dashboard />} />
           <Route path='/orders' element={<Orders />} />
+          <Route path='/orders/page/:pageNo' element={<Orders />} />
+          <Route
+            path='/orders/:orderId/payments/:referenceCode/validation'
+            element={<PaymentSuccess />}
+          />
           <Route path='/customers' element={<Customers />} />
           <Route path='/staff' element={<Staff />} />
           <Route path='/staff/new' element={<Add />} />
@@ -66,6 +95,10 @@ function App() {
           <Route path='/meals-and-dishes/:id' element={<MealsView />} />
           <Route path='/restaurant-tables' element={<Tables />} />
           <Route path='/transactions' element={<Transactions />} />
+          <Route path='/transactions/page/:pageNo' element={<Transactions />} />
+          <Route path='/inventory' element={<Inventory />} />
+          <Route path='/inventory/purchases' element={<Purchase />} />
+          <Route path='/inventory/purchases/:pageNo' element={<Purchase />} />
           <Route path='/reports' element={<Reports />} />
           <Route path='/settings' element={<Settings />} />
         </Route>
@@ -76,20 +109,3 @@ function App() {
 
 export default App;
 
-// const handleSpeak = () => {
-//   const text = "A new order has been made at table number 10. PLease check...";
-
-//   const value = new SpeechSynthesisUtterance(text);
-//   value.rate = 0.9;
-//   window.speechSynthesis.speak(value);
-// };
-
-// useEffect(() => {
-//   // Set up an interval to call handleSpeak every 5 seconds (adjust the time interval as needed)
-//   const intervalId = setInterval(() => {
-//     handleSpeak();
-//   }, 5000); // 5000 milliseconds = 5 seconds
-
-//   // Clean up the interval when the component is unmounted
-//   return () => clearInterval(intervalId);
-// }, []); // Empty dependency array ensures that the effect runs only once when the component mounts

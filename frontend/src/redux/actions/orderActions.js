@@ -28,9 +28,9 @@ export const createOrder = (order) => async (dispatch) => {
       }
     }
 
-    await axios.post(`${BASE_URL}/orders/create`, order, config);
+    const {data} = await axios.post(`${BASE_URL}/orders/create`, order, config);
 
-    dispatch(createOrderSuccess());
+    dispatch(createOrderSuccess(data));
     dispatch(clearTable());
   } catch (err) {
     console.log(err);
@@ -42,11 +42,11 @@ export const createOrder = (order) => async (dispatch) => {
 
 //  LIST ALL ORDERS
 
-export const listOrders = () => async (dispatch) => {
+export const listOrders = (page=1, orderId="", orderStatus=null, paymentStatus=null) => async (dispatch) => {
   try {
     dispatch(listOrdersStart());
 
-    const { data } = await axios.get(`${BASE_URL}/orders/list`);
+    const { data } = await axios.get(`${BASE_URL}/orders/list?pageNo=${page}&search_id=${orderId}&order_status=${orderStatus}&payment_status=${paymentStatus}`);
     dispatch(listOrdersSuccess(data));
   } catch (err) {
     dispatch(listOrdersFail("Error listing orders!"));

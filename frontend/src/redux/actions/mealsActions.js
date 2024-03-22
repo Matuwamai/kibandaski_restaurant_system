@@ -30,13 +30,14 @@ export const createMeal = (meal) => async (dispatch) => {
 
 //  LIST ALL MEALS & DISHES
 
-export const listMeals = () => async (dispatch) => {
+export const listMeals = (searchName="") => async (dispatch) => {
   try {
     dispatch(listMealsStart());
 
-    const { data } = await axios.get(`${BASE_URL}/meals-and-dishes/list`);
+    const { data } = await axios.get(`${BASE_URL}/meals-and-dishes/list?search_name=${searchName}`);
     dispatch(listMealsSuccess(data));
   } catch (err) {
+    console.log(err)
     dispatch(listMealsFail("Error listing meals!"));
   }
 };

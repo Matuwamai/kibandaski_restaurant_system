@@ -29,6 +29,10 @@
   max-width: 600px;
 }
 
+.modal-content.order-paid-content{
+  background-color: green;
+}
+
 .modal-content.order-view{
   height: 90vh;
   overflow-y: auto;

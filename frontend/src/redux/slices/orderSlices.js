@@ -10,7 +10,7 @@ const new_orders_count = localStorage.getItem("o_new")
 
 const initialState = {
   loading: false,
-  ordersList: [],
+  ordersList: null,
   success_create: false,
   success_delete: false,
   success_update: false,
@@ -21,6 +21,7 @@ const initialState = {
   table,
   new_orders: new_orders_count,
   orderStats: {},
+  orderDetails: null,
 };
 
 export const ordersSlice = createSlice({
@@ -32,9 +33,10 @@ export const ordersSlice = createSlice({
       state.error = false;
       state.success_create = false;
     },
-    createOrderSuccess: (state) => {
+    createOrderSuccess: (state, action) => {
       state.loading = false;
       state.success_create = true;
+      state.orderDetails = action.payload;
     },
     createOrderFail: (state, action) => {
       state.loading = false;
@@ -96,7 +98,7 @@ export const ordersSlice = createSlice({
       state.order_flagged = null;
     },
     updateOrdersList: (state, action) => {
-      state.ordersList = [...state.ordersList, action.payload];
+      state.ordersList.orders = [...state.ordersList.orders, action.payload];
       state.reload = true;
       state.new_orders = state.new_orders + 1;
       localStorage.setItem("o_new", JSON.stringify(state.new_orders));
