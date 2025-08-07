@@ -215,10 +215,10 @@ service-identity==24.1.0
 simple-websocket==1.0.0
 six==1.16.0
 sqlparse==0.4.4
-Twisted==23.10.0
+Twisted==22.10.0
 txaio==23.1.1
 typing_extensions==4.8.0
 urllib3==2.1.0
 Werkzeug==3.0.1
 wsproto==1.2.0
-zope.interface==6.1
+zope.interface==5.5.2
